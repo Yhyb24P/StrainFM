@@ -1,0 +1,179 @@
+[
+  {
+    "file": "Bacformer/README.md",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/README.md",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "6e4fdabbd05c93ff63b0eb583ce6a9309eaa13998087cc32ddeaa6928025b235",
+    "bytes": 20027,
+    "accessed_utc": "2026-11-04T06:35:30.101387+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/modeling/config.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/modeling/config.py",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "f9a2200f90e24e2cc50b12285baca1d398a1111c96662c9ec440ba16cf23efd7",
+    "bytes": 2854,
+    "accessed_utc": "2026-11-04T06:35:29.877062+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/modeling/data_reader.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/modeling/data_reader.py",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "e83339f370ceaa12e796d39f8476a3bfd6faaa4e1b1923c025a75826b8066563",
+    "bytes": 9817,
+    "accessed_utc": "2026-11-04T06:35:29.913138+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/modeling/modeling_base.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/modeling/modeling_base.py",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "7e4623fcad0b9914cbf93cec82ed8011504272777f4a4cd126bbe1e00c6cd880",
+    "bytes": 24534,
+    "accessed_utc": "2026-11-04T06:35:29.898369+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/modeling/modeling_large.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/modeling/modeling_large.py",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "7d42cea439635f765be42ae7f80da26dd17973eb59fe66579f0d0a42f8473fa7",
+    "bytes": 61136,
+    "accessed_utc": "2026-11-04T06:35:29.906919+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/modeling/modeling_pretraining.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/modeling/modeling_pretraining.py",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "54f71e2d56da9acd2ece07086098f560a532831d1a394702f4a03b27392709b6",
+    "bytes": 19358,
+    "accessed_utc": "2026-11-04T06:35:29.890054+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/pp/preprocess.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/pp/preprocess.py",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "ec853b4e90bc25f9bc5e0b988b0d9e71c7ddf72ceb78b592dc4c267e871467b0",
+    "bytes": 6263,
+    "accessed_utc": "2026-11-04T06:35:30.365114+00:00"
+  },
+  {
+    "file": "BacBench/README.md",
+    "url": "https://raw.githubusercontent.com/macwiatrak/BacBench/64b7d45823b2ff2ef88458e3aa235caa461a12aa/README.md",
+    "revision": "64b7d45823b2ff2ef88458e3aa235caa461a12aa",
+    "sha256": "c9d28efef5b4cc30adbcc9de224c350100f5aa2a15a025beaf10dcdeb86cd93e",
+    "bytes": 24321,
+    "accessed_utc": "2026-11-04T06:35:30.245518+00:00"
+  },
+  {
+    "file": "BacBench/bacbench/modeling/embed_prot_seqs.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/BacBench/64b7d45823b2ff2ef88458e3aa235caa461a12aa/bacbench/modeling/embed_prot_seqs.py",
+    "revision": "64b7d45823b2ff2ef88458e3aa235caa461a12aa",
+    "sha256": "3a5493dc1b40b3cc477180935ed734fecccf7abfcbce70f9230e280313f03027",
+    "bytes": 10054,
+    "accessed_utc": "2026-11-04T06:35:30.234956+00:00"
+  },
+  {
+    "file": "BacBench/bacbench/tasks/strain_clustering/run_evaluation.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/BacBench/64b7d45823b2ff2ef88458e3aa235caa461a12aa/bacbench/tasks/strain_clustering/run_evaluation.py",
+    "revision": "64b7d45823b2ff2ef88458e3aa235caa461a12aa",
+    "sha256": "7ce9041999f9bced70d9dc6215d824e0866f47f753258ed972f880e8d668a79b",
+    "bytes": 9556,
+    "accessed_utc": "2026-11-04T06:35:31.402358+00:00"
+  },
+  {
+    "file": "BacBench/bacbench/tasks/antibiotic_resistance/train_and_predict_linear.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/BacBench/64b7d45823b2ff2ef88458e3aa235caa461a12aa/bacbench/tasks/antibiotic_resistance/train_and_predict_linear.py",
+    "revision": "64b7d45823b2ff2ef88458e3aa235caa461a12aa",
+    "sha256": "784e809a1518a02c081b966d5329ac7bb74a2713b1b8af3512e2462f285d28ac",
+    "bytes": 36123,
+    "accessed_utc": "2026-11-04T06:35:30.287149+00:00"
+  },
+  {
+    "file": "biorxiv_versions.json",
+    "url": "https://api.biorxiv.org/details/biorxiv/10.1101/2025.07.20.665723",
+    "revision": null,
+    "sha256": "565d9c58318ab33eaad4c7f93b61fcd63f79a47a35c15b1a6d29a6a6482c369d",
+    "bytes": 5847,
+    "accessed_utc": "2026-11-04T06:35:30.930512+00:00"
+  },
+  {
+    "file": "hf_large_metadata.json",
+    "url": "https://huggingface.co/api/models/macwiatrak/bacformer-large-masked-complete-genomes",
+    "revision": null,
+    "sha256": "30b5cb669dfa21861aa65810e5ad1860ff846630e21730116b72c37f87611c7e",
+    "bytes": 1992,
+    "accessed_utc": "2026-11-04T06:35:30.578709+00:00"
+  },
+  {
+    "file": "hf_large_config.json",
+    "url": "https://huggingface.co/macwiatrak/bacformer-large-masked-complete-genomes/resolve/84f85c37a05e55559142b842c1569e265183b554/config.json",
+    "revision": "84f85c37a05e55559142b842c1569e265183b554",
+    "sha256": "b768d32bd58dc09eaae417e0ce11591eac174bdeda3cfe06dd39e3cab4702536",
+    "bytes": 1797,
+    "accessed_utc": "2026-11-04T06:35:30.740155+00:00"
+  },
+  {
+    "file": "Bacformer/bacformer/modeling/utils.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/bacformer/modeling/utils.py",
+    "sha256": "72fa5e9288d4f3c6408877babb54266133e1f7522dce249a9fec2a1bc8d3d5f0",
+    "bytes": 8790,
+    "accessed_utc": "2026-11-04T06:38:39.065805+00:00"
+  },
+  {
+    "file": "hf_amr_README.md",
+    "url": "https://huggingface.co/datasets/macwiatrak/bacbench-antibiotic-resistance-protein-sequences/raw/main/README.md",
+    "sha256": "6288d23675d24722e0db8d87d3d8a78983d9c875fadc565fe3ef1945fbef0465",
+    "bytes": 4719,
+    "accessed_utc": "2026-11-04T06:38:39.648937+00:00"
+  },
+  {
+    "file": "hf_amr_metadata.json",
+    "url": "https://huggingface.co/api/datasets/macwiatrak/bacbench-antibiotic-resistance-protein-sequences",
+    "sha256": "3c4f1844590d7ac03526c52b2e9650279e6eb4c29a96c52d8eb80752e9ca8eed",
+    "bytes": 4175,
+    "accessed_utc": "2026-11-04T06:38:39.654957+00:00"
+  },
+  {
+    "file": "hf_base_metadata.json",
+    "url": "https://huggingface.co/api/models/macwiatrak/bacformer-masked-complete-genomes",
+    "sha256": "2ed76dd788b8a665fdeb263d40e469c853779938b39db2647e9850d8d6ecfc9c",
+    "bytes": 1960,
+    "accessed_utc": "2026-11-04T06:38:39.020724+00:00"
+  },
+  {
+    "file": "BacBench/bacbench/modeling/utils/utils.py",
+    "url": "https://raw.githubusercontent.com/macwiatrak/BacBench/64b7d45823b2ff2ef88458e3aa235caa461a12aa/bacbench/modeling/utils/utils.py",
+    "sha256": "704aa6fabbcb2eb5886e7370de23f3d293edc1601dfecfe010e10ba371569aad",
+    "bytes": 10865,
+    "accessed_utc": "2026-11-04T06:39:39.675100+00:00"
+  },
+  {
+    "file": "hf_amr_binary_labels.csv",
+    "url": "https://huggingface.co/datasets/macwiatrak/bacbench-antibiotic-resistance-protein-sequences/resolve/fa5f826a5a6ae28126483a751c6e8acffaca0eec/binary_labels.csv",
+    "sha256": "644b91687d53c36e8645f0a5eb560b33cd807276ae41d81ae9a2f411050b0f63",
+    "bytes": 2260246,
+    "accessed_utc": "2026-11-04T06:39:40.195183+00:00"
+  },
+  {
+    "file": "hf_amr_README_pinned.md",
+    "url": "https://huggingface.co/datasets/macwiatrak/bacbench-antibiotic-resistance-protein-sequences/resolve/fa5f826a5a6ae28126483a751c6e8acffaca0eec/README.md",
+    "sha256": "6288d23675d24722e0db8d87d3d8a78983d9c875fadc565fe3ef1945fbef0465",
+    "bytes": 4719,
+    "accessed_utc": "2026-11-04T06:39:39.948446+00:00"
+  },
+  {
+    "file": "Bacformer/LICENSE",
+    "url": "https://raw.githubusercontent.com/macwiatrak/Bacformer/61dca9537429b95365d73d72a3e11c207df1ed6c/LICENSE",
+    "revision": "61dca9537429b95365d73d72a3e11c207df1ed6c",
+    "sha256": "d7fe40bfc2a639daa18e4caf57fab7545ece94bd38fb181c1f5b780d3b8cfa01",
+    "bytes": 10800,
+    "accessed_utc": "2026-11-04T07:30:33.888726+00:00"
+  },
+  {
+    "file": "BacBench/LICENSE",
+    "url": "https://raw.githubusercontent.com/macwiatrak/BacBench/64b7d45823b2ff2ef88458e3aa235caa461a12aa/LICENSE",
+    "revision": "64b7d45823b2ff2ef88458e3aa235caa461a12aa",
+    "sha256": "d7fe40bfc2a639daa18e4caf57fab7545ece94bd38fb181c1f5b780d3b8cfa01",
+    "bytes": 10800,
+    "accessed_utc": "2026-11-04T07:30:34.238859+00:00"
+  }
+]

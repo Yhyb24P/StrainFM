@@ -1,0 +1,30 @@
+{
+  "checked_utc": "2026-11-04T07:33:14.159698+00:00",
+  "checks": [
+    "manifest_local_audit_20261104: code snapshots match recorded hashes",
+    "bacbench_label_audit_20261104: code snapshots match recorded hashes",
+    "ncbi_sample_metadata_20261104: code snapshots match recorded hashes",
+    "All downloaded source files match sources.json",
+    "Existing README, governance, research plan and decisions remain byte-identical",
+    "All new relative document links resolve",
+    "Inventory denominators reconcile: 125942 mapped, 125936 present, 6 absent/empty"
+  ],
+  "tests": {
+    "command": "PYTHONPATH=src python3 -m unittest discover -s tests -v",
+    "observed_passed": 6,
+    "scope": "FASTA metrics/corruption, path escape, TSV extra fields, versioned label matching/missingness, incomplete metadata response"
+  },
+  "test_source_sha256": {
+    "tests/test_audit.py": "d70a68e84486683d40e9cdf2183d28dbeffe5ba53bdfbb0d37719b8968e13d9c",
+    "tests/test_labels.py": "74b7bb2c009d6d364154d141f70125f9429fb292ce211202ec2060c2d6678c34",
+    "tests/test_metadata.py": "d68f8efb7c6ab3e03001b103c619dfec8e8c1cad81adcfc947d682c8add47e06"
+  },
+  "deliverable_sha256": {
+    "docs/STRAIN_REPRESENTATION_RESEARCH_20261104.md": "2a361f53a8d8893b8f3b02849ce57c3dec34ac2d11e7db115373fa205308c41e",
+    "docs/STRAIN_EVALUATION_PROTOCOL_DRAFT.md": "5accdefa50a21c9be5f04883ed3d83e7041e94cca32eb8484bdad50f0f670318",
+    "data/results/ncbi_sample_metadata_20261104/README.md": "357882bb8319cc3912ad72726c2d57bc4b53e145ebca613f052936229f009052",
+    "data/results/bacformer_source_audit_20261104/README.md": "6815b0553a95d6827758c6c4094b9db6370b6a1ed745a6a8211c5b83af6b6186",
+    "data/results/manifest_local_audit_20261104/README.md": "43a320389a2c6f200c43c32074935d81761e17fe258079fc67349c9655341bde",
+    "data/results/bacbench_label_audit_20261104/README.md": "3080d9ca891f5f9a3fdd60a83ae9e8a04ad9e4cf96f8b85efc89ebfc98ed5af7"
+  }
+}

@@ -1,0 +1,5 @@
+species	manifest_records	mapped_records	mapped_unique_genome_ids	mapped_unique_paths	present_nonempty_records	absent_or_empty_records	directory_fasta_files	unmapped_directory_files	genome_id_differs_from_file_accession	directory_errors
+Escherichia_coli	62560	62560	62560	62560	62555	5	62555	0	46962	
+Klebsiella_pneumoniae	44401	44401	44401	44401	44401	0	44401	0	34488	
+Pseudomonas_aeruginosa	17579	17579	17579	17579	17578	1	17578	0	14640	
+Bacillus_subtilis	1402	1402	1402	1402	1402	0	1402	0	1274	

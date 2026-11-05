@@ -1,0 +1,45 @@
+{
+  "status": "label_availability_only_not_independent_evaluation",
+  "owner": "Codex current session",
+  "finished_utc": "2026-11-04T06:41:24.482610+00:00",
+  "argv": [
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__main__.py",
+    "labels",
+    "--labels",
+    "data/results/bacformer_source_audit_20261104/hf_amr_binary_labels.csv",
+    "--download-manifest",
+    "/mnt/e/StrainFM/data/raw/download_manifest_all.tsv",
+    "--output",
+    "data/results/bacbench_label_audit_20261104"
+  ],
+  "input_sha256": {
+    "data/results/bacformer_source_audit_20261104/hf_amr_binary_labels.csv": "644b91687d53c36e8645f0a5eb560b33cd807276ae41d81ae9a2f411050b0f63",
+    "/mnt/e/StrainFM/data/raw/download_manifest_all.tsv": "a96528c903f7c8422ecb6a2e3b399b24edd1aaf8d0555b1313e4aa55c8637bb7"
+  },
+  "code_sha256": {
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__init__.py": "fd93abf609ebaff70feea900ba7341905906da0cebc268cafc50ad5c7d391938",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__main__.py": "ee913a4bea87472d895f858e4cb21853fe824e5b5e645852158d183b0f5c66bf",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/audit.py": "083ad94de1e8edf98e710b9e034293faa763a73a93859a9651419f122b6d4d41",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/labels.py": "0db876e5f59ac3c0c4144fb71a16b332a10a89fa6bba066937db1db83ac80c5f"
+  },
+  "global": {
+    "label_rows": 26052,
+    "rows_with_any_label": 23428,
+    "observed_cells": 292996,
+    "positive_cells": 62428,
+    "drug_columns": 37,
+    "missing_cells": 670928
+  },
+  "matching": {
+    "unmatched": 23446,
+    "both": 162,
+    "file_accession_only": 2444
+  },
+  "limitations": [
+    "Exact versioned accession match only; no GCF/GCA rewriting or version stripping.",
+    "Species taken from local download manifest, not independently verified taxonomy.",
+    "File presence and paired-assembly identity not verified by this command.",
+    "Label source, assay method, repeated isolate independence and pretraining overlap need separate audit.",
+    "Multiple drug labels on one genome are not independent genome observations."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-04",
+  "project_files": {
+    "README.md": {
+      "bytes": 3165,
+      "sha256": "572e225575f4e48345718e401363b05f6e70bc8c26c47c92b1da9ee0f2719852"
+    },
+    "AGENTS.md": {
+      "bytes": 7628,
+      "sha256": "9ddd55a76cb4adaeb878dff4df86509d9cd23a32b622b94f85aefaba0bd47c4e"
+    },
+    "docs/RESEARCH_PLAN.md": {
+      "bytes": 19657,
+      "sha256": "95697116b3d4e5a395a9e6da14f9c6fca30412955827a4bd7e7a622d4330bb3d"
+    },
+    "docs/DATA_GOVERNANCE.md": {
+      "bytes": 7835,
+      "sha256": "cc7ab809e5f2700bc139ee2ab153c2feacc676e888a465edb1d0896374792476"
+    },
+    "docs/DECISIONS.md": {
+      "bytes": 4827,
+      "sha256": "383bf047c058ad5d0917c4d9f58235fae176ba002b882f3c8a8779e90529f8c3"
+    }
+  },
+  "tool_paths": {
+    "bakta": null,
+    "gtdbtk": null,
+    "checkm2": null,
+    "poppunk": null,
+    "chewBBACA": null,
+    "mash": null,
+    "fastANI": null,
+    "prodigal": null,
+    "python3": "/usr/bin/python3"
+  },
+  "gpu": "NVIDIA GeForce RTX 5090 D, 32607 MiB, 2377 MiB",
+  "filesystem": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sdd        2.0T  1.5T  452G  77% /\nE:\\             3.7T  2.7T  972G  74% /mnt/e\n",
+  "git_directory_present": false
+}

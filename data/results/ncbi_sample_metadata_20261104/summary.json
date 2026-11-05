@@ -1,0 +1,114 @@
+{
+  "owner": "Codex current session",
+  "finished_utc": "2026-11-04T06:43:53.336612+00:00",
+  "argv": [
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__main__.py",
+    "metadata",
+    "--sample",
+    "data/results/manifest_local_audit_20261104/fasta_sample.tsv",
+    "--output",
+    "data/results/ncbi_sample_metadata_20261104"
+  ],
+  "input_sha256": {
+    "data/results/manifest_local_audit_20261104/fasta_sample.tsv": "6eef2ff4f426137645d223b6fb2ae687274219c15094a3e73bdf093a02acf317"
+  },
+  "code_sha256": {
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__init__.py": "fd93abf609ebaff70feea900ba7341905906da0cebc268cafc50ad5c7d391938",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__main__.py": "ce069b60cd481c59a43713b7f90a38b10198c0870464e76ce4d5c309523ed766",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/audit.py": "083ad94de1e8edf98e710b9e034293faa763a73a93859a9651419f122b6d4d41",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/labels.py": "0db876e5f59ac3c0c4144fb71a16b332a10a89fa6bba066937db1db83ac80c5f",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/metadata.py": "db6c45084316ef82aee885caf0f2bdb1eac988d85a5da57038f22ee8e683bbd4"
+  },
+  "status": "completed",
+  "failures": [],
+  "species": [
+    {
+      "species": "Bacillus_subtilis",
+      "requested": 25,
+      "found": 25,
+      "assembly_levels": {
+        "Complete Genome": 8,
+        "Contig": 9,
+        "Scaffold": 8
+      },
+      "known_bioprojects": 22,
+      "missing_bioproject_records": 0,
+      "collection_date_known": 21,
+      "location_known": 19,
+      "isolation_source_known": 15,
+      "sequencing_tech_known": 23,
+      "fasta_total_length_matches": 25,
+      "original_id_is_returned_or_paired": 25,
+      "annotated_protein_coding_genes_gt6000": 0,
+      "missing_protein_count": 3
+    },
+    {
+      "species": "Escherichia_coli",
+      "requested": 25,
+      "found": 25,
+      "assembly_levels": {
+        "Scaffold": 6,
+        "Contig": 15,
+        "Complete Genome": 4
+      },
+      "known_bioprojects": 25,
+      "missing_bioproject_records": 0,
+      "collection_date_known": 25,
+      "location_known": 23,
+      "isolation_source_known": 20,
+      "sequencing_tech_known": 25,
+      "fasta_total_length_matches": 25,
+      "original_id_is_returned_or_paired": 25,
+      "annotated_protein_coding_genes_gt6000": 0,
+      "missing_protein_count": 5
+    },
+    {
+      "species": "Klebsiella_pneumoniae",
+      "requested": 25,
+      "found": 25,
+      "assembly_levels": {
+        "Scaffold": 9,
+        "Contig": 15,
+        "Complete Genome": 1
+      },
+      "known_bioprojects": 25,
+      "missing_bioproject_records": 0,
+      "collection_date_known": 24,
+      "location_known": 24,
+      "isolation_source_known": 19,
+      "sequencing_tech_known": 25,
+      "fasta_total_length_matches": 25,
+      "original_id_is_returned_or_paired": 25,
+      "annotated_protein_coding_genes_gt6000": 0,
+      "missing_protein_count": 5
+    },
+    {
+      "species": "Pseudomonas_aeruginosa",
+      "requested": 25,
+      "found": 25,
+      "assembly_levels": {
+        "Contig": 14,
+        "Scaffold": 10,
+        "Chromosome": 1
+      },
+      "known_bioprojects": 25,
+      "missing_bioproject_records": 0,
+      "collection_date_known": 19,
+      "location_known": 21,
+      "isolation_source_known": 17,
+      "sequencing_tech_known": 25,
+      "fasta_total_length_matches": 25,
+      "original_id_is_returned_or_paired": 25,
+      "annotated_protein_coding_genes_gt6000": 10,
+      "missing_protein_count": 9
+    }
+  ],
+  "limitations": [
+    "Metadata snapshot is not sequence-identity or upstream checksum verification.",
+    "Paired accession validates a database relationship, not identical sequences.",
+    "Missingness uses documented flattened fields and standard attribute names; unusual names can be missed.",
+    "BioProject count does not establish epidemiological independence.",
+    "Protein counts refer to deposited annotations, not a unified Bakta run or actually retained model tokens.",
+    "FASTA records may be scaffolds; record N50 must not be interpreted as contig N50."
+  ]
+}

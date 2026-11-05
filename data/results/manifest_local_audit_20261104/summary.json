@@ -1,0 +1,81 @@
+{
+  "status": "completed_read_only_audit_not_training_readiness",
+  "owner": "Codex current session",
+  "finished_utc": "2026-11-04T06:41:14.500534+00:00",
+  "python": "3.12.3",
+  "argv": [
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__main__.py",
+    "audit",
+    "--config",
+    "config/manifest_audit.json",
+    "--output",
+    "data/results/manifest_local_audit_20261104"
+  ],
+  "config": {
+    "manifest": "/mnt/e/StrainFM/data/raw/manifest_all.tsv",
+    "download_manifest": "/mnt/e/StrainFM/data/raw/download_manifest_all.tsv",
+    "genome_root": "/mnt/e/StrainFM/data/raw/genomes",
+    "species": [
+      "Escherichia_coli",
+      "Klebsiella_pneumoniae",
+      "Pseudomonas_aeruginosa",
+      "Bacillus_subtilis"
+    ],
+    "sample_per_species": 25,
+    "seed": 20261104
+  },
+  "input_sha256": {
+    "config/manifest_audit.json": "8b4d7fbf69fefcc4ad2244cc68a5421deab10ad3ee9e21dd8e823468a3a3554c",
+    "/mnt/e/StrainFM/data/raw/manifest_all.tsv": "cb4d06fe58c957e22d3c4685247a866f8adb03304f24541c0c4f0ad95d6961e7",
+    "/mnt/e/StrainFM/data/raw/download_manifest_all.tsv": "a96528c903f7c8422ecb6a2e3b399b24edd1aaf8d0555b1313e4aa55c8637bb7"
+  },
+  "code_sha256": {
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__init__.py": "fd93abf609ebaff70feea900ba7341905906da0cebc268cafc50ad5c7d391938",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/__main__.py": "0ad6ad9b0ad478e81d4c551dbddb960f0edf21e7e46fc9a51e547d32f7d94e17",
+    "/home/yhshy/git_files/StrainFM/src/strainfm/audit.py": "083ad94de1e8edf98e710b9e034293faa763a73a93859a9651419f122b6d4d41"
+  },
+  "manifest": {
+    "records": 554459,
+    "duplicate_genome_id_excess_rows": 0,
+    "rows_with_trailing_empty_columns": 101408,
+    "kingdom_counts": {
+      "bacteria": 443876,
+      "archaea": 428,
+      "fungi": 264,
+      "virus": 109891
+    },
+    "bacterial_species": 1864,
+    "bacterial_accession_prefixes": {
+      "GCF": 381837,
+      "GCA": 62039
+    },
+    "blank_fields": {
+      "genome_id": 0,
+      "species_id": 0,
+      "fasta": 0,
+      "kingdom": 0
+    }
+  },
+  "mapping": {
+    "rows": 444559,
+    "genome_id_differs_from_file_accession": 372436,
+    "unknown_genome_id": 0,
+    "species_or_kingdom_mismatch": 0,
+    "duplicate_genome_id_excess_rows": 0,
+    "duplicate_target_path_excess_rows": 0,
+    "duplicate_file_accession_excess_rows": 0
+  },
+  "sample": {
+    "selection": "lowest SHA256(seed TAB genome_id), tie by target_relpath; selected before existence check",
+    "records": 100,
+    "passed": 100,
+    "failed": 0,
+    "exact_contig_multiset_duplicate_excess": 0
+  },
+  "limitations": [
+    "File presence is not sequence validity; only sampled files were decoded and hashed.",
+    "No accession identity, biological contamination, annotation, license or clinical permissions verified.",
+    "File accession substitutions require upstream assembly metadata; matching numeric accession parts is insufficient.",
+    "No near-clone deduplication, lineage inference, labels or pretraining overlap assessment performed."
+  ]
+}

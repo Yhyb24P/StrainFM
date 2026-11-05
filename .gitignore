@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# 本地状态与工具配置
+.state/
+.qoder/
+.claude/
+.codex/
+.cursor/
+adapters/
+bus.sqlite
+bus.sqlite-*
+*.sqlite
+*.sqlite-*
+*.log
+
+# 原始数据、权重与大规模中间产物；小型正式结果从 data/results/ 选择提交
+/data/raw/
+/data/weights/
+/data/processed/
+*.gguf
+*.safetensors
+*.pt
+*.pth
+
+# 第三方源码快照、第三方标签与原样响应仅本地留存，来源 URL/哈希/revision 见 sources.json
+/data/results/bacformer_source_audit_20261104/BacBench/
+/data/results/bacformer_source_audit_20261104/Bacformer/
+/data/results/bacformer_source_audit_20261104/hf_amr_binary_labels.csv
+/data/results/ncbi_sample_metadata_20261104/ncbi_batch_*.json
+
+# OS / 编辑器
+.DS_Store
+*.swp
+*.tmp

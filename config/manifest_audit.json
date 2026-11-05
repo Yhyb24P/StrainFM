@@ -1,0 +1,13 @@
+{
+  "manifest": "/mnt/e/StrainFM/data/raw/manifest_all.tsv",
+  "download_manifest": "/mnt/e/StrainFM/data/raw/download_manifest_all.tsv",
+  "genome_root": "/mnt/e/StrainFM/data/raw/genomes",
+  "species": [
+    "Escherichia_coli",
+    "Klebsiella_pneumoniae",
+    "Pseudomonas_aeruginosa",
+    "Bacillus_subtilis"
+  ],
+  "sample_per_species": 25,
+  "seed": 20261104
+}
