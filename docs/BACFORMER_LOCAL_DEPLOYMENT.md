@@ -74,6 +74,8 @@ export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
 | 位置 | 行为 | 处理 |
 |---|---|---|
 | `run_embed_prot_seqs.py` | `model_path` 含 `bacformer-large` 时**硬编码**把 pLM 换成 `Synthyra/ESMplusplus_small`（revision 由 embedder 固定），不暴露独立 revision 参数 | 首次功能验证按官方运行；正式 runner 必须支持分别传入 Bacformer 与 pLM 的本地快照 |
+| `run_embed_prot_seqs.py` | `load_seq_embedder(model_path)` **不传 device**，pLM 默认落在 CUDA；`--device cpu` 只影响 Bacformer | 本仓 runner 用 `--device`（Bacformer）与 `--esm-device auto`（ESM）分别控制，两者都写入 contract；CPU-only 机器上 ESM 会显著变慢 |
+| 共享 GPU | 运行中外部进程可抢占显存/算力（实测 ESM 阶段因外部作业 97% 占用而变慢） | 运行记录如实报告墙钟时间与 `device`；不把共享排队时间当作模型性能 |
 | `run_embed_prot_seqs.py` | `--max-n-proteins` 默认 9000，模型训练上限为 6000 | 显式传 6000；超长基因组单独统计截断 |
 | `run_embed_prot_seqs.py` | 输出时 `df["split"] = split_name` | 划分永远以独立 split manifest 为准，按 `genome_id` 重连并断言 |
 | `embedder.py` | 按路径字符串匹配模型类型（`esmplusplus`/`bacformer`） | 本地快照路径保留可识别子串；换名需同步检查 |
@@ -113,6 +115,9 @@ python bacbench/tasks/operon/run_evaluation_long_read_rna_seq.py \
 ## 6. 数据链约定（E. coli 自有基因组）
 
 - 优先使用同版本配套注释（GBFF 或 FAA+GFF）；仅在无配套注释时用固定版本 pyrodigal（translation table 11）。
+- GBFF 查找同时尝试 `genome_id`/`file_accession`/`paired_accession`（GCA/GCF 配对命名）；0 CDS 的 WGS 主记录 GBFF 自动回退 pyrodigal 并在 `summary.json` 记 `n_gbff_fallbacks`。
+- 源文件在慢速/共享挂载（如 WSL2 `/mnt/e` 的 9p）上解析前先复制到本地临时目录：实测并发读同一 3MB GBFF 时出现重复读放大（累计读取 >70GB、分钟级停滞），复制后解析约 0.7s。
+- 注释产物记录 `n_cds_without_translation`、`n_pseudo`、`n_proteins_over_1024aa`、`n_over_max_proteins`，并在 `genome_input_summary.tsv` 写入 `source_file` 以回溯。
 - 有实验标签的参考菌株**不得重注释**后按行号贴回标签；须建立显式映射并列出失败对象。
 - 输入排序固定为：contig 在 FASTA 中的顺序 → CDS start → end；`max_n_proteins=6000` 截断规则固定并记录 `truncated_protein_count`。
 - 蛋白质级字段必须可回溯到“哪个组装、哪个 contig、哪个 CDS”：保留 genome_id、assembly accession（含版本）、BioSample、contig、contig 内索引、坐标、strand、locus tag、protein_id、序列哈希。

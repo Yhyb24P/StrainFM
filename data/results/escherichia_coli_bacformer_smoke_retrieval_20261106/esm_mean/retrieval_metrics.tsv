@@ -1,0 +1,4 @@
+model_name	protocol	split	stratum	n_queries_total	open_set_n	n_queries_scored	hit@1	hit@5	hit@10	recall@1	recall@5	recall@10	mrr	map@10	median_positive_rank
+esmplusplus-small-mean	A	validation	seen=0;complete	4	4	0									
+esmplusplus-small-mean	A	validation	seen=1;complete	6	3	3	0.3333333333333333	1.0	1.0	0.08333333333333333	0.3333333333333333	0.8333333333333334	0.5	0.39652777777777776	4
+esmplusplus-small-mean	A	validation	ALL	10	7	3	0.3333333333333333	1.0	1.0	0.08333333333333333	0.3333333333333333	0.8333333333333334	0.5	0.39652777777777776	4

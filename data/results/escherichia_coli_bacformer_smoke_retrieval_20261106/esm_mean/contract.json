@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "purpose": "Frozen-protocol strain retrieval evaluation",
+  "model": "esm_mean",
+  "model_name": "esmplusplus-small-mean",
+  "protocol": "A",
+  "split": "validation",
+  "gallery_split": "train",
+  "k_values": [
+    1,
+    5,
+    10
+  ],
+  "seed": 20261106,
+  "positive_definition": "same_Mash_sequence_neighborhood",
+  "ranking": "cosine_distance ascending; ties genome_id lexicographic ascending",
+  "open_set_rule": "queries without gallery positives are counted in open_set_n and excluded from all score denominators",
+  "embeddings_dir": "data/processed/escherichia_coli_bacformer_embeddings_smoke22_20261106",
+  "split_manifest_sha256": "34ba67134a67b416d342a6449c2019cd09c353dfcfb759bf7c29a8b02b9b2a59",
+  "support_sha256": "d954b2622ec6f0f0dde64e389b0d7484497b85046e44bbe64face47d2abf189a",
+  "groups_sha256": "b509a575ccd2a08832b67f881570c13a537117e19dc092e9c8d44c74b91bef05",
+  "n_embedding_failures": 0,
+  "code_sha256": "88c55b7abb87cb3aec46617c2ac3211214b8b90bd1409d8b20083d3332b39f7f",
+  "support_eligible_lost_to_embedding_failures": 3
+}

@@ -14,6 +14,10 @@ from .download import run_download
 from .virus import split_virus
 from .amr_intersection import run_amr_intersection
 from .operon_local_eval import run_operon_local_eval
+from .bacformer_annotate import run_bacformer_annotate
+from .bacformer_embed import run_bacformer_embed
+from .eval_retrieval import run_eval_retrieval
+from .eval_distance import run_eval_distance
 
 
 def main():
@@ -72,6 +76,67 @@ def main():
     local.add_argument("--method-name", default="unknown")
     local.add_argument("--model-revision", default="unknown")
     local.add_argument("--official-embeddings", type=Path, default=None)
+    annotate = sub.add_parser("bacformer-annotate", help="Build ordered protein inputs from companion GBFF or pyrodigal fallback")
+    annotate.add_argument("--split-manifest", type=Path, required=True)
+    annotate.add_argument("--assemblies", type=Path, required=True)
+    annotate.add_argument("--genome-root", type=Path, default=Path("/mnt/e/StrainFM/data/raw/genomes"))
+    annotate.add_argument("--annotation-root", type=Path, default=None)
+    annotate.add_argument("--annotation-mode", choices=["auto", "gbff", "prodigal"], default="auto")
+    annotate.add_argument("--tool", default="prodigal")
+    annotate.add_argument("--translation-table", type=int, default=11)
+    annotate.add_argument("--min-aa-len", type=int, default=30)
+    annotate.add_argument("--max-proteins", type=int, default=6000)
+    annotate.add_argument("--splits", default=None)
+    annotate.add_argument("--genome-ids", default=None)
+    annotate.add_argument("--limit", type=int, default=None)
+    annotate.add_argument("--chunk-size", type=int, default=64)
+    annotate.add_argument("--output", type=Path, required=True)
+    embed = sub.add_parser("bacformer-embed", help="Frozen ESM-C and Bacformer-L genome vectors on one identical protein set")
+    embed.add_argument("--protein-manifest", type=Path, required=True)
+    embed.add_argument("--split-manifest", type=Path, required=True)
+    embed.add_argument("--bacformer-path", type=Path, required=True)
+    embed.add_argument("--esm-path", type=Path, required=True)
+    embed.add_argument("--bacformer-revision", default=None)
+    embed.add_argument("--esm-revision", default=None)
+    embed.add_argument("--batch-size", type=int, default=8)
+    embed.add_argument("--max-seq-len", type=int, default=1024)
+    embed.add_argument("--max-n-proteins", type=int, default=6000)
+    embed.add_argument("--max-n-contigs", type=int, default=1000)
+    embed.add_argument("--device", default="cuda:0")
+    embed.add_argument("--esm-device", default="auto")
+    embed.add_argument("--esm-dtype", default="auto")
+    embed.add_argument("--esm-min-free-mib", type=int, default=1500)
+    embed.add_argument("--dtype", default="bfloat16")
+    embed.add_argument("--min-free-mib", type=int, default=4000)
+    embed.add_argument("--chunk-size", type=int, default=16)
+    embed.add_argument("--output", type=Path, required=True)
+    retrieval = sub.add_parser("eval-retrieval", help="Frozen-protocol retrieval evaluation (protocol A train gallery / B held-out)")
+    retrieval.add_argument("--embeddings-dir", type=Path, required=True)
+    retrieval.add_argument("--split-manifest", type=Path, required=True)
+    retrieval.add_argument("--support", type=Path, required=True)
+    retrieval.add_argument("--groups", type=Path, required=True)
+    retrieval.add_argument("--output", type=Path, required=True)
+    retrieval.add_argument("--model", choices=["bacformer", "esm_mean"], default="bacformer")
+    retrieval.add_argument("--protocol", choices=["A", "B"], default="A")
+    retrieval.add_argument("--split", choices=["validation", "test"], default="validation")
+    retrieval.add_argument("--k-values", default="1,5,10")
+    retrieval.add_argument("--seed", type=int, default=20261106)
+    retrieval.add_argument("--model-name", default="bacformer-large-frozen")
+    distance = sub.add_parser("eval-distance", help="Embedding distance vs Mash distance consistency")
+    distance.add_argument("--embeddings-dir", type=Path, required=True)
+    distance.add_argument("--split-manifest", type=Path, required=True)
+    distance.add_argument("--groups-dir", type=Path, required=True)
+    distance.add_argument("--assemblies", type=Path, required=True)
+    distance.add_argument("--genome-root", type=Path, default=Path("/mnt/e/StrainFM/data/raw/genomes"))
+    distance.add_argument("--mash-binary", type=Path, required=True)
+    distance.add_argument("--output", type=Path, required=True)
+    distance.add_argument("--model", choices=["bacformer", "esm_mean"], default="bacformer")
+    distance.add_argument("--split", choices=["validation", "test"], default="validation")
+    distance.add_argument("--seed", type=int, default=20261106)
+    distance.add_argument("--model-name", default="bacformer-large-frozen")
+    distance.add_argument("--per-bin", type=int, default=20)
+    distance.add_argument("--max-far-candidates-per-query", type=int, default=400)
+    distance.add_argument("--cli-workers", type=int, default=8)
     args = parser.parse_args()
     if args.command == "audit":
         result = run_audit(args.config, args.output)
@@ -95,6 +160,35 @@ def main():
         result = run_amr_intersection(args.labels, args.cohort_manifest, args.split_manifest, args.output)
     elif args.command == "operon-local-eval":
         result = run_operon_local_eval(args.embeddings, args.mapping, args.reference, args.output, args.method_name, args.model_revision, args.official_embeddings)
+    elif args.command == "bacformer-annotate":
+        result = run_bacformer_annotate(
+            args.split_manifest, args.assemblies, args.genome_root, args.output,
+            annotation_root=args.annotation_root, annotation_mode=args.annotation_mode,
+            tool=args.tool, translation_table=args.translation_table, min_aa_len=args.min_aa_len,
+            max_proteins=args.max_proteins,
+            splits=args.splits.split(",") if args.splits else None,
+            genome_ids=args.genome_ids.split(",") if args.genome_ids else None,
+            limit=args.limit, chunk_size=args.chunk_size)
+    elif args.command == "bacformer-embed":
+        result = run_bacformer_embed(
+            args.protein_manifest, args.split_manifest, args.bacformer_path, args.esm_path, args.output,
+            batch_size=args.batch_size, max_seq_len=args.max_seq_len, max_n_proteins=args.max_n_proteins,
+            max_n_contigs=args.max_n_contigs, device=args.device, dtype=args.dtype,
+            min_free_mib=args.min_free_mib, chunk_size=args.chunk_size,
+            bacformer_revision=args.bacformer_revision, esm_revision=args.esm_revision,
+            esm_device=args.esm_device, esm_dtype=args.esm_dtype, esm_min_free_mib=args.esm_min_free_mib)
+    elif args.command == "eval-retrieval":
+        result = run_eval_retrieval(
+            args.embeddings_dir, args.split_manifest, args.support, args.groups, args.output,
+            model=args.model, protocol=args.protocol, split=args.split,
+            k_values=tuple(int(k) for k in args.k_values.split(",")), seed=args.seed,
+            model_name=args.model_name)
+    elif args.command == "eval-distance":
+        result = run_eval_distance(
+            args.embeddings_dir, args.split_manifest, args.groups_dir, args.assemblies,
+            args.genome_root, args.mash_binary, args.output, model=args.model, split=args.split,
+            seed=args.seed, model_name=args.model_name, per_bin=args.per_bin,
+            max_far_candidates_per_query=args.max_far_candidates_per_query, cli_workers=args.cli_workers)
     else:
         result = split_virus(args.manifest, args.input, args.output)
     print(json.dumps(result, ensure_ascii=False, indent=2))

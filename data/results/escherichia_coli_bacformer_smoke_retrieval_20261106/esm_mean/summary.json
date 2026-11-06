@@ -1,0 +1,30 @@
+{
+  "status": "retrieval_eval_complete",
+  "model": "esm_mean",
+  "model_name": "esmplusplus-small-mean",
+  "protocol": "A",
+  "split": "validation",
+  "n_queries_total": 10,
+  "open_set_n": 7,
+  "n_queries_scored": 3,
+  "n_strata": 2,
+  "k_values": [
+    1,
+    5,
+    10
+  ],
+  "seed": 20261106,
+  "n_embedding_failures": 0,
+  "all_hit": {
+    "hit@1": 0.3333333333333333,
+    "hit@5": 1.0,
+    "hit@10": 1.0
+  },
+  "all_recall": {
+    "recall@1": 0.08333333333333333,
+    "recall@5": 0.3333333333333333,
+    "recall@10": 0.8333333333333334
+  },
+  "all_mrr": 0.5,
+  "all_map@10": 0.39652777777777776
+}
