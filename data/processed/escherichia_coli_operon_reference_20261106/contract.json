@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "purpose": "Official-input closed loop A reference: E. coli (DH5\u03b1, GCF_002899475.1, contig NZ_CP026085.1) long-read RNA-seq operon labels, author protein order preserved",
+  "source_dataset": "macwiatrak/operon-identification-long-read-rna-sequencing-protein-sequences",
+  "source_revision": "d77df90f19544475a4da28c0cb80cda2e4d00652",
+  "source_file": "/mnt/e/StrainFM/models/hf_datasets/datasets--macwiatrak--operon-identification-long-read-rna-sequencing-protein-sequences/snapshots/d77df90f19544475a4da28c0cb80cda2e4d00652/data/test-00000-of-00001.parquet",
+  "source_file_sha256": "2d8443ba184b93ef84c7562b806282fe77b31334556152b277e422013e506799",
+  "output_file": "data/processed/escherichia_coli_operon_reference_20261106/ecoli_operon_reference.parquet",
+  "output_sha256": "b54cdb7c1dbd003ab51a01175d42af810156bec128a5f24eabbb9d055134c487",
+  "n_contigs": 1,
+  "n_proteins": 4440,
+  "n_operons": 369,
+  "note": "operon_prot_indices are indices into the author's ordered protein list; do not re-annotate before using them",
+  "built_utc": "2026-11-06T03:03:53.384344+00:00"
+}

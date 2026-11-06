@@ -1,0 +1,29 @@
+{
+  "status": "amr_intersection_complete",
+  "funnel": {
+    "cohort_records": 62560,
+    "label_rows": 26052,
+    "exact_accession_matches_cohort": 609,
+    "version_mismatch_only": 0,
+    "unmatched_label_rows": 25443,
+    "matched_split_representatives": 37,
+    "unique_biosamples_matched": 37,
+    "biosamples_with_multiple_representatives": 0
+  },
+  "matched_representatives_by_split": {
+    "train": 29,
+    "test": 3,
+    "validation": 5
+  },
+  "n_drugs": 37,
+  "n_drugs_with_any_label": 31,
+  "n_drugs_passing_paper_rule": 0,
+  "n_duplicate_biosample_groups": 0,
+  "finished_utc": "2026-11-06T03:06:03.722343+00:00",
+  "limitations": [
+    "Intersection counts are label availability, not verified AST quality or independent-sample counts.",
+    "GCA/GCF matches rely on NCBI paired accession metadata, not on sequence identity between the two records.",
+    "Same BioSample with multiple assemblies is reported, not silently collapsed.",
+    "Binary labels exclude ambiguous (I) results by the published dataset construction; per-drug conflicts are not observable in this file."
+  ]
+}

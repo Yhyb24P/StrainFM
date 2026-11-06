@@ -1,0 +1,9 @@
+stage	n
+cohort_records	62560
+label_rows	26052
+exact_accession_matches_cohort	609
+version_mismatch_only	0
+unmatched_label_rows	25443
+matched_split_representatives	37
+unique_biosamples_matched	37
+biosamples_with_multiple_representatives	0

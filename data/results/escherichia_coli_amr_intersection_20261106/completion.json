@@ -1,0 +1,8 @@
+{
+  "summary.json": "12b906970c8f9a404aae6f61186155519d9317c72b9f2af31bb29f472cb001d5",
+  "funnel.tsv": "3a76744bc2ae54ccc8354198fc20bc1b0b439be60b827b057bef96c8d12e8498",
+  "matched_representatives.tsv": "c7eb9966345bb7b0843ab6e70ff3148d82bcaaa573710e7906762a7b1568a47c",
+  "drug_counts_representatives.tsv": "fb2ff7c4bcb64c6ac57d642bebda409f598b4b5309aea35614846b20b6ff8c7b",
+  "version_mismatch_matches.tsv": "38c84a18e2f1120aed9d6aeb473315f4b6c81cedf4ff0b9037c98d8948caa6c0",
+  "contract.json": "ed28a7d5283d639d80eda54efd900f09fadda4e3ce9e49719b85aee454d834a6"
+}

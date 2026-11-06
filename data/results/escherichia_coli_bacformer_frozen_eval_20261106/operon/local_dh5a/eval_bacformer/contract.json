@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "purpose": "Operon boundary scoring on local annotation restricted to pairs aligned with the author protein list",
+  "embeddings_sha256": "36e0ca1cf60e847558b3089e0f95863b4acce6b1149d15f052c436abb68ab965",
+  "mapping_sha256": "214912c761c36b8f125b64f10d47b20e285a09880c8500749f062fec23c35183",
+  "reference_sha256": "b54cdb7c1dbd003ab51a01175d42af810156bec128a5f24eabbb9d055134c487",
+  "code_sha256": "231e906242ac39e86b6646afa98af686c2a0432dd0cf6d8620778898b675d96b",
+  "pair_definition": "local adjacent pair (l, l+1) included iff both map to consecutive author indices; label from official author pairwise labels; score from official BacBench function",
+  "coordinate_note": "embeddings column is the official flat single-row nested list; reshaped to (n_proteins, dim) before scoring",
+  "started_utc": "2026-11-06T03:14:45.912868+00:00"
+}

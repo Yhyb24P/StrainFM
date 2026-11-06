@@ -1,0 +1,105 @@
+{
+  "status": "deployment_verification_only",
+  "scope_statement": "Single-strain DH5\u03b1 official-input run verifying deployment and official evaluation code; not evidence of multi-strain representation quality.",
+  "inputs": {
+    "operon_reference_parquet": {
+      "path": "data/processed/escherichia_coli_operon_reference_20261106/ecoli_operon_reference.parquet",
+      "sha256": "b54cdb7c1dbd003ab51a01175d42af810156bec128a5f24eabbb9d055134c487"
+    },
+    "operon_dataset_revision": "d77df90f19544475a4da28c0cb80cda2e4d00652",
+    "n_proteins": 4440,
+    "n_operons": 369,
+    "n_contigs": 1
+  },
+  "model_revisions": {
+    "bacformer_large": {
+      "repo_id": "macwiatrak/bacformer-large-masked-complete-genomes",
+      "revision_pinned": "84f85c37a05e55559142b842c1569e265183b554",
+      "note": "fix-rope-buffer-reinit; re-downloaded after 2025-05-15 embedding-quality bug",
+      "local_path": "/mnt/e/StrainFM/models/hf/models--macwiatrak--bacformer-large-masked-complete-genomes/snapshots/84f85c37a05e55559142b842c1569e265183b554",
+      "weight_sha256": "f48fc313f876db642212a6238b199b18217dd750dcdc9d517ecedebe9e20a2e1"
+    },
+    "esmplusplus_small": {
+      "repo_id": "Synthyra/ESMplusplus_small",
+      "revision_pinned": "1e40c1b8ef46c33f93a9b817eb0bd81279ab4088",
+      "note": "BacBench ESMPlusPlusEmbedder._load pins this revision (Bacformer-L training-time ESM++); supersedes the earlier main snapshot 37b1a0f",
+      "local_path": "/mnt/e/StrainFM/models/hf/models--Synthyra--ESMplusplus_small/snapshots/1e40c1b8ef46c33f93a9b817eb0bd81279ab4088",
+      "weight_sha256": "d099223765bc4f1ae8d6c7e18561ce41df1d54073fdc5327ef0a229235a8f52a"
+    },
+    "bacbench_commit": "64b7d45823b2ff2ef88458e3aa235caa461a12aa"
+  },
+  "environment": {
+    "conda_env": "esm3",
+    "device": "cpu",
+    "dtype": "bfloat16 (models) / float32 (saved embeddings)",
+    "torch": "2.11.0",
+    "transformers": "4.48.1",
+    "bacformer_package": "0.2.0",
+    "offline_evidence": "HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 with HF_HUB_CACHE=/mnt/e/StrainFM/models/hf; models loaded from pinned local snapshots",
+    "gpu_status_at_run": "RTX 5090 D 1.6GB free, 97% util -> CPU per deployment policy"
+  },
+  "embedding_checks": {
+    "shape": [
+      4440,
+      960
+    ],
+    "dtype": "float32",
+    "nan_count": 0,
+    "determinism": {
+      "criterion": "max_abs_diff <= 1e-6 on identical CPU reruns",
+      "observed_max_abs_diff": 0.0,
+      "identical": true,
+      "note": "CPU reruns bitwise identical; CPU vs GPU not compared bitwise"
+    }
+  },
+  "resource_usage": {
+    "bacformer_run": {
+      "wall_time_s": 37.13,
+      "peak_rss_kb": 9832640,
+      "note": "determinism rerun with /usr/bin/time -v; first run not instrumented"
+    },
+    "esm_run": {
+      "wall_time_s": 73.21,
+      "peak_rss_kb": 5272280
+    }
+  },
+  "metrics": [
+    {
+      "method": "bacformer-large-frozen",
+      "strain_name": "Escherichia coli",
+      "AUROC": 0.7124797724598942,
+      "average_precision": 0.21941718117376713,
+      "n_pairs": 4439,
+      "n_positive_pairs": 574,
+      "n_negative_pairs": 3865,
+      "model_revision": "84f85c37a05e55559142b842c1569e265183b554",
+      "device": "cpu",
+      "protocol": "BacBench 64b7d45 official operon benchmark ((cos+1)/2, strand veto)"
+    },
+    {
+      "method": "esmplusplus-small-mean",
+      "strain_name": "Escherichia coli",
+      "AUROC": 0.6723674898918643,
+      "average_precision": 0.1777187708628541,
+      "n_pairs": 4439,
+      "n_positive_pairs": 574,
+      "n_negative_pairs": 3865,
+      "model_revision": "1e40c1b8ef46c33f93a9b817eb0bd81279ab4088",
+      "device": "cpu",
+      "protocol": "BacBench 64b7d45 official operon benchmark ((cos+1)/2, strand veto)"
+    }
+  ],
+  "metric_csv_sha256": {
+    "metrics_bacformer_official_input.csv": "12cf91f937f9c0a91d477f1583dc14fe33c661b22eefe575441efce7a33524df",
+    "metrics_esm_official_input.csv": "70837f1ff4d1b1355bcd8acae7635ea77d1821bf343cc5c18a61752a872e1f2b",
+    "metrics_compact.csv": "682c4e4d6ce2d84f87a76a63f9ccd264c3a595efe7e9c67ebf361f865505a02d"
+  },
+  "commands": {
+    "embed_bacformer": "PYTHONPATH=<bacbench_pinned> HF_HOME=HF_HUB_CACHE=/mnt/e/StrainFM/models/hf HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 python bacbench/modeling/run_embed_prot_seqs.py --input-parquet-path data/processed/escherichia_coli_operon_reference_20261106/ecoli_operon_reference.parquet --model-path <bacformer-large snapshot> --batch-size 8 --max-prot-seq-len 1024 --max-n-proteins 6000 --device cpu --output-filepath <operon/official_input/bacformer/ecoli_operon_bacformer.parquet>",
+    "embed_esm": "same with --model-path <esmplusplus_small snapshot 1e40c1b8> and esm output path",
+    "evaluate": "PYTHONPATH=<bacbench_pinned> python bacbench/tasks/operon/run_evaluation_long_read_rna_seq.py --input-filepath <embeddings parquet> --output-filepath <metrics csv>"
+  },
+  "finished_utc": "2026-11-06T03:10:30.734560+00:00",
+  "metric_recompute_note": "Compact metrics recomputed from embeddings parquet with the official BacBench 64b7d45 pair-label and pair-score functions; matches official CSV AUROC/AP to 1e-5",
+  "artifact_note": "Bacformer embeddings artifact recorded in commands is ecoli_operon_bacformer.parquet; the runtime-instrumented rerun is ecoli_operon_bacformer_rerun.parquet, bitwise identical (max abs diff 0.0). embeddings column is the official flat single-row nested list (4440x960); downstream consumers must reshape(4440, 960)."
+}

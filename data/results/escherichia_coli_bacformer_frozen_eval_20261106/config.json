@@ -1,0 +1,28 @@
+{
+  "phase": "frozen_representation_deployment_verification",
+  "framework": "Bacformer official + BacBench official",
+  "training": false,
+  "closed_loop": "A official-input (DH5\u03b1 operon)",
+  "models": {
+    "bacformer_large": {
+      "repo_id": "macwiatrak/bacformer-large-masked-complete-genomes",
+      "revision_pinned": "84f85c37a05e55559142b842c1569e265183b554",
+      "note": "fix-rope-buffer-reinit; re-downloaded after 2025-05-15 embedding-quality bug",
+      "local_path": "/mnt/e/StrainFM/models/hf/models--macwiatrak--bacformer-large-masked-complete-genomes/snapshots/84f85c37a05e55559142b842c1569e265183b554",
+      "weight_sha256": "f48fc313f876db642212a6238b199b18217dd750dcdc9d517ecedebe9e20a2e1"
+    },
+    "esmplusplus_small": {
+      "repo_id": "Synthyra/ESMplusplus_small",
+      "revision_pinned": "1e40c1b8ef46c33f93a9b817eb0bd81279ab4088",
+      "note": "BacBench ESMPlusPlusEmbedder._load pins this revision (Bacformer-L training-time ESM++); supersedes the earlier main snapshot 37b1a0f",
+      "local_path": "/mnt/e/StrainFM/models/hf/models--Synthyra--ESMplusplus_small/snapshots/1e40c1b8ef46c33f93a9b817eb0bd81279ab4088",
+      "weight_sha256": "d099223765bc4f1ae8d6c7e18561ce41df1d54073fdc5327ef0a229235a8f52a"
+    },
+    "bacbench_commit": "64b7d45823b2ff2ef88458e3aa235caa461a12aa"
+  },
+  "policy": {
+    "device": "cpu_fallback_due_to_shared_gpu",
+    "test_split_opened": false,
+    "retrieval_protocol": "deferred (REQ-002 frozen)"
+  }
+}

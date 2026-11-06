@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "purpose": "Local DH5\u03b1 input built from same-version GenBank GBFF; labels are NOT attached here and must come from the explicit author-list mapping",
+  "gbff": "/mnt/e/StrainFM/data/raw/annotations/GCF_002899475.1/GCF_002899475.1_ASM289947v1_genomic.gbff.gz",
+  "gbff_sha256": "0dacb3a72ac2698079b0eb02298b4ec4efd88dbd580e87ac27434d6bdfbd72b0",
+  "n_proteins": 4444,
+  "contig": "NZ_CP026085.1",
+  "coordinate_convention": "start is 0-based GenBank location start (author convention); end inclusive",
+  "output_sha256": "c8962229bd768b983fd716c1d0ae5d0b501f57d40c7694e69f25ebb91891dfd0"
+}

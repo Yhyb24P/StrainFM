@@ -24,7 +24,10 @@ bus.sqlite-*
 # 原始数据、权重与大规模中间产物；小型正式结果从 data/results/ 选择提交
 /data/raw/
 /data/weights/
-/data/processed/
+/data/processed/*
+!/data/processed/escherichia_coli_operon_reference_20261106/
+!/data/processed/escherichia_coli_dh5a_local_mapping_20261106/
+!/data/processed/escherichia_coli_dh5a_local_input_20261106/
 *.gguf
 *.safetensors
 *.pt
@@ -40,3 +43,10 @@ bus.sqlite-*
 .DS_Store
 *.swp
 *.tmp
+
+# 模型权重与数据集冷数据（放 /mnt/e/StrainFM/models）
+/models/
+/data/results/bacbench_pinned_20261106/
+/data/results/escherichia_coli_bacformer_frozen_eval_20261106/operon/official_input/
+/data/results/escherichia_coli_bacformer_frozen_eval_20261106/operon/local_dh5a/bacformer/
+/data/results/escherichia_coli_bacformer_frozen_eval_20261106/operon/local_dh5a/esm/

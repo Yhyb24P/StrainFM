@@ -1,0 +1,27 @@
+{
+  "status": "local_dh5a_mapping_only_no_inference",
+  "coordinate_system": "author start is 0-based (verified author_start0 == GenBank start-1 on mapped proteins)",
+  "source_gbff": "/mnt/e/StrainFM/data/raw/annotations/GCF_002899475.1/GCF_002899475.1_ASM289947v1_genomic.gbff.gz",
+  "source_gbff_sha256": "0dacb3a72ac2698079b0eb02298b4ec4efd88dbd580e87ac27434d6bdfbd72b0",
+  "reference_parquet_sha256": "b54cdb7c1dbd003ab51a01175d42af810156bec128a5f24eabbb9d055134c487",
+  "author_proteins": 4440,
+  "local_cds_with_translation": 4444,
+  "match_counts": {
+    "id_coord": 4429,
+    "unmapped": 11
+  },
+  "mapped_author_proteins": 4429,
+  "unmapped_author_proteins": 11,
+  "duplicate_local_mappings": 0,
+  "coordinate_strand_identical_among_mapped": 4429,
+  "local_proteins_without_author_match": 15,
+  "operons_total": 369,
+  "operons_fully_mapped": 369,
+  "operons_partially_mapped": 0,
+  "finished_utc": "2026-11-06T03:12:10.158809+00:00",
+  "limitations": [
+    "Mapping uses author coordinates (0-based starts) to disambiguate repeated protein_id copies; no re-annotation or row-number label reuse.",
+    "Unmatched author proteins are enumerated, not filled by nearest-position or name matching.",
+    "Operons with any unmapped member are excluded from local-input evaluation."
+  ]
+}

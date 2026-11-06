@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "purpose": "Pre-modelling intersection of BacBench AMR binary labels with the frozen E. coli cohort; no model inference",
+  "labels_sha256": "644b91687d53c36e8645f0a5eb560b33cd807276ae41d81ae9a2f411050b0f63",
+  "cohort_manifest_sha256": "99aadc3b5ebfa987402949eaac0ad28121fa5a7fd33cba5775373d3f728fca4c",
+  "split_manifest_sha256": "34ba67134a67b416d342a6449c2019cd09c353dfcfb759bf7c29a8b02b9b2a59",
+  "code_sha256": "164bf9d08a6de7cbab2eced3520cfccff2b06ea78ed3fdde629b0f69e12298e7",
+  "label_direction": "0=susceptible, 1=resistant as published (AST S/R only, ambiguous excluded); direction not re-verified against source AST in this audit",
+  "matching_rule": "Exact versioned accession against file/current/paired accession; version-stripped matches counted separately as diagnostics and never merged",
+  "started_utc": "2026-11-06T03:06:03.721577+00:00"
+}

@@ -1,0 +1,37 @@
+{
+  "method": "bacformer-large-frozen",
+  "model_revision": "84f85c37a05e55559142b842c1569e265183b554",
+  "AUROC": 0.7126248911717823,
+  "average_precision": 0.2206019806997686,
+  "n_aligned_pairs": 4408,
+  "n_positive_pairs": 574,
+  "n_negative_pairs": 3834,
+  "n_local_proteins": 4444,
+  "n_author_proteins": 4440,
+  "aligned_pairs_of_author_pairs": 0.993016445145303,
+  "excluded_pairs": {
+    "author_unmapped_between": 6,
+    "local_extra_protein_pair": 29
+  },
+  "unmapped_author_indices": [
+    123,
+    1330,
+    2379,
+    3230,
+    3646,
+    3828,
+    3856,
+    3865,
+    3923,
+    3924,
+    4118
+  ],
+  "n_author_pairs": 4439,
+  "official_same_pairs": {
+    "AUROC": 0.7118617304549972,
+    "average_precision": 0.22040891841178956,
+    "n_pairs": 4408,
+    "note": "official-input scores projected onto the identical aligned author-pair set; isolates annotation drift from pipeline differences",
+    "official_embeddings_sha256": "62176505d88176e12b2672e3fec121bc165a3e5144ae3b4bb5dbe269ae44f6d6"
+  }
+}

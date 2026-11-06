@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "gbff": "/mnt/e/StrainFM/data/raw/annotations/GCF_002899475.1/GCF_002899475.1_ASM289947v1_genomic.gbff.gz",
+  "gbff_sha256": "0dacb3a72ac2698079b0eb02298b4ec4efd88dbd580e87ac27434d6bdfbd72b0",
+  "reference_parquet": "data/processed/escherichia_coli_operon_reference_20261106/ecoli_operon_reference.parquet",
+  "reference_sha256": "b54cdb7c1dbd003ab51a01175d42af810156bec128a5f24eabbb9d055134c487",
+  "code": "inline Bio.SeqIO GenBank CDS parse (translation required, pseudo excluded), protein_id then exact-sequence mapping"
+}
