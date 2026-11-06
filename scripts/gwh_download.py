@@ -11,6 +11,8 @@ import threading
 import time
 from urllib.parse import quote
 
+from strainfm.download import download_fasta
+
 ROOT = "/mnt/e/StrainFM"
 GENOMES = ROOT + "/data/raw/genomes"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
@@ -63,37 +65,14 @@ def query_gwh(acc):
     return None
 
 
-def download_one(row, target_rel, basename, gwh_url):
-    target = os.path.join(GENOMES, target_rel)
-    os.makedirs(os.path.dirname(target), exist_ok=True)
-    if os.path.exists(target) and os.path.getsize(target) > 0:
-        with lock:
-            stats["skipped"] += 1
-        return "skipped"
-    tmp = target + ".gwhpart"
-    cmd = ["curl", "-sL", "--noproxy", "*", "--fail", "--retry", "3", "--retry-delay", "2",
-           "--max-time", "300", "-o", tmp, gwh_url]
-    r = subprocess.run(cmd, capture_output=True, text=True)
-    if r.returncode != 0:
-        try: os.remove(tmp)
-        except FileNotFoundError: pass
-        with lock:
-            stats["download_failed"] += 1
-        log(f"DOWNLOAD_FAIL {basename} rc={r.returncode} {r.stderr.strip()[:120]}")
-        return "failed"
-    if subprocess.run(["gzip", "-t", tmp], capture_output=True).returncode != 0:
-        os.remove(tmp)
-        with lock:
-            stats["download_failed"] += 1
-        log(f"GZIP_FAIL {basename}")
-        return "failed"
-    os.replace(tmp, target)
+def download_one(record):
+    result = download_fasta(GENOMES, record["target_relpath"], record["gwh_url"])
+    key = "skipped" if result == "skip" else "downloaded" if result == "OK" else "download_failed"
     with lock:
-        stats["downloaded"] += 1
-        n = stats["downloaded"]
-    if n % 100 == 0:
-        log(f"downloaded={n} hit={stats['hit']} miss={stats['miss']} failed={stats['download_failed']}")
-    return "ok"
+        stats[key] += 1
+    if result.startswith("FAIL"):
+        log(result)
+    return result
 
 
 def main():
@@ -139,7 +118,7 @@ def main():
         w.writeheader(); w.writerows({k: r.get(k, "") for k in w.fieldnames} for r in misses)
     log(f"mapping saved {map_path} misses {miss_path}")
     with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
-        futs = [ex.submit(download_one, r["file_accession"], r["target_relpath"], r["fasta_basename"], r["gwh_url"]) for r in mapping]
+        futs = [ex.submit(download_one, r) for r in mapping]
         for f in concurrent.futures.as_completed(futs):
             f.result()
     log(f"done {stats}")

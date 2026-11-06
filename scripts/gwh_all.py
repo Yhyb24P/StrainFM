@@ -12,6 +12,8 @@ import time
 from collections import defaultdict
 from urllib.parse import quote
 
+from strainfm.download import download_fasta, valid_fasta
+
 ROOT = "/mnt/e/StrainFM"
 GEN = ROOT + "/data/raw/genomes"
 API = "https://ngdc.cncb.ac.cn/gwh/api/esdt/gwh_assemblies/query"
@@ -56,33 +58,12 @@ def api_page(species, start):
             time.sleep(1 + attempt)
     return None
 
-
-def download_gwh(rec):
-    target = os.path.join(GEN, rec["target_relpath"])
-    if os.path.exists(target) and os.path.getsize(target) > 0:
-        return "skip"
-    os.makedirs(os.path.dirname(target), exist_ok=True)
-    tmp = target + ".gwhpart"
-    r = subprocess.run(["curl", "-sL", "--noproxy", "*", "--http2", "--fail", "--retry", "4",
-                        "--retry-delay", "2", "--max-time", "300", "-o", tmp, rec["gwh_url"]],
-                       capture_output=True, text=True)
-    if r.returncode != 0:
-        try: os.remove(tmp)
-        except FileNotFoundError: pass
-        return f"FAIL {rec['file_accession']} rc={r.returncode}"
-    if subprocess.run(["gzip", "-t", tmp], capture_output=True).returncode != 0:
-        os.remove(tmp)
-        return f"GZIPFAIL {rec['file_accession']}"
-    os.replace(tmp, target)
-    return "OK"
-
-
 def main():
     log("indexing existing files")
     existing = set()
     for dirpath, _, files in os.walk(GEN):
         for f in files:
-            if f.endswith(".fna.gz"):
+            if f.endswith(".fna.gz") and valid_fasta(os.path.join(dirpath, f)):
                 existing.add(os.path.relpath(os.path.join(dirpath, f), GEN))
     log(f"existing={len(existing)}")
     # Build remaining rows from both manifests
@@ -135,12 +116,12 @@ def main():
         ok = skip = fail = 0
         if hits:
             with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
-                for f in concurrent.futures.as_completed([ex.submit(download_gwh, rec) for rec in hits.values()]):
+                for f in concurrent.futures.as_completed([ex.submit(download_fasta, GEN, rec["target_relpath"], rec["gwh_url"]) for rec in hits.values()]):
                     res = f.result()
                     if res == "OK": ok += 1
                     elif res == "skip": skip += 1
                     else: fail += 1
-                    if res.startswith("FAIL") or res.startswith("GZIPFAIL"):
+                    if res.startswith("FAIL"):
                         log(res)
             for rec in hits.values():
                 mw.writerow(rec); map_f.flush()

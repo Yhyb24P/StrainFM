@@ -1,0 +1,50 @@
+{
+  "status": "candidate_splits_frozen_pending_target_species_confirmation",
+  "seed": 20261105,
+  "identity_representatives": 60416,
+  "near_clone_representatives": 30687,
+  "split_counts": {
+    "train": 26462,
+    "validation": 2113,
+    "test": 2112
+  },
+  "source_project_counts": {
+    "train": 3480,
+    "validation": 1469,
+    "test": 1496
+  },
+  "source_unknown_train_only": 0,
+  "retrieval_positive_supported_queries": {
+    "test": 1959,
+    "validation": 1953
+  },
+  "retrieval_queries_without_gallery_positive": {
+    "validation": 160,
+    "test": 153
+  },
+  "sequence_neighborhood_counts": {
+    "train": 1833,
+    "validation": 452,
+    "test": 480
+  },
+  "test_neighborhoods_seen_in_train": 331,
+  "test_neighborhoods_absent_from_train": 149,
+  "verified_no_cross_split_identity_nearclone_or_known_project": true,
+  "input_sha256": {
+    "data/processed/escherichia_coli_identity_cohort_20261105/identity_representatives.tsv": "a38e53757502f167fe8082ef4df844cea8be47f38f592ac50601b49cee7ffae5",
+    "data/processed/escherichia_coli_mash_groups_20261105/sequence_groups.tsv": "b509a575ccd2a08832b67f881570c13a537117e19dc092e9c8d44c74b91bef05",
+    "data/processed/escherichia_coli_identity_cohort_20261105/cohort_manifest.tsv": "99aadc3b5ebfa987402949eaac0ad28121fa5a7fd33cba5775373d3f728fca4c"
+  },
+  "code_sha256": "7b3c70afd6e62f772ca4646158150af703d0b25672d2cf7afed9a65886955374",
+  "split_manifest_sha256": "34ba67134a67b416d342a6449c2019cd09c353dfcfb759bf7c29a8b02b9b2a59",
+  "limitations": [
+    "Source-isolated within-species retrieval is not automatically unseen-lineage evaluation.",
+    "Neighborhood positives derive from Mash grouping and diagnose genetic structure, not independent phenotypes.",
+    "All upstream pretraining exposure remains unknown; report this evaluation stratum explicitly.",
+    "Approximate MinHash near-clone groups are operational, not proof of epidemiological independence.",
+    "Fractions are targets; whole-project allocation prioritizes source isolation."
+  ],
+  "source_components": 2520,
+  "largest_source_component_representatives": 26462,
+  "full_member_source_constraints_verified": true
+}

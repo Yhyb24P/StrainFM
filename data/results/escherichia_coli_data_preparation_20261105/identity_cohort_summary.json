@@ -1,0 +1,40 @@
+{
+  "status": "identity_cohort_ready_for_sequence_grouping",
+  "config": {
+    "scientific_name": "Escherichia coli",
+    "genome_root": "/mnt/e/StrainFM/data/raw/genomes",
+    "min_bases": 500000,
+    "max_bases": 10000000,
+    "min_contig_n50": 50000,
+    "max_contigs": 500,
+    "max_ambiguous_fraction": 0.01
+  },
+  "input_sha256": {
+    "data/processed/escherichia_coli_download_20261105/assemblies.tsv": "1babfba1bb0c89a36bcddc1a1b19796cda330909ffa9191b5f48be509ad27451",
+    "data/processed/escherichia_coli_ncbi_metadata_20261105/assembly_metadata.tsv": "5bf3b6f4c619226b586676aa6d7924d5b1c7018be5b69d419a88067a22abc33e",
+    "config/escherichia_coli_cohort.json": "07e1eb2653d7327b45425a9fcbca5d32b49bdf67bd24efe755ee416d5188b4f1"
+  },
+  "code_sha256": "ad3881875db8e628ca3e071b9be4f4c7e3f66314b5da3f478a611421afa066b0",
+  "records": 62560,
+  "eligible_files": 60984,
+  "excluded_files": 1576,
+  "exclusion_reasons_nonexclusive": {
+    "taxonomy_check_failed": 62,
+    "contig_count_above_maximum": 39,
+    "ambiguous_fraction_above_maximum": 415,
+    "contig_n50_below_minimum": 697,
+    "length_outside_range": 68,
+    "assembly_suppressed": 463,
+    "metadata_exact_version_unknown": 6,
+    "file_missing": 5
+  },
+  "identity_groups": 60416,
+  "identity_duplicate_excess": 568,
+  "biosample_unknown_eligible": 0,
+  "bioproject_unknown_representatives": 0,
+  "limitations": [
+    "Identity groups merge eligible assemblies by exact FASTA-record digest or BioSample, not by genomic near-clone distance.",
+    "NCBI assembly metadata support filtering; no new annotation or contamination estimation was run.",
+    "Pretraining overlap remains unknown until a usable upstream membership list is obtained."
+  ]
+}

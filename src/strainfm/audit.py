@@ -7,6 +7,7 @@ import json
 import os
 import platform
 import sys
+import zlib
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -52,37 +53,27 @@ def fasta_stats(path):
     """
     path = Path(path)
     before = path.stat()
-    compressed_digest = sha256(path)
+    compressed = path.read_bytes()
+    compressed_digest = hashlib.sha256(compressed).hexdigest()
+    try:
+        content = gzip.decompress(compressed) if path.suffix == ".gz" else compressed
+    except zlib.error as exc:
+        raise ValueError(f"Invalid gzip data: {exc}") from exc
     lengths, contig_digests = [], []
     counts = Counter()
-    current = None
-    length = 0
-    open_fn = gzip.open if path.suffix == ".gz" else open
-    with open_fn(path, "rt", encoding="ascii") as handle:
-        for number, line in enumerate(handle, 1):
-            line = line.strip()
-            if not line:
-                continue
-            if line.startswith(">"):
-                if current is not None:
-                    if length == 0:
-                        raise ValueError(f"Empty FASTA record before line {number}")
-                    lengths.append(length)
-                    contig_digests.append(current.hexdigest())
-                current, length = hashlib.sha256(), 0
-            else:
-                if current is None:
-                    raise ValueError("Sequence before first FASTA header")
-                sequence = line.upper()
-                if set(sequence) - set("ACGTRYSWKMBDHVN"):
-                    raise ValueError(f"Non-IUPAC DNA characters at line {number}")
-                current.update(sequence.encode("ascii"))
-                length += len(sequence)
-                counts.update(sequence)
-    if current is None or length == 0:
-        raise ValueError("Empty FASTA or empty last record")
-    lengths.append(length)
-    contig_digests.append(current.hexdigest())
+    if not content.strip() or not content.lstrip().startswith(b">"):
+        raise ValueError("Empty FASTA or sequence before first header")
+    allowed = b"ACGTRYSWKMBDHVN"
+    for record in content.lstrip()[1:].split(b"\n>"):
+        lines = record.splitlines()
+        sequence = b"".join(line.strip() for line in lines[1:]).upper()
+        if not sequence:
+            raise ValueError("Empty FASTA record")
+        if sequence.translate(None, allowed):
+            raise ValueError("Non-IUPAC DNA characters")
+        lengths.append(len(sequence))
+        contig_digests.append(hashlib.sha256(sequence).hexdigest())
+        counts.update({chr(base): sequence.count(base) for base in allowed})
     total = sum(lengths)
     cumulative = 0
     for contig_length in sorted(lengths, reverse=True):

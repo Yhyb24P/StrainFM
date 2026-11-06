@@ -1,0 +1,75 @@
+{
+  "checked_utc": "2026-11-05T03:58:08.861631+00:00",
+  "status": "candidate_computational_deliverables_verified_target_species_pending",
+  "checks": [
+    "Full inventory, eligible cohort, identity groups and selected near-clone representatives reconcile",
+    "Saved sparse forests reconstruct both full 60416-genome grouping assignments exactly",
+    "Every selected clone retains all original eligible-member projects, with no project or BioSample shared across splits",
+    "All validation/test queries have correctly counted training-gallery positives; unsupported queries remain explicit",
+    "Quality and diversity coverage reported for the actual frozen split, without changing selection after model evaluation",
+    "Frozen split checksum and executed split implementation checksum match recorded provenance"
+  ],
+  "split_quality_and_diversity": {
+    "train": {
+      "genomes": 26462,
+      "fraction": 0.8623195489946883,
+      "assembly_levels": {
+        "Complete Genome": 3125,
+        "Chromosome": 244,
+        "Scaffold": 7239,
+        "Contig": 15854
+      },
+      "median_total_bases": 5055711.5,
+      "median_contig_count": 127.0,
+      "median_contig_n50": 158764.0,
+      "sequence_neighborhoods": 1833
+    },
+    "validation": {
+      "genomes": 2113,
+      "fraction": 0.06885651904715352,
+      "assembly_levels": {
+        "Complete Genome": 447,
+        "Chromosome": 25,
+        "Contig": 1206,
+        "Scaffold": 435
+      },
+      "median_total_bases": 5084721,
+      "median_contig_count": 115,
+      "median_contig_n50": 178671,
+      "sequence_neighborhoods": 452
+    },
+    "test": {
+      "genomes": 2112,
+      "fraction": 0.06882393195815818,
+      "assembly_levels": {
+        "Complete Genome": 460,
+        "Chromosome": 42,
+        "Contig": 1159,
+        "Scaffold": 451
+      },
+      "median_total_bases": 5052048.0,
+      "median_contig_count": 104.5,
+      "median_contig_n50": 181906.0,
+      "sequence_neighborhoods": 480
+    }
+  },
+  "artifact_sha256": {
+    "data/processed/escherichia_coli_download_20261105/assemblies.tsv": "1babfba1bb0c89a36bcddc1a1b19796cda330909ffa9191b5f48be509ad27451",
+    "data/processed/escherichia_coli_identity_cohort_20261105/cohort_manifest.tsv": "99aadc3b5ebfa987402949eaac0ad28121fa5a7fd33cba5775373d3f728fca4c",
+    "data/processed/escherichia_coli_mash_groups_20261105/sequence_groups.tsv": "b509a575ccd2a08832b67f881570c13a537117e19dc092e9c8d44c74b91bef05",
+    "data/processed/escherichia_coli_source_split_20261105/split_manifest.tsv": "34ba67134a67b416d342a6449c2019cd09c353dfcfb759bf7c29a8b02b9b2a59",
+    "data/processed/escherichia_coli_source_split_20261105/retrieval_query_support.tsv": "d954b2622ec6f0f0dde64e389b0d7484497b85046e44bbe64face47d2abf189a"
+  },
+  "unresolved": [
+    "Target species has not received an explicit user/mentor selection; E. coli remains a candidate."
+  ],
+  "not_performed": [
+    "No annotation or protein/model preprocessing",
+    "No model inference or training"
+  ],
+  "candidate_computational_deliverables_complete": true,
+  "formal_target_species_confirmed": false,
+  "limitations": [
+    "Foundation-model pretraining membership remains unknown; source/BioSample/near-clone isolation has been established for the current candidate development/test data only. This unknown status is documented and does not trigger additional unbounded audit."
+  ]
+}

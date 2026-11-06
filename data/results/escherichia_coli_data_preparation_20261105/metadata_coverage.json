@@ -1,0 +1,86 @@
+{
+  "scope": "metadata_coverage_before_file_and_sequence_deduplication",
+  "requested_accessions": 62560,
+  "found_exact_version": 62554,
+  "distinct_biosamples": 62456,
+  "biosample_repeated_accession_excess": 98,
+  "distinct_bioprojects": 6845,
+  "largest_bioprojects": [
+    {
+      "bioproject": "PRJNA230969",
+      "accessions": 2052
+    },
+    {
+      "bioproject": "PRJNA1054762",
+      "accessions": 1045
+    },
+    {
+      "bioproject": "PRJNA983524",
+      "accessions": 887
+    },
+    {
+      "bioproject": "PRJDB5579",
+      "accessions": 769
+    },
+    {
+      "bioproject": "PRJNA1204058",
+      "accessions": 684
+    },
+    {
+      "bioproject": "PRJNA1119420",
+      "accessions": 483
+    },
+    {
+      "bioproject": "PRJNA605147",
+      "accessions": 482
+    },
+    {
+      "bioproject": "PRJNA1134622",
+      "accessions": 393
+    },
+    {
+      "bioproject": "PRJNA287560",
+      "accessions": 353
+    },
+    {
+      "bioproject": "PRJNA678027",
+      "accessions": 349
+    }
+  ],
+  "top_10_project_fraction_of_found": 0.11984845093838924,
+  "metadata_table_sha256": "5bf3b6f4c619226b586676aa6d7924d5b1c7018be5b69d419a88067a22abc33e",
+  "upstream_summary": {
+    "status": "metadata_partial",
+    "requested": 62560,
+    "found_exact_version": 62554,
+    "unknown": 6,
+    "failed_batches": 0,
+    "coverage_nonmissing": {
+      "biosample": 62554,
+      "bioproject": 62554,
+      "collection_date": 56850,
+      "geo_loc_name": 59120,
+      "isolation_source": 45174,
+      "contig_n50": 62554,
+      "assembly_level": 62554
+    },
+    "assembly_levels": {
+      "Scaffold": 14939,
+      "Contig": 39389,
+      "Complete Genome": 7441,
+      "unknown": 6,
+      "Chromosome": 785
+    },
+    "metadata_sha256": "5bf3b6f4c619226b586676aa6d7924d5b1c7018be5b69d419a88067a22abc33e",
+    "finished_utc": "2026-11-05T01:37:17.765798+00:00",
+    "limitations": [
+      "Metadata are fetched at the recorded times; assembly taxonomy and assay/source assertions are not independently established.",
+      "Only exact requested accession versions are used; current or paired reports do not silently replace missing versions.",
+      "Public BioSample attributes are saved locally; not automatically approved for public redistribution."
+    ]
+  },
+  "limitations": [
+    "BioSample identity counts are not near-clone counts or epidemiologically independent sample counts.",
+    "Project counts refer to all returned metadata; absent/corrupt/low-quality local files are not yet excluded."
+  ]
+}

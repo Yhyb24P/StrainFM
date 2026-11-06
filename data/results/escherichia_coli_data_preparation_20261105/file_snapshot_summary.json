@@ -1,0 +1,23 @@
+{
+  "status": "file_snapshot_complete",
+  "species": "Escherichia_coli",
+  "finished_utc": "2026-11-05T02:12:13.532428+00:00",
+  "records": 62560,
+  "file_status": {
+    "valid": 62555,
+    "missing": 5
+  },
+  "exact_record_multiset_groups": 62060,
+  "exact_record_multiset_duplicate_excess": 495,
+  "compressed_bytes": 94859610772,
+  "assemblies_sha256": "1babfba1bb0c89a36bcddc1a1b19796cda330909ffa9191b5f48be509ad27451",
+  "contract_sha256": "1a42339e9338db2b62fed0a9ed148e9b2416294e86b70a07e9c552d43bb22ee9",
+  "inventory_sha256": "263005b313ad51128d3a3da88391d1e49ca21a95a5b8289ca70a01758f28ce54",
+  "python": "3.12.3",
+  "git_commit": "340e1cb96576782d1fe742143bc8a2fbee35c464",
+  "limitations": [
+    "Exact FASTA record multiset digest does not normalize reverse complements, circular starts or assembly breakpoints.",
+    "File validation is not species identity, biological quality or epidemiological independence confirmation.",
+    "Source files remain in place; later use must verify content hashes against this snapshot."
+  ]
+}

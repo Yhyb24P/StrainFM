@@ -1,0 +1,9 @@
+{
+  "scientific_name": "Escherichia coli",
+  "genome_root": "/mnt/e/StrainFM/data/raw/genomes",
+  "min_bases": 500000,
+  "max_bases": 10000000,
+  "min_contig_n50": 50000,
+  "max_contigs": 500,
+  "max_ambiguous_fraction": 0.01
+}

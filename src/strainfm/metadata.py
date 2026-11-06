@@ -101,7 +101,7 @@ def run_metadata_audit(sample_path, output):
         by_species.append(summary)
     summary = {"owner": "Codex current session", "finished_utc": datetime.now(timezone.utc).isoformat(), "argv": sys.argv,
                "input_sha256": {str(sample_path): input_digest}, "code_sha256": {str(p): sha256(p) for p in sorted(Path(__file__).parent.glob("*.py"))},
-               "status": "completed" if not failures and len(reports) == len(accessions) else "partial",
+               "status": "completed" if not failures and set(accessions) <= reports.keys() else "partial",
                "failures": failures, "species": by_species,
                "limitations": ["Metadata snapshot is not sequence-identity or upstream checksum verification.", "Paired accession validates a database relationship, not identical sequences.", "Missingness uses documented flattened fields and standard attribute names; unusual names can be missed.", "BioProject count does not establish epidemiological independence.", "Protein counts refer to deposited annotations, not a unified Bakta run or actually retained model tokens.", "FASTA records may be scaffolds; record N50 must not be interpreted as contig N50."]}
     if sha256(sample_path) != input_digest:

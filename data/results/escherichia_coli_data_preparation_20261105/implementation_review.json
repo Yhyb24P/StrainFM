@@ -1,0 +1,13 @@
+{
+  "status": "reviewed_fix_not_phase_completion",
+  "reviewer": "/root/review_three_stages",
+  "scope": "Correctness of cohort, Mash grouping and source split implementation; no extra dataset audit",
+  "finding": "Deduplication representatives alone discarded nonrepresentative members BioProject relationships, allowing apparent source isolation despite hidden shared projects.",
+  "resolution": "Required full cohort manifest input for splitting; propagate all identity/clone member source projects, union connected projects, assign source components and assert no overlap in all represented projects.",
+  "review_result": "Passed after targeted correction; no Mash rerun required",
+  "source_sha256": {
+    "src/strainfm/split.py": "7b3c70afd6e62f772ca4646158150af703d0b25672d2cf7afed9a65886955374",
+    "tests/test_cohort_split.py": "327290ecdee5c90c9f982c3ed6c91e76747ae301ae4ba45b7fc64b1e800d639f"
+  },
+  "tests_passed": 12
+}

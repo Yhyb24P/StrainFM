@@ -1,0 +1,10 @@
+{
+  "mash_binary": "/home/yhshy/.local/share/strainfm/tools/mash-2.3/mash-Linux64-v2.3/mash",
+  "genome_root": "/mnt/e/StrainFM/data/raw/genomes",
+  "k": 21,
+  "sketch_size": 1000,
+  "seed": 42,
+  "sketch_batch_size": 2000,
+  "near_clone_distance": 0.001,
+  "neighborhood_distance": 0.005
+}

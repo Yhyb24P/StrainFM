@@ -5,6 +5,13 @@ from pathlib import Path
 from .audit import run_audit
 from .labels import run_label_audit
 from .metadata import run_metadata_audit
+from .snapshot import run_snapshot
+from .metadata_bulk import run_bulk_metadata
+from .cohort import run_cohort
+from .diversity import run_diversity
+from .split import run_split
+from .download import run_download
+from .virus import split_virus
 
 
 def main():
@@ -20,14 +27,60 @@ def main():
     metadata = sub.add_parser("metadata", help="Fetch NCBI assembly metadata for an existing audit sample")
     metadata.add_argument("--sample", type=Path, required=True)
     metadata.add_argument("--output", type=Path, required=True)
+    snapshot = sub.add_parser("snapshot", help="Freeze and validate all mapped files for one species; resumable")
+    snapshot.add_argument("--config", type=Path, required=True)
+    snapshot.add_argument("--output", type=Path, required=True)
+    snapshot.add_argument("--workers", type=int, default=8)
+    bulk = sub.add_parser("metadata-bulk", help="Fetch versioned NCBI metadata for a species inventory; resumable")
+    bulk.add_argument("--inventory", type=Path, required=True)
+    bulk.add_argument("--output", type=Path, required=True)
+    cohort = sub.add_parser("cohort", help="Filter and deduplicate a completed snapshot using exact identity evidence")
+    cohort.add_argument("--snapshot", type=Path, required=True)
+    cohort.add_argument("--metadata", type=Path, required=True)
+    cohort.add_argument("--config", type=Path, required=True)
+    cohort.add_argument("--output", type=Path, required=True)
+    diversity = sub.add_parser("diversity", help="Sketch and group a species cohort with Mash; resumable sketch batches")
+    diversity.add_argument("--representatives", type=Path, required=True)
+    diversity.add_argument("--config", type=Path, required=True)
+    diversity.add_argument("--output", type=Path, required=True)
+    diversity.add_argument("--threads", type=int, default=8)
+    split = sub.add_parser("split", help="Freeze candidate source-held-out train/validation/test after sequence grouping")
+    split.add_argument("--representatives", type=Path, required=True)
+    split.add_argument("--groups", type=Path, required=True)
+    split.add_argument("--cohort-manifest", type=Path, required=True)
+    split.add_argument("--output", type=Path, required=True)
+    split.add_argument("--seed", type=int, default=20261105)
+    download = sub.add_parser("download", help="Download/retry manifest FASTA files, validating existing and new files")
+    download.add_argument("--manifest", type=Path, required=True)
+    download.add_argument("--root", type=Path, required=True)
+    virus = sub.add_parser("split-virus", help="Split UHGV into a new output directory after successful decompression")
+    virus.add_argument("--manifest", type=Path, required=True)
+    virus.add_argument("--input", type=Path, required=True)
+    virus.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "audit":
         result = run_audit(args.config, args.output)
     elif args.command == "labels":
         result = run_label_audit(args.labels, args.download_manifest, args.output)
-    else:
+    elif args.command == "metadata":
         result = run_metadata_audit(args.sample, args.output)
+    elif args.command == "snapshot":
+        result = run_snapshot(args.config, args.output, args.workers)
+    elif args.command == "metadata-bulk":
+        result = run_bulk_metadata(args.inventory, args.output)
+    elif args.command == "cohort":
+        result = run_cohort(args.snapshot, args.metadata, args.config, args.output)
+    elif args.command == "diversity":
+        result = run_diversity(args.representatives, args.config, args.output, args.threads)
+    elif args.command == "split":
+        result = run_split(args.representatives, args.groups, args.cohort_manifest, args.output, args.seed)
+    elif args.command == "download":
+        result = run_download(args.manifest, args.root)
+    else:
+        result = split_virus(args.manifest, args.input, args.output)
     print(json.dumps(result, ensure_ascii=False, indent=2))
+    if args.command == "download" and result["failed"]:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

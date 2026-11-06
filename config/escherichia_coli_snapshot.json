@@ -1,0 +1,5 @@
+{
+  "species": "Escherichia_coli",
+  "download_manifest": "/mnt/e/StrainFM/data/raw/download_manifest_all.tsv",
+  "genome_root": "/mnt/e/StrainFM/data/raw/genomes"
+}
