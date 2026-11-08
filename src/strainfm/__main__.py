@@ -88,8 +88,10 @@ def main():
     annotate.add_argument("--max-proteins", type=int, default=6000)
     annotate.add_argument("--splits", default=None)
     annotate.add_argument("--genome-ids", default=None)
+    annotate.add_argument("--genome-list", type=Path, default=None)
     annotate.add_argument("--limit", type=int, default=None)
     annotate.add_argument("--chunk-size", type=int, default=64)
+    annotate.add_argument("--workers", type=int, default=1)
     annotate.add_argument("--output", type=Path, required=True)
     embed = sub.add_parser("bacformer-embed", help="Frozen ESM-C and Bacformer-L genome vectors on one identical protein set")
     embed.add_argument("--protein-manifest", type=Path, required=True)
@@ -167,8 +169,9 @@ def main():
             tool=args.tool, translation_table=args.translation_table, min_aa_len=args.min_aa_len,
             max_proteins=args.max_proteins,
             splits=args.splits.split(",") if args.splits else None,
-            genome_ids=args.genome_ids.split(",") if args.genome_ids else None,
-            limit=args.limit, chunk_size=args.chunk_size)
+            genome_ids=(args.genome_ids.split(",") if args.genome_ids else
+                        [line.strip() for line in args.genome_list.read_text().splitlines() if line.strip()] if args.genome_list else None),
+            limit=args.limit, chunk_size=args.chunk_size, workers=args.workers)
     elif args.command == "bacformer-embed":
         result = run_bacformer_embed(
             args.protein_manifest, args.split_manifest, args.bacformer_path, args.esm_path, args.output,

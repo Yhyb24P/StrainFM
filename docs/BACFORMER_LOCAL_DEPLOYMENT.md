@@ -7,7 +7,7 @@
 - 只做**冻结推理**：不继续预训练、不微调主干；AMR 类任务仅允许论文式轻量下游头，且须在闭环 A 通过后另行决定（D0-17）。
 - 主评测框架为 **Bacformer 官方模型 + BacBench 官方评测框架**；StrainFM 只保留薄适配层（固定划分、固定模型快照、结果落盘），不重写模型或另建平行评测系统。
 - GPU 为共享资源：每次 GPU 推理前先 `nvidia-smi` 确认余量；不足时回退 CPU 并在结果中如实记录 `device`。
-- 冷数据（权重、数据集、大型中间产物）放 `/mnt/e/StrainFM/models`，不入 Git。
+- 冷数据（权重、数据集、大型中间产物）放 `/mnt/e/StrainFM/models`，不入 Git；Plan A 的注释清单与冻结向量放 `/mnt/e/StrainFM/processed/`，仓库 `data/results/` 只保留小型结果与运行记录。NCBI FTP/HF 下载走本机代理 `127.0.0.1:28080`（HF 可选 hf-mirror，镜像缺 revision 时回退代理）。
 
 ## 2. 硬件与环境（本机实测）
 

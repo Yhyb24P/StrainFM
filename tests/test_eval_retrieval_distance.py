@@ -145,11 +145,11 @@ class EvalRetrievalTest(unittest.TestCase):
             summary = run_eval_retrieval(root / "embeds", root / "split_manifest.tsv", root / "support.tsv",
                                          root / "sequence_groups.tsv", out,
                                          model="bacformer", protocol="A", split="validation")
-            # protocol A spans validation + test: v1, v2, v3, v4, v6, v7, x1 (v5 failed)
-            self.assertEqual(summary["n_queries_total"], 7)
+            # protocol A now honours --split: validation only = v1, v2, v3, v4, v6, v7 (v5 failed)
+            self.assertEqual(summary["n_queries_total"], 6)
             # open set: v4/v6/v7 (neighborhood N5 has no train member)
             self.assertEqual(summary["open_set_n"], 3)
-            self.assertEqual(summary["n_queries_scored"], 4)
+            self.assertEqual(summary["n_queries_scored"], 3)
             self.assertEqual(summary["all_hit"]["hit@1"], 1.0)
             self.assertAlmostEqual(summary["all_mrr"], 1.0)
             metric_rows = list(read_table(out / "retrieval_metrics.tsv"))
@@ -160,7 +160,37 @@ class EvalRetrievalTest(unittest.TestCase):
             self.assertTrue((out / "retrieval_results.tsv").exists() or (out / "retrieval_results.parquet").exists())
             contract = json.loads((out / "contract.json").read_text())
             self.assertEqual(contract["positive_definition"], "same_Mash_sequence_neighborhood")
-            self.assertEqual(contract["support_eligible_lost_to_embedding_failures"], 0)
+            self.assertEqual(contract["support_eligible_no_gallery_positive"], 0)
+            self.assertEqual(contract["support_positive_count_mismatch"], 0)
+            # Fixture support marks v3 ineligible although N3 has train member t5
+            self.assertEqual(contract["support_ineligible_with_positives"], 1)
+
+    def test_protocol_a_split_filter_isolation(self):
+        """Synthetic-data check of the split filter: validation run must exclude the
+        test query x1, and a test run must contain only x1. The real test split is
+        not touched (fixtures only)."""
+        def result_queries(out):
+            tsv = out / "retrieval_results.tsv"
+            if tsv.exists():
+                return {r["query_genome_id"] for r in read_table(tsv)}
+            import pyarrow.parquet as pq
+            return set(pq.read_table(out / "retrieval_results.parquet", columns=["query_genome_id"]).column(0).to_pylist())
+        with tempfile.TemporaryDirectory() as tmp:
+            root = _setup(tmp)
+            out_v = root / "out_v"
+            run_eval_retrieval(root / "embeds", root / "split_manifest.tsv", root / "support.tsv",
+                               root / "sequence_groups.tsv", out_v,
+                               model="bacformer", protocol="A", split="validation")
+            self.assertNotIn("x1", result_queries(out_v))
+            self.assertEqual(json.loads((out_v / "contract.json").read_text())["n_queries_missing_embeddings"], 0)
+            out_t = root / "out_t"
+            summary_t = run_eval_retrieval(root / "embeds", root / "split_manifest.tsv", root / "support.tsv",
+                                           root / "sequence_groups.tsv", out_t,
+                                           model="bacformer", protocol="A", split="test")
+            self.assertEqual(summary_t["n_queries_total"], 1)
+            self.assertEqual(summary_t["open_set_n"], 0)
+            self.assertEqual(summary_t["n_queries_scored"], 1)
+            self.assertEqual(result_queries(out_t), {"x1"})
 
     def test_protocol_b_neighborhood_split_deterministic(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -259,8 +289,10 @@ class MetricHelperTest(unittest.TestCase):
             cosine_distance([0, 0], [1, 0])
 
     def test_map(self):
-        self.assertAlmostEqual(mean_average_precision([True, False, True], 3), (1 + 2 / 3) / 2)
-        self.assertEqual(mean_average_precision([False, False], 2), 0.0)
+        self.assertAlmostEqual(mean_average_precision([True, False, True], 3, 2), (1 + 2 / 3) / 2)
+        self.assertEqual(mean_average_precision([False, False], 2, 0), 0.0)
+        # Denominator min(k, n_positives): second positive outside top-10 halves AP
+        self.assertAlmostEqual(mean_average_precision([True] + [False] * 9 + [True], 10, 2), 0.5)
 
 
 if __name__ == "__main__":

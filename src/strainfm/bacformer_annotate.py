@@ -8,6 +8,7 @@ interrupted run resumes without recomputing finished genomes.
 """
 
 import gzip
+import hashlib
 import json
 import platform
 import shutil
@@ -30,6 +31,10 @@ SUMMARY_COLUMNS = [
     "n_proteins", "n_proteins_over_1024aa", "n_over_max_proteins", "error",
 ]
 FAILURE_COLUMNS = ["genome_id", "split", "error"]
+
+
+def sha256_text(text):
+    return hashlib.sha256(text.encode()).hexdigest()
 
 
 def _find_gbff(annotation_root, accessions):
@@ -144,6 +149,22 @@ def _annotate_prodigal(genome_id, fasta_path, min_aa_len, max_proteins):
             "n_proteins": len(rows), "tool": "pyrodigal"}
 
 
+_WORKER = {}
+
+
+def _init_worker(genome_root, annotation_root, annotation_mode, min_aa_len, max_proteins):
+    _WORKER.update(genome_root=genome_root, annotation_root=annotation_root,
+                   annotation_mode=annotation_mode, min_aa_len=min_aa_len, max_proteins=max_proteins)
+
+
+def _annotate_task(spec):
+    genome_id, target_relpath, file_accession, paired_accession = spec
+    return _annotate_genome(genome_id, {"file_accession": file_accession, "paired_accession": paired_accession},
+                            {genome_id: {"target_relpath": target_relpath}}, _WORKER["genome_root"],
+                            _WORKER["annotation_root"], _WORKER["annotation_mode"],
+                            _WORKER["min_aa_len"], _WORKER["max_proteins"])
+
+
 def _annotate_genome(genome_id, row, assemblies, genome_root, annotation_root, annotation_mode,
                      min_aa_len, max_proteins):
     accessions = [genome_id, row.get("file_accession", ""), row.get("paired_accession", "")]
@@ -172,7 +193,7 @@ def _annotate_genome(genome_id, row, assemblies, genome_root, annotation_root, a
 def run_bacformer_annotate(split_manifest_path, assemblies_path, genome_root, output,
                            annotation_root=None, annotation_mode="auto", tool="prodigal",
                            translation_table=11, min_aa_len=30, max_proteins=6000,
-                           splits=None, genome_ids=None, limit=None, chunk_size=64):
+                           splits=None, genome_ids=None, limit=None, chunk_size=64, workers=1):
     split_manifest_path, assemblies_path, genome_root, output = map(Path, (split_manifest_path, assemblies_path, genome_root, output))
     if "raw" in output.resolve().parts:
         raise ValueError("Non-raw output directory required")
@@ -205,7 +226,8 @@ def run_bacformer_annotate(split_manifest_path, assemblies_path, genome_root, ou
         "min_aa_len": min_aa_len,
         "max_proteins": max_proteins,
         "selected_splits": sorted(set(splits)) if splits is not None else ["train", "validation", "test"],
-        "limit": limit, "chunk_size": chunk_size,
+        "limit": limit, "chunk_size": chunk_size, "workers": workers,
+        "genome_ids_sha256": (sha256_text("\n".join(sorted(genome_ids))) if genome_ids else None),
         "genome_root": str(genome_root),
         "split_manifest_sha256": sha256(split_manifest_path),
         "assemblies_sha256": sha256(assemblies_path),
@@ -243,14 +265,33 @@ def run_bacformer_annotate(split_manifest_path, assemblies_path, genome_root, ou
         shard = prefix.with_suffix(".rows.jsonl")
         if not (done.exists() and shard.exists()):
             chunk_rows, chunk_summaries, chunk_failures = [], [], []
+            specs = [(r["genome_id"], assemblies[r["genome_id"]]["target_relpath"],
+                      r.get("file_accession", ""), r.get("paired_accession", "")) for r in chunk]
+            outcomes = {}
+            if workers > 1:
+                from concurrent.futures import ProcessPoolExecutor, as_completed
+                with ProcessPoolExecutor(max_workers=workers, initializer=_init_worker,
+                                         initargs=(genome_root, annotation_root, annotation_mode, min_aa_len, max_proteins)) as pool:
+                    futures = {pool.submit(_annotate_task, spec): spec[0] for spec in specs}
+                    for future in as_completed(futures):
+                        try:
+                            outcomes[futures[future]] = future.result()
+                        except Exception as error:
+                            outcomes[futures[future]] = error
+            else:
+                _init_worker(genome_root, annotation_root, annotation_mode, min_aa_len, max_proteins)
+                for spec in specs:
+                    try:
+                        outcomes[spec[0]] = _annotate_task(spec)
+                    except Exception as error:
+                        outcomes[spec[0]] = error
             for row in chunk:
                 genome_id = row["genome_id"]
-                try:
-                    result, source = _annotate_genome(genome_id, row, assemblies, genome_root, annotation_root,
-                                                      annotation_mode, min_aa_len, max_proteins)
-                except Exception as error:
-                    chunk_failures.append({"genome_id": genome_id, "split": row["split"], "error": f"{type(error).__name__}: {error}"})
+                outcome = outcomes[genome_id]
+                if isinstance(outcome, Exception):
+                    chunk_failures.append({"genome_id": genome_id, "split": row["split"], "error": f"{type(outcome).__name__}: {outcome}"})
                     continue
+                result, source = outcome
                 genome_rows = result["rows"]
                 coverage = result["coverage"]
                 chunk_rows.extend(genome_rows)
@@ -280,21 +321,36 @@ def run_bacformer_annotate(split_manifest_path, assemblies_path, genome_root, ou
 def _finalize_annotate(output, n_requested, contract):
     import pyarrow as pa
     import pyarrow.parquet as pq
-    rows, summaries, failures = [], [], []
-    for shard in sorted(output.glob("annotate_*.rows.jsonl")):
-        with shard.open() as handle:
-            for line in handle:
-                if line:
-                    rows.append(json.loads(line))
+    schema = pa.schema([
+        ("genome_id", pa.string()), ("assembly_accession", pa.string()), ("contig_id", pa.string()),
+        ("contig_rank", pa.int64()), ("protein_index_in_contig", pa.int64()),
+        ("start", pa.int64()), ("end", pa.int64()), ("strand", pa.int64()),
+        ("protein_sequence", pa.string()), ("aa_len", pa.int64()),
+        ("annotation_tool", pa.string()), ("annotation_version", pa.string()),
+        ("source_file_sha256", pa.string()),
+    ])
+    summaries, failures = [], []
     for done in sorted(output.glob("annotate_*.done.json")):
         payload = json.loads(done.read_text())
         summaries.extend(payload.get("summaries", []))
         failures.extend(payload.get("failures", []))
-    rows.sort(key=lambda r: (r["genome_id"], r["contig_rank"], r["start"], r["end"]))
     summaries.sort(key=lambda r: r["genome_id"])
     failures.sort(key=lambda r: r["genome_id"])
-    table = pa.table({column: [row[column] for row in rows] for column in PROTEIN_COLUMNS})
-    pq.write_table(table, output / "protein_manifest.parquet")
+    manifest_path = output / "protein_manifest.parquet"
+    pending = manifest_path.with_suffix(".parquet.tmp")
+    pending.unlink(missing_ok=True)
+    writer = pq.ParquetWriter(pending, schema)
+    try:
+        for shard in sorted(output.glob("annotate_*.rows.jsonl")):
+            with shard.open() as handle:
+                shard_rows = [json.loads(line) for line in handle if line]
+            shard_rows.sort(key=lambda r: (r["genome_id"], r["contig_rank"], r["start"], r["end"]))
+            if shard_rows:
+                writer.write_table(pa.table({column: [row[column] for row in shard_rows] for column in PROTEIN_COLUMNS}, schema=schema))
+            shard.unlink()
+    finally:
+        writer.close()
+    pending.replace(manifest_path)
     write_tsv(output / "genome_input_summary.tsv", summaries, SUMMARY_COLUMNS)
     write_tsv(output / "annotation_failures.tsv", failures, FAILURE_COLUMNS)
     annotated = [s for s in summaries if s["status"] == "annotated"]

@@ -32,14 +32,23 @@ def cosine_distance(a, b):
     return 1.0 - dot / (na * nb)
 
 
-def mean_average_precision(ranked_positive_flags, k):
+def mean_average_precision(ranked_positive_flags, k, n_positives):
+    """AP@k with denominator min(k, n_positives).
+
+    Missed positives below the cut-off reduce the score; dividing by the number
+    of hits (the previous implementation) would report 1.0 for a query whose
+    second positive ranks last inside the top-k. Definition frozen in D0-24.
+    """
+    denominator = min(k, n_positives)
+    if denominator <= 0:
+        return 0.0
     hits = 0
     total = 0.0
     for rank, flag in enumerate(ranked_positive_flags[:k], start=1):
         if flag:
             hits += 1
             total += hits / rank
-    return total / hits if hits else 0.0
+    return total / denominator
 
 
 def median(values):
@@ -53,6 +62,10 @@ def median(values):
 
 
 def _normalized(vector):
+    if not vector:
+        raise ValueError("Empty embedding")
+    if not all(math.isfinite(x) for x in vector):
+        raise ValueError("Non-finite embedding value")
     norm = math.sqrt(sum(x * x for x in vector))
     if norm == 0.0:
         raise ValueError("Zero-norm embedding")
@@ -87,10 +100,16 @@ def load_embeddings(embeddings_dir, model):
     else:
         raise ValueError(f"No embedding artifact for {model}: tried {parquet} and {tsv}")
     vectors, truncated = {}, {}
+    dimension = None
     for row in rows:
         if row["genome_id"] in vectors:
             raise ValueError(f"Duplicate genome_id in embeddings: {row['genome_id']}")
-        vectors[row["genome_id"]] = _normalized(row["embedding"])
+        vector = _normalized(row["embedding"])
+        if dimension is None:
+            dimension = len(vector)
+        elif len(vector) != dimension:
+            raise ValueError(f"Inconsistent embedding dimension for {row['genome_id']}: {len(vector)} != {dimension}")
+        vectors[row["genome_id"]] = vector
         truncated[row["genome_id"]] = int(row.get("truncated_protein_count") or 0)
     return vectors, truncated
 
@@ -106,23 +125,29 @@ def quality_bin(assembly_level):
     return "complete" if assembly_level in ("Complete Genome", "Chromosome") else "draft"
 
 
-def _select_protocol_a(manifests, neighborhood_of, train_ids, embedded, failures):
-    """Queries = all usable query-split genomes; positives = train gallery of the
-    same sequence neighborhood. Open-set queries (no positives) are kept and
-    identified by an empty positive set."""
+def _select_protocol_a(manifests, neighborhood_of, train_ids, embedded, failures, split):
+    """Queries = usable genomes of the requested split only; positives = train
+    gallery of the same sequence neighborhood. Open-set queries (no positives)
+    are kept and identified by an empty positive set. Queries present in the
+    split but absent from the embeddings (or failed) are reported, not dropped
+    silently."""
     usable_train = [g for g in train_ids if g in embedded and g not in failures]
     by_neighborhood = defaultdict(list)
     for gid in usable_train:
         by_neighborhood[neighborhood_of.get(gid, "")].append(gid)
-    queries = {}
+    queries, missing, failed_in_split = {}, [], []
     for gid, row in sorted(manifests.items()):
-        if row["split"] != "validation" and row["split"] != "test":
+        if row["split"] != split:
             continue
-        if gid not in embedded or gid in failures:
+        if gid in failures:
+            failed_in_split.append(gid)
+            continue
+        if gid not in embedded:
+            missing.append(gid)
             continue
         positives = sorted(by_neighborhood.get(neighborhood_of.get(gid, ""), ()))
         queries[gid] = {"positives": set(positives), "gallery": usable_train, "protocol": "A"}
-    return queries
+    return queries, missing, failed_in_split
 
 
 def _select_protocol_b(manifests, neighborhood_of, split, embedded, failures, seed):
@@ -176,20 +201,27 @@ def run_eval_retrieval(embeddings_dir, split_manifest, support, groups, output,
     support_rows = {r["genome_id"]: r for r in read_table(support)}
     vectors, truncated = load_embeddings(embeddings_dir, model)
     failures = failed_genomes(embeddings_dir)
+    missing_queries, failed_in_split, support_eligible_no_gallery_positive = [], [], 0
+    support_positive_count_mismatch, support_ineligible_with_positives = 0, 0
     if protocol == "A":
         train_ids = [gid for gid, row in manifests.items() if row["split"] == "train"]
-        queries = _select_protocol_a(manifests, neighborhood_of, train_ids, vectors, failures)
-        # Cross-check against the frozen support file: embedding failures can
-        # remove the last train positive of a support-eligible query; count it,
-        # never silently re-label open-set queries.
-        support_mismatches = 0
+        queries, missing_queries, failed_in_split = _select_protocol_a(
+            manifests, neighborhood_of, train_ids, vectors, failures, split)
+        # Per-query cross-check against the frozen support file. Counts are
+        # reported; queries are never silently re-labelled.
         for gid, spec in queries.items():
             row = support_rows.get(gid)
-            if row is None or not row.get("eligible_for_positive_supported_retrieval"):
+            if row is None:
                 continue
-            eligible = row["eligible_for_positive_supported_retrieval"].strip().lower() in ("true", "1", "yes")
-            if eligible and not spec["positives"]:
-                support_mismatches += 1
+            eligible = row.get("eligible_for_positive_supported_retrieval", "").strip().lower() in ("true", "1", "yes")
+            expected = int(row.get("gallery_positive_count") or 0)
+            actual = len(spec["positives"])
+            if eligible and actual == 0:
+                support_eligible_no_gallery_positive += 1
+            if eligible and actual != expected:
+                support_positive_count_mismatch += 1
+            if not eligible and actual > 0:
+                support_ineligible_with_positives += 1
     else:
         queries = _select_protocol_b(manifests, neighborhood_of, split, vectors, failures, seed)
     positive_definition = "same_Mash_sequence_neighborhood" if protocol == "A" else "held_out_neighborhood_gallery"
@@ -211,10 +243,16 @@ def run_eval_retrieval(embeddings_dir, split_manifest, support, groups, output,
         "support_sha256": sha256(support),
         "groups_sha256": sha256(groups),
         "n_embedding_failures": len(failures),
+        "n_queries_missing_embeddings": len(missing_queries),
+        "n_query_split_failures": len(failed_in_split),
+        "missing_query_ids": missing_queries[:50],
+        "failed_query_ids": failed_in_split[:50],
         "code_sha256": sha256(__file__),
     }
     if protocol == "A":
-        contract["support_eligible_lost_to_embedding_failures"] = support_mismatches
+        contract["support_eligible_no_gallery_positive"] = support_eligible_no_gallery_positive
+        contract["support_positive_count_mismatch"] = support_positive_count_mismatch
+        contract["support_ineligible_with_positives"] = support_ineligible_with_positives
     prepare_output(output, contract)
     kmax = max(k_values)
     scored_records, strata = [], defaultdict(lambda: {"total": 0, "open": 0, "records": []})
@@ -239,7 +277,7 @@ def run_eval_retrieval(embeddings_dir, split_manifest, support, groups, output,
             "k": kmax,
             "hit_at_k": int(any(flags[:kmax])),
             "recall_at_k": sum(flags[:kmax]) / len(positives),
-            "ap_at_k": mean_average_precision(flags, 10) if kmax >= 10 else "",
+            "ap_at_k": mean_average_precision(flags, 10, len(positives)) if kmax >= 10 else "",
             "rr": (1.0 / first) if first else 0.0,
             "first_positive_rank": first,
             "n_positive": len(positives),
@@ -282,6 +320,8 @@ def run_eval_retrieval(embeddings_dir, split_manifest, support, groups, output,
         "n_queries_total": n_total, "open_set_n": n_open, "n_queries_scored": len(scored_records),
         "n_strata": len(strata), "k_values": list(k_values), "seed": seed,
         "n_embedding_failures": len(failures),
+        "n_queries_missing_embeddings": len(missing_queries),
+        "n_query_split_failures": len(failed_in_split),
         "all_hit": {f"hit@{k}": _mean(scored_records, f"hit@{k}") for k in k_values},
         "all_recall": {f"recall@{k}": _mean(scored_records, f"recall@{k}") for k in k_values},
         "all_mrr": _mean(scored_records, "rr"),

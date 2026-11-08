@@ -21,14 +21,25 @@ ESM_COLUMNS = ["genome_id", "split", "model_name", "model_revision", "n_proteins
 FAILURE_COLUMNS = ["genome_id", "split", "stage", "error"]
 
 
-def _load_groups(protein_manifest_path, split_by_genome):
-    import pyarrow.parquet as pq
-    rows = pq.read_table(protein_manifest_path, columns=["genome_id", "contig_id", "contig_rank", "protein_sequence"]).to_pylist()
+def _genome_ids(dataset, split_by_genome):
+    seen = set()
+    for batch in dataset.to_batches(columns=["genome_id"]):
+        seen.update(batch.column("genome_id").to_pylist())
+    outside = sorted(gid for gid in seen if gid not in split_by_genome)
+    if outside:
+        raise ValueError(f"Protein manifest genome outside split manifest: {outside[:5]}")
+    return sorted(seen)
+
+
+def _load_chunk(dataset, genome_ids, split_by_genome):
+    import pyarrow.dataset as ds
+    table = dataset.to_table(
+        columns=["genome_id", "contig_id", "contig_rank", "protein_sequence"],
+        filter=ds.field("genome_id").isin(list(genome_ids)),
+    )
     groups = {}
-    for row in rows:
+    for row in table.to_pylist():
         genome_id = row["genome_id"]
-        if genome_id not in split_by_genome:
-            raise ValueError(f"Protein manifest genome outside split manifest: {genome_id}")
         groups.setdefault(genome_id, []).append((int(row["contig_rank"]), row["contig_id"], row["protein_sequence"]))
     for items in groups.values():
         items.sort(key=lambda item: item[0])
@@ -119,8 +130,10 @@ def run_bacformer_embed(protein_manifest_path, split_manifest_path, bacformer_pa
     if "raw" in output.resolve().parts:
         raise ValueError("Non-raw output directory required")
     manifests = {r["genome_id"]: r for r in read_table(split_manifest_path)}
-    groups = _load_groups(protein_manifest_path, manifests)
-    if not groups:
+    import pyarrow.dataset as pyarrow_dataset
+    dataset = pyarrow_dataset.dataset(str(protein_manifest_path), format="parquet")
+    genome_ids = _genome_ids(dataset, manifests)
+    if not genome_ids:
         raise ValueError("No genomes in protein manifest")
     import torch
     if device.startswith("cuda"):
@@ -129,7 +142,7 @@ def run_bacformer_embed(protein_manifest_path, split_manifest_path, bacformer_pa
             raise RuntimeError(f"GPU {device} has {free} MiB free (< {min_free_mib} required); wait or rerun with --device cpu --dtype float32")
     if esm_device == "auto":
         free = _cuda_free_mib("cuda:0") if torch.cuda.is_available() else 0
-        esm_device = "cuda:0" if free is not None and free >= esm_min_free_mib else device
+        esm_device = "cuda:0" if free is not None and free >= esm_min_free_mib else "cpu"
     elif esm_device.startswith("cuda"):
         free = _cuda_free_mib(esm_device)
         if free is not None and free < esm_min_free_mib:
@@ -176,7 +189,7 @@ def run_bacformer_embed(protein_manifest_path, split_manifest_path, bacformer_pa
             existing.setdefault("code_sha256_history", []).append(existing["code_sha256"])
             changes["code_sha256"] = {"from": existing["code_sha256"], "to": contract["code_sha256"]}
             existing["code_sha256"] = contract["code_sha256"]
-            existing["code_change_note"] = "resume plumbing/failure persistence only; embedding math unchanged"
+            existing["resume_code_change"] = "code changed between runs; equivalence of embedding math requires manual verification"
         if changes:
             existing.setdefault("resume_runs", []).append({"started_utc": contract["started_utc"], **changes})
             atomic_json(contract_path, existing)
@@ -190,16 +203,24 @@ def run_bacformer_embed(protein_manifest_path, split_manifest_path, bacformer_pa
                 raise ValueError(f"Completed artifact changed: {name}")
         return json.loads((output / "summary.json").read_text())
     models = _Models(bacformer_path, esm_path, device, esm_device, dtype, esm_dtype)
-    genome_ids = sorted(groups)
     for start in range(0, len(genome_ids), chunk_size):
         chunk = genome_ids[start:start + chunk_size]
         prefix = output / f"embed_{start:06d}"
         done = prefix.with_suffix(".done.json")
         shard = prefix.with_suffix(".rows.jsonl")
-        if not (done.exists() and shard.exists()):
+        if done.exists() and shard.exists():
+            recorded = json.loads(done.read_text()).get("rows_sha256")
+            if recorded and sha256(shard) != recorded:
+                raise ValueError(f"Chunk rows changed since completion: {shard.name}")
+        else:
             rows, chunk_failures = [], []
+            groups = _load_chunk(dataset, chunk, manifests)
             for genome_id in chunk:
                 split = manifests[genome_id]["split"]
+                if genome_id not in groups:
+                    chunk_failures.append({"genome_id": genome_id, "split": split, "stage": "missing_proteins",
+                                           "error": "No protein rows for genome in manifest"})
+                    continue
                 contig_ids, nested = _nested_by_contig(groups[genome_id])
                 try:
                     esm_vector, bacformer_vector, used, truncated = models.genome_vectors(
@@ -214,14 +235,16 @@ def run_bacformer_embed(protein_manifest_path, split_manifest_path, bacformer_pa
             with shard.open("w") as handle:
                 for row in rows:
                     handle.write(json.dumps(row) + "\n")
-            atomic_json(done, {"genomes": len(chunk), "embedded": len(rows), "failures": chunk_failures})
+            atomic_json(done, {"genomes": len(chunk), "embedded": len(rows), "failures": chunk_failures,
+                               "rows_sha256": sha256(shard), "device": device, "esm_device": esm_device,
+                               "dtype": dtype, "esm_dtype": esm_dtype})
         atomic_json(output / "progress.json", {"status": "embedding", "completed": min(start + chunk_size, len(genome_ids)), "total": len(genome_ids)})
         print(f"embed {min(start + chunk_size, len(genome_ids))}/{len(genome_ids)}", flush=True)
-    _finalize(output, groups, contract, max_n_proteins)
+    _finalize(output, len(genome_ids), contract, max_n_proteins)
     return json.loads((output / "summary.json").read_text())
 
 
-def _finalize(output, groups, contract, max_n_proteins):
+def _finalize(output, n_genomes_input, contract, max_n_proteins):
     import pyarrow as pa
     import pyarrow.parquet as pq
     bacformer_rows, esm_rows, summaries = [], [], []
@@ -256,7 +279,7 @@ def _finalize(output, groups, contract, max_n_proteins):
     write_tsv(output / "embedding_failures.tsv", failures, FAILURE_COLUMNS)
     summary = {
         "status": "embedding_complete" if not failures else "embedding_complete_with_failures",
-        "n_genomes_input": len(groups),
+        "n_genomes_input": n_genomes_input,
         "n_genomes_embedded": len(summaries),
         "n_failed": len(failures),
         "n_truncated_at_max_proteins": sum(s["truncated_protein_count"] > 0 for s in summaries),
