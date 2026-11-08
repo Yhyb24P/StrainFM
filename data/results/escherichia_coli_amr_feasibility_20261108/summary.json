@@ -1,0 +1,58 @@
+{
+  "status": "amr_feasibility_audit_complete",
+  "owner": "gpt",
+  "git_commit": "e541e746407de2909ca1971d0b3eae0b95ce10b1",
+  "matched_assemblies": 609,
+  "label_rows": 26052,
+  "unique_known_biosamples": 609,
+  "assemblies_with_unknown_biosample": 0,
+  "biosamples_with_multiple_assemblies": 0,
+  "dispositions": {
+    "retained_split_representative": 342,
+    "near_clone_nonrepresentative": 247,
+    "cohort_quality_excluded": 20
+  },
+  "legacy_loss_mechanisms": {
+    "legacy_recognized_representative": 37,
+    "near_clone_nonrepresentative": 247,
+    "legacy_identifier_key_mismatch": 305,
+    "cohort_quality_excluded": 20
+  },
+  "quality_exclusion_reasons_nonexclusive": {
+    "ambiguous_fraction_above_maximum": 10,
+    "assembly_suppressed": 3,
+    "contig_n50_below_minimum": 7
+  },
+  "current_file_status": {
+    "snapshot_content_verified": 609
+  },
+  "quality_eligible_assemblies_now": 589,
+  "quality_eligible_near_clone_groups": 424,
+  "quality_eligible_inherited_splits": {
+    "train": 565,
+    "test": 8,
+    "validation": 16
+  },
+  "version_only_label_accessions": [],
+  "drugs_passing_count_gate": [
+    "gentamicin",
+    "ciprofloxacin"
+  ],
+  "protocol_decisions": {
+    "count_gate_passes_protocol_pending": 2,
+    "not_currently_evaluable_three_way": 34,
+    "exploratory_only_protocol_pending": 1
+  },
+  "n_sample_drug_conflicts_observed": 0,
+  "training_performed": false,
+  "new_split_created": false,
+  "finished_utc": "2026-11-08T12:11:04.015790+00:00",
+  "limitations": [
+    "Counts describe versioned published binary labels, not newly verified AST measurements or epidemiological independence.",
+    "Conflicts within the collapsed source CSV cells and experimental conditions are unobservable; zero observed conflict does not prove no AST conflict.",
+    "Exact paired accession is database linkage, not independent proof of sequence identity; match fields are retained per assembly.",
+    "Quality reuses frozen cohort rules and verified content, without new contamination or completeness estimation.",
+    "Inherited splits use original full membership source/clone components, never newly assign samples; class coverage is a minimum condition, not statistical power.",
+    "Neither a count gate nor necessary group support proves a valid protocol, model utility, cross-strain generalisation or protein generation."
+  ]
+}

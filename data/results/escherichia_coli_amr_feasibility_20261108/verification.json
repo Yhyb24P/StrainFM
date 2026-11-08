@@ -1,0 +1,83 @@
+{
+  "status": "verified",
+  "verified_utc": "2026-11-08T12:13:40.274416+00:00",
+  "owner": "gpt",
+  "checks": {
+    "all_record_ids_and_609_dispositions": "passed",
+    "raw_csv_and_manifests_independent_counts_all_37_drugs": "passed",
+    "current_file_hashes_match_frozen_snapshot_609": "passed",
+    "sample_drug_cells": 22533,
+    "input_and_code_hashes": "passed",
+    "completion_hashes_and_aggregate_copies": "passed",
+    "old_amr_results_unmodified_in_git": "passed",
+    "inherited_BioSample_clone_source_isolation": "passed",
+    "stopped_pid_1196785_absent": "passed",
+    "protocol_classification_includes_source_and_clone_support_all_37_drugs": "passed",
+    "all_changed_markdown_local_links": "passed",
+    "independent_recount_method": "Raw CSV exact versioned file/current/paired joins against original cohort; unique BioSample and S/R counts recomputed without calling AMR audit helpers"
+  },
+  "tests": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -m unittest discover -s tests -q",
+      "ran": 43,
+      "passed": 42,
+      "skipped": 1
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src /home/yhshy/miniconda3/envs/esm3/bin/python -m unittest discover -s tests -q",
+      "ran": 43,
+      "passed": 43,
+      "skipped": 0
+    }
+  ],
+  "local_detailed_run": "data/processed/escherichia_coli_amr_feasibility_source_isolated_20261108",
+  "artifact_sha256": {
+    "summary.json": "81354c5e1a71c945380b8d7b1524516cbb76614b1311d9404c989f909a4feede",
+    "contract.json": "73bf80017745d112477d1bae6253f1957540d9ad6fa6ce7551b78ce6c719d663",
+    "record_disposition.tsv": "943b13220792c67a36d0b6094d8560879c808b92e001c04b5f7ac872000328a6",
+    "sample_drug_evidence.tsv": "79410f61fd76b6dcc87272968de64b217937eb10ad9ed3477ae0cc3b3e946261",
+    "drug_feasibility.tsv": "a7df87d541d6c1c1c1bd508797321003db30916e3b046206523880c6f7a80e29"
+  },
+  "runtime_action": {
+    "pid": 1196785,
+    "signal": "SIGINT",
+    "process_absent": true,
+    "shards_preserved": 85,
+    "completed_markers_preserved": 85,
+    "reported_progress": 1360,
+    "target_genomes": 24973,
+    "completion_absent": true
+  },
+  "not_checked": [
+    "Underlying per-test AST measurements, methods, breakpoints, dates and conditions",
+    "Independent sequence/sample verification for paired-only label accessions",
+    "Statistical power or prospective task-specific split feasibility",
+    "AMR model predictions or test performance",
+    "Full Bacformer v3 PDF (HTTP 403)"
+  ],
+  "knowledge_surfaces": {
+    "code": "changed-and-verified",
+    "runtime": "changed-and-verified",
+    "README_and_plan": "changed-and-verified; independently reviewed, user AMR-01 instructions applied",
+    "AGENTS": "verified-current; not changed",
+    "DATA_GOVERNANCE": "not changed; per-task execution follows updated RESEARCH_PLAN",
+    "agent_memory": "out-of-scope; not changed",
+    "workspace": "pre-existing untracked operon/smoke results preserved; no cleanup or publication"
+  },
+  "peer_review": {
+    "reviewer": "/root/review_three_stages",
+    "scope": "Read-only review of research plan, label-loss evidence, code and source-aware protocol decision",
+    "result": "passed after source-isolation gate correction",
+    "reviewed_plan_sha256": "c19f919f751f35a02ff3531521882bacec0c424af1579a211a52ac7a095619d6",
+    "reviewed_implementation_sha256": "7f9643c49b26068273178a9bbca9e7d0234b73218e5ecf365d47d5e8454003b0",
+    "post_review_change": "Plan and report header status only; review provenance appended to DECISIONS; no model or new split authorization implied"
+  },
+  "knowledge_sha256": {
+    "README.md": "9a2d63b4ebb08a8d651cb3285fda14be99d6fdd6f4d6b51456d6b26c11687ba0",
+    "docs/RESEARCH_PLAN.md": "61c27b414363c3cdc26b857d15a48531e03b40345c56f7c2c5d7be68807a426a",
+    "docs/DECISIONS.md": "83f0ad6b60dd54b574989adb7187bdb69b2e832aa5f7a135ca704df7d29d928b",
+    "docs/BACFORMER_LOCAL_DEPLOYMENT.md": "ff356db0733bb3b2f161ca94e746f37e493be4bd7e5051124faf2a2d01ff78c4",
+    "data/results/escherichia_coli_amr_feasibility_20261108/README.md": "9c0c3bbd029a215dc691fc6e195bdec8d76b9e47fc3dcdd4199cfd5df7f27dd7"
+  },
+  "user_instruction_sha256": "599e617fd517219df0e5c1088eded2decf2e55192b5d6fd09d78ca9bbf676fdb"
+}

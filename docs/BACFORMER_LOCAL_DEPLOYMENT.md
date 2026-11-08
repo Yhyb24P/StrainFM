@@ -108,9 +108,11 @@ python bacbench/tasks/operon/run_evaluation_long_read_rna_seq.py \
 - 主结果用官方 benchmark 实现：`(cos+1)/2`、异链置零；代码中的 `AUPRC` 实为 `average_precision_score`，报告时写明。论文带间距的分数如需复现，单独命名报告。
 - 结果表述限定为“DH5α 实验标注参考上的 operon 边界评价”，不外推为多菌株泛化。
 
-### 5.2 闭环 B：多菌株 AMR（当前被数据否决）
+### 5.2 闭环 B：多菌株 AMR（先完成 AMR-01）
 
-`data/results/escherichia_coli_amr_intersection_20261106/`：62,560 条候选记录中仅 609 条精确命中 BacBench AMR 标签 accession，其中 37 个划分代表（29/5/3）；单药最多 36 个标签、测试集每药 2–3 个，无药物满足 500/50 规则（D0-18）。**不得**在该标签文件上强行建模；下一步需按 BioSample 采 NCBI AST 或重新设计任务。
+2026-11-06 的交集报告在 accession 与 genome_id 的键映射上漏计，不能据“37 个代表”认定 AMR 不可行。2026-11-08 按用户要求逐记录追踪质量、代表选择和键映射，并统计 BioSample 与逐药类别/分区支持；现役结论见 [AMR-01 报告](../data/results/escherichia_coli_amr_feasibility_20261108/README.md)。旧结果保留为历史，尚未进行多菌株 AMR 模型训练或测试。
+
+下游评价是否成立，先看真实标签、质量合格的原始组装、样本与近克隆/来源隔离及逐药支持。不自动扩大检索，也不因标签总数足够就直接启动全量推理。不同任务可有专用集合，须在查看模型测试表现前固定；不将标签复制给近缘组装。
 
 ## 6. 数据链约定（E. coli 自有基因组）
 

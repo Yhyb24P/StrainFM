@@ -1,0 +1,28 @@
+{
+  "schema": 2,
+  "purpose": "AMR-01 label-loss and per-drug feasibility audit; no training, selection or new split",
+  "inputs_sha256": {
+    "data/results/bacformer_source_audit_20261104/hf_amr_binary_labels.csv": "644b91687d53c36e8645f0a5eb560b33cd807276ae41d81ae9a2f411050b0f63",
+    "data/processed/escherichia_coli_identity_cohort_20261105/cohort_manifest.tsv": "99aadc3b5ebfa987402949eaac0ad28121fa5a7fd33cba5775373d3f728fca4c",
+    "data/processed/escherichia_coli_source_split_20261105/split_manifest.tsv": "34ba67134a67b416d342a6449c2019cd09c353dfcfb759bf7c29a8b02b9b2a59",
+    "data/processed/escherichia_coli_mash_groups_20261105/sequence_groups.tsv": "b509a575ccd2a08832b67f881570c13a537117e19dc092e9c8d44c74b91bef05"
+  },
+  "genome_root": "/mnt/e/StrainFM/data/raw/genomes",
+  "code_sha256": {
+    "amr_intersection.py": "7f9643c49b26068273178a9bbca9e7d0234b73218e5ecf365d47d5e8454003b0",
+    "audit.py": "28ce6c6e4a063d3a670c3d7c91d307e53b68a81de805ff2f2b90c6fb3cf6f637",
+    "cohort.py": "ad3881875db8e628ca3e071b9be4f4c7e3f66314b5da3f478a611421afa066b0",
+    "metadata.py": "0a194261bc2b8d82378af243bcaaae9c60c7c116f5ccb44c4a2c5a69154840d6"
+  },
+  "git_commit": "e541e746407de2909ca1971d0b3eae0b95ce10b1",
+  "label_direction": "Published binary CSV: 0=S, 1=R; underlying AST quality/conditions not reverified",
+  "matching_rule": "Exact versioned file/current/paired accession; all matches retained, no label transfer to clone representatives",
+  "quality_rule": "Reuse frozen cohort eligibility only when current compressed SHA-256 matches its fully decoded snapshot",
+  "count_rule": "Known BioSample, nonconflicting binary label directly on at least one quality-eligible assembly; no replacement assembly selected",
+  "paper_count_gate": {
+    "total": 500,
+    "per_class": 50
+  },
+  "group_support_rule": "At least 3 groups carrying each class is necessary, not sufficient, for 3-way class coverage; no new split constructed",
+  "started_utc": "2026-11-08T12:11:02.451163+00:00"
+}

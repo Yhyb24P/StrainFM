@@ -63,11 +63,13 @@ def main():
     virus.add_argument("--manifest", type=Path, required=True)
     virus.add_argument("--input", type=Path, required=True)
     virus.add_argument("--output", type=Path, required=True)
-    amr = sub.add_parser("amr-intersection", help="Intersect BacBench AMR binary labels with the frozen E. coli cohort")
+    amr = sub.add_parser("amr-intersection", help="Trace AMR label loss and per-drug BioSample/group feasibility; no training or new split")
     amr.add_argument("--labels", type=Path, required=True)
     amr.add_argument("--cohort-manifest", type=Path, required=True)
     amr.add_argument("--split-manifest", type=Path, required=True)
     amr.add_argument("--output", type=Path, required=True)
+    amr.add_argument("--groups", type=Path, required=True)
+    amr.add_argument("--genome-root", type=Path, required=True)
     local = sub.add_parser("operon-local-eval", help="Score operon boundaries on a local annotation via explicit author-list mapping")
     local.add_argument("--embeddings", type=Path, required=True)
     local.add_argument("--mapping", type=Path, required=True)
@@ -159,7 +161,8 @@ def main():
     elif args.command == "download":
         result = run_download(args.manifest, args.root)
     elif args.command == "amr-intersection":
-        result = run_amr_intersection(args.labels, args.cohort_manifest, args.split_manifest, args.output)
+        result = run_amr_intersection(args.labels, args.cohort_manifest, args.split_manifest, args.output,
+                                      groups_path=args.groups, genome_root=args.genome_root)
     elif args.command == "operon-local-eval":
         result = run_operon_local_eval(args.embeddings, args.mapping, args.reference, args.output, args.method_name, args.model_revision, args.official_embeddings)
     elif args.command == "bacformer-annotate":
