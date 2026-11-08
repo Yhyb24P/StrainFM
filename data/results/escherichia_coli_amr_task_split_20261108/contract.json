@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "purpose": "Pre-registered near-clone-group split for AMR task evaluation; frozen before model results",
+  "rules": {
+    "unit": "drug x BioSample x versioned assembly; one row per unit",
+    "group": "near_clone_group; whole group in one partition",
+    "source_isolation": false,
+    "source_note": "source components may cross partitions by user decision (D0-28); documented in limitations",
+    "conflicts": "mixed S/R within a clone group flagged; primary analysis excludes them",
+    "partitioning": "70/10/20 by group count, deterministic seeded greedy; min_groups enforced"
+  },
+  "seed": 20261108,
+  "min_groups": 20,
+  "drugs": [
+    "gentamicin",
+    "ciprofloxacin"
+  ],
+  "labels_sha256": "644b91687d53c36e8645f0a5eb560b33cd807276ae41d81ae9a2f411050b0f63",
+  "cohort_manifest_sha256": "99aadc3b5ebfa987402949eaac0ad28121fa5a7fd33cba5775373d3f728fca4c",
+  "split_manifest_sha256": "34ba67134a67b416d342a6449c2019cd09c353dfcfb759bf7c29a8b02b9b2a59",
+  "nonrepresentatives_sha256": "40d505636842327cdc70b15e0b7f7ccb7c70a5dba1d5f517632e3c74e4f286ec",
+  "code_sha256": "9fa8ef67535b9edc54eb92ea513952a9fbe64a734877aba344b2f74911f77510",
+  "started_utc": "2026-11-08T12:23:01.359264+00:00"
+}

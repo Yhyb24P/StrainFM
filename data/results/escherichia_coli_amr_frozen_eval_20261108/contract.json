@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "purpose": "Frozen-backbone AMR light-head evaluation per D0-27/D0-28",
+  "models": [
+    "bacformer",
+    "esm_mean"
+  ],
+  "lr_grid": [
+    0.0001,
+    0.001,
+    0.01
+  ],
+  "max_epochs": 100,
+  "patience": 10,
+  "seeds": [
+    20261108,
+    20261109,
+    20261110
+  ],
+  "head": "LayerNorm -> Dropout(0.1) -> Linear(960,1); BCEWithLogits; Adam",
+  "selection": "learning rate and epoch selected on validation AUROC; test scored once per seed",
+  "bootstrap": "group-level resampling of near-clone groups, 1000 repeats",
+  "units_sha256": "081497f051f7bcc5f9562f627c581d35e918316c77b76a9a006467e3cf89237f",
+  "code_sha256": "3b15547c17781a35002b16378104abff7c41e784f740eeac650bfe208637ea20",
+  "started_utc": "2026-11-08T14:25:16.229031+00:00"
+}

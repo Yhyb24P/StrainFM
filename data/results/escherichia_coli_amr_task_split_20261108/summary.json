@@ -1,0 +1,81 @@
+{
+  "status": "amr_split_frozen",
+  "seed": 20261108,
+  "min_groups": 20,
+  "drugs": {
+    "gentamicin": {
+      "n_units": 546,
+      "n_S": 440,
+      "n_R": 106,
+      "n_direct_file_accession": 496,
+      "n_groups": 408,
+      "n_conflict_groups": 6,
+      "n_conflict_units": 64,
+      "primary_n_units": 482,
+      "primary_n_S": 398,
+      "primary_n_R": 84,
+      "partitions": {
+        "train": {
+          "n_units": 380,
+          "n_primary_units": 329,
+          "n_groups": 285,
+          "n_source_components": 6
+        },
+        "validation": {
+          "n_units": 51,
+          "n_primary_units": 48,
+          "n_groups": 41,
+          "n_source_components": 3
+        },
+        "test": {
+          "n_units": 115,
+          "n_primary_units": 105,
+          "n_groups": 82,
+          "n_source_components": 3
+        }
+      }
+    },
+    "ciprofloxacin": {
+      "n_units": 545,
+      "n_S": 268,
+      "n_R": 277,
+      "n_direct_file_accession": 496,
+      "n_groups": 405,
+      "n_conflict_groups": 3,
+      "n_conflict_units": 13,
+      "primary_n_units": 532,
+      "primary_n_S": 264,
+      "primary_n_R": 268,
+      "partitions": {
+        "train": {
+          "n_units": 406,
+          "n_primary_units": 396,
+          "n_groups": 284,
+          "n_source_components": 6
+        },
+        "validation": {
+          "n_units": 43,
+          "n_primary_units": 43,
+          "n_groups": 40,
+          "n_source_components": 3
+        },
+        "test": {
+          "n_units": 96,
+          "n_primary_units": 93,
+          "n_groups": 81,
+          "n_source_components": 2
+        }
+      }
+    }
+  },
+  "n_quality_excluded_matched": 20,
+  "n_matched_assemblies": 609,
+  "units_sha256": "081497f051f7bcc5f9562f627c581d35e918316c77b76a9a006467e3cf89237f",
+  "finished_utc": "2026-11-08T12:23:01.361268+00:00",
+  "limits": [
+    "Labels are published binary AST results (paired-accession evidence); direct-only is a sensitivity subset (496 per drug).",
+    "Source components cross partitions by user decision; shared project is not lineage proof.",
+    "Mixed S/R clone groups are excluded from the primary analysis and reported.",
+    "The split is frozen before model results; the global retrieval split is unchanged."
+  ]
+}

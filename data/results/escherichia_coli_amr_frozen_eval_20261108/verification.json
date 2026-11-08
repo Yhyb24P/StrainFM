@@ -1,0 +1,23 @@
+{
+  "units_unique_assemblies": 549,
+  "embeddings": 549,
+  "all_units_embedded": true,
+  "seeds": [
+    20261108,
+    20261109,
+    20261110
+  ],
+  "test_counts_primary": {
+    "ciprofloxacin": 93,
+    "gentamicin": 105
+  },
+  "test_counts_with_conflicts": {
+    "ciprofloxacin": 96,
+    "gentamicin": 115
+  },
+  "models": [
+    "bacformer",
+    "esm_mean"
+  ],
+  "split_units_sha256": "081497f051f7bcc5f9562f627c581d35e918316c77b76a9a006467e3cf89237f"
+}

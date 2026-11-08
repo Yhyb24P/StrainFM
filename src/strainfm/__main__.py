@@ -13,6 +13,8 @@ from .split import run_split
 from .download import run_download
 from .virus import split_virus
 from .amr_intersection import run_amr_intersection
+from .amr_split import run_amr_split
+from .amr_eval import run_amr_eval
 from .operon_local_eval import run_operon_local_eval
 from .bacformer_annotate import run_bacformer_annotate
 from .bacformer_embed import run_bacformer_embed
@@ -70,6 +72,25 @@ def main():
     amr.add_argument("--output", type=Path, required=True)
     amr.add_argument("--groups", type=Path, required=True)
     amr.add_argument("--genome-root", type=Path, required=True)
+    amr_split = sub.add_parser("amr-split", help="Freeze a near-clone-group-isolated AMR task split before any model result")
+    amr_split.add_argument("--labels", type=Path, required=True)
+    amr_split.add_argument("--cohort-manifest", type=Path, required=True)
+    amr_split.add_argument("--split-manifest", type=Path, required=True)
+    amr_split.add_argument("--nonrepresentatives", type=Path, required=True)
+    amr_split.add_argument("--output", type=Path, required=True)
+    amr_split.add_argument("--drugs", default="gentamicin,ciprofloxacin")
+    amr_split.add_argument("--seed", type=int, default=20261108)
+    amr_split.add_argument("--min-groups", type=int, default=20)
+    amr_eval = sub.add_parser("amr-eval", help="Train paper-style light heads on frozen AMR vectors and score the frozen test split")
+    amr_eval.add_argument("--embeddings-dir", type=Path, required=True)
+    amr_eval.add_argument("--units", type=Path, required=True)
+    amr_eval.add_argument("--output", type=Path, required=True)
+    amr_eval.add_argument("--models", default="bacformer,esm_mean")
+    amr_eval.add_argument("--lr-grid", default="0.0001,0.001,0.01")
+    amr_eval.add_argument("--max-epochs", type=int, default=100)
+    amr_eval.add_argument("--patience", type=int, default=10)
+    amr_eval.add_argument("--seeds", default="20261108,20261109,20261110")
+    amr_eval.add_argument("--bootstrap-repeats", type=int, default=1000)
     local = sub.add_parser("operon-local-eval", help="Score operon boundaries on a local annotation via explicit author-list mapping")
     local.add_argument("--embeddings", type=Path, required=True)
     local.add_argument("--mapping", type=Path, required=True)
@@ -163,6 +184,17 @@ def main():
     elif args.command == "amr-intersection":
         result = run_amr_intersection(args.labels, args.cohort_manifest, args.split_manifest, args.output,
                                       groups_path=args.groups, genome_root=args.genome_root)
+    elif args.command == "amr-split":
+        result = run_amr_split(args.labels, args.cohort_manifest, args.split_manifest, args.nonrepresentatives,
+                               args.output, drugs=tuple(args.drugs.split(",")), seed=args.seed,
+                               min_groups=args.min_groups)
+    elif args.command == "amr-eval":
+        result = run_amr_eval(args.embeddings_dir, args.units, args.output,
+                              models=tuple(args.models.split(",")),
+                              lr_grid=tuple(float(x) for x in args.lr_grid.split(",")),
+                              max_epochs=args.max_epochs, patience=args.patience,
+                              seeds=tuple(int(x) for x in args.seeds.split(",")),
+                              bootstrap_repeats=args.bootstrap_repeats)
     elif args.command == "operon-local-eval":
         result = run_operon_local_eval(args.embeddings, args.mapping, args.reference, args.output, args.method_name, args.model_revision, args.official_embeddings)
     elif args.command == "bacformer-annotate":

@@ -200,7 +200,13 @@ def run_bacformer_annotate(split_manifest_path, assemblies_path, genome_root, ou
     if annotation_mode not in ("auto", "gbff", "prodigal"):
         raise ValueError("annotation_mode must be auto, gbff or prodigal")
     manifests = read_table(split_manifest_path)
-    assemblies = {r["genome_id"]: r for r in read_table(assemblies_path)}
+    assembly_rows = read_table(assemblies_path)
+    assemblies = {r["genome_id"]: r for r in assembly_rows}
+    for row in assembly_rows:
+        for field in ("file_accession", "paired_accession"):
+            value = row.get(field, "")
+            if value and value not in ("missing", "unknown"):
+                assemblies.setdefault(value, row)
     if splits is not None:
         manifests = [r for r in manifests if r["split"] in set(splits)]
     if genome_ids is not None:
