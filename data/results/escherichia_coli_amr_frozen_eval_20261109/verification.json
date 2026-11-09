@@ -1,0 +1,44 @@
+{
+  "checked_against": "gpt UPDATE-gpt-20261109-bootstrap-independent-034 (independent recompute)",
+  "comparisons": [
+    {
+      "drug": "ciprofloxacin",
+      "analysis_set": "primary",
+      "delta_AUROC_match": true,
+      "delta_AUROC_ci_match": true,
+      "delta_AP_match": true,
+      "delta_AP_ci_match": true
+    },
+    {
+      "drug": "ciprofloxacin",
+      "analysis_set": "direct_refit",
+      "delta_AUROC_match": true,
+      "delta_AUROC_ci_match": true,
+      "delta_AP_match": true,
+      "delta_AP_ci_match": true
+    },
+    {
+      "drug": "gentamicin",
+      "analysis_set": "primary",
+      "delta_AUROC_match": true,
+      "delta_AUROC_ci_match": true,
+      "delta_AP_match": true,
+      "delta_AP_ci_match": true
+    },
+    {
+      "drug": "gentamicin",
+      "analysis_set": "direct_refit",
+      "delta_AUROC_match": true,
+      "delta_AUROC_ci_match": true,
+      "delta_AP_match": true,
+      "delta_AP_ci_match": true
+    }
+  ],
+  "all_match": true,
+  "valid_repeats": {
+    "gentamicin/direct_refit": 999,
+    "others": 1000
+  },
+  "split_units_sha256": "081497f051f7bcc5f9562f627c581d35e918316c77b76a9a006467e3cf89237f",
+  "seed": 20261108
+}

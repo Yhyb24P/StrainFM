@@ -7,7 +7,7 @@ try:
 except ImportError:
     HAVE = False
 
-from strainfm.amr_eval import _group_bootstrap, _metrics
+from strainfm.amr_eval import _group_bootstrap, _metrics, _paired_group_bootstrap_multi
 
 
 @unittest.skipUnless(HAVE, "requires numpy/scikit-learn")
@@ -25,6 +25,24 @@ class AmrEvalHelpersTest(unittest.TestCase):
         second = _group_bootstrap(groups, labels, scores, 50, 20261108)
         self.assertEqual(first, second)
         self.assertEqual(first["n_groups"], 3)
+
+    def test_paired_bootstrap_multi_seed(self):
+        groups = ["a", "a", "b", "c", "c", "c", "d", "e"]
+        labels = [0, 1, 0, 1, 1, 0, 1, 0]
+        seed_scores = [
+            {"model_a": [0.9, 0.8, 0.2, 0.7, 0.6, 0.3, 0.85, 0.4],
+             "model_b": [0.1, 0.2, 0.8, 0.3, 0.4, 0.7, 0.15, 0.6]},
+            {"model_a": [0.8, 0.7, 0.3, 0.6, 0.7, 0.2, 0.9, 0.5],
+             "model_b": [0.2, 0.3, 0.7, 0.4, 0.3, 0.8, 0.1, 0.5]},
+        ]
+        first = _paired_group_bootstrap_multi(groups, labels, seed_scores, 100, 20261108,
+                                              names=("model_a", "model_b"))
+        second = _paired_group_bootstrap_multi(groups, labels, seed_scores, 100, 20261108,
+                                               names=("model_a", "model_b"))
+        self.assertEqual(first, second)
+        self.assertIsNotNone(first["delta_AUROC_ci95"])
+        with self.assertRaises(ValueError):
+            _paired_group_bootstrap_multi(groups, labels, seed_scores, 10, 1, names=("model_a",))
 
 
 if __name__ == "__main__":
