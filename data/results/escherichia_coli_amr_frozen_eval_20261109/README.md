@@ -53,3 +53,5 @@
 ## 文件
 
 `contract.json`、`summary.json`（含逐模型 bootstrap 与有效重复）、`amr_metrics.tsv`（逐 seed）、`amr_predictions.tsv`（逐样本）、`amr_model_comparison.tsv`（配对差异）、`verification.json`（与 gpt 独立复算的逐项对照）。
+
+**verification 性质**：`verification.json` 中的对照是在**同一批预测文件**上对统计量实现的复算，用于核验代码与口径一致性；它不是独立确认性试验，也不构成新的科研证据。
