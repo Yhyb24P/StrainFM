@@ -1,0 +1,15 @@
+{
+  "requested_samples": 3943,
+  "run_rows": 3850,
+  "samples_with_runs": 3754,
+  "study_count": 42,
+  "samples_with_multiple_studies": 14,
+  "species_names": {
+    "Escherichia coli": 3847,
+    "Klebsiella pneumoniae": 3
+  },
+  "inputs_sha256": {
+    "/mnt/e/StrainFM/data/raw/ecoli_ast_ena_sources_20261109/manifest.json": "a02defb2cca97c615528f1a96f3ecd0ae7f1de789e08da6dd5bec179fb562086"
+  },
+  "scope": "Live ENA sample-to-run query snapshot. Study counts precede ATB quality selection and near-clone grouping."
+}

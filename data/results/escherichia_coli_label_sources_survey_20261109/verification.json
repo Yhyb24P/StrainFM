@@ -1,0 +1,15 @@
+{
+  "hashes_verified": 277,
+  "bvbrc_record_totals_and_sample_table_consistent": true,
+  "bacdive_unique_records": 1975,
+  "independent_ornithine_with_genome_counts": {
+    "+": 74,
+    "-": 61
+  },
+  "scope": "Computational spot verification of research snapshots/counts, not experimental validation or cohort acceptance.",
+  "missing_local_breakdown_total": 3351,
+  "cross_source_binary_agreements": {
+    "ciprofloxacin": 58,
+    "gentamicin": 57
+  }
+}

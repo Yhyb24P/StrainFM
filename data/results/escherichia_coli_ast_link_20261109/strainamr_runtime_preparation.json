@@ -1,0 +1,33 @@
+{
+  "revision": "c57619eed0fd7121f2b475f5f6401bf679f629f9",
+  "source_root": "/mnt/e/StrainFM/tools/strainamr_source_c57619e",
+  "python_runtime": "/home/yhshy/.local/share/strainfm/strainamr-runtime/bin/python",
+  "venv_inherits": "/home/yhshy/miniconda3/envs/esm3",
+  "isolated_additions": {
+    "shap": "0.49.1",
+    "slicer": "0.0.8",
+    "cloudpickle": "3.1.2"
+  },
+  "shap_install_report_sha256": "4a9b5f3aeb37c2db93a70935dd9c38bec299f2bca631d9c9d52a35d4dc6207d9",
+  "entrypoint_checks": {
+    "root_help": 0,
+    "train_help": 0,
+    "build_train_help": 0
+  },
+  "limitations": [
+    "CLI help only, no feature extraction/training performed.",
+    "Runtime uses existing Python3.10/Torch2.11 rather than upstream Python3.8/Torch1.12; computational equivalence unverified.",
+    "External tools and resistance databases not ready."
+  ],
+  "tool_solver_attempt": {
+    "status": "failed",
+    "reason": "python 3.8.6 requires zlib <1.3; current channel solving did not satisfy pinned tool set",
+    "log_sha256": "1b1028e70c754a2146da8ee27c1b84a8a6623c9543091d193bd377430aadec94"
+  },
+  "official_explicit_plan": {
+    "status": "dry_run_success",
+    "source": "docs/environment-explicit.txt",
+    "source_sha256": "a06fa705eaa6f3ea5e9ff01f9b1b5897f22eb0b5eb409f4f032752a2e5833cbf",
+    "installed": false
+  }
+}

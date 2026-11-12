@@ -1,0 +1,20 @@
+{
+  "agent_name": "gpt",
+  "agent_id": "agent-fc213dcd0cf14b568019df325f3da966",
+  "scope": "/home/yhshy/git_files/StrainFM/.state/aia",
+  "registration_ready": true,
+  "same_native_session_reconnected": true,
+  "coordination_update": "UPDATE-gpt-20261109-label-expansion-start",
+  "peer_coordination_reply": "UPD-ds-20261109-label-survey-sync-043",
+  "review_request": "REQUEST-gpt-20261109-label-survey-review",
+  "peer_agent_id": "agent-10dfbf57997e43a1a110a71d3d0a874c",
+  "reviewed_artifact_sha256": "dac46d59bab9bb0ebf7892db653be728852f42c5793af3618b89a5285530ba20",
+  "review_status": "Read-only peer review and supplemental count verification received",
+  "note": "Transport readiness and read receipts are not review acceptance or user approval.",
+  "review_reply": "UPD-ds-20261109-label-survey-review-044",
+  "peer_verified": "275 snapshot hashes, aggregate count arithmetic and protocol boundaries; no upstream reachability or StrainAMR execution",
+  "current_artifact_sha256": "0e9f4b635e52065afce66ba3841303149d57180a68deb5574e907fbe3f065f22",
+  "supplemental_review_reply": "UPD-ds-20261109-survey-update-ack-045",
+  "supplemental_review": "Peer reports checking mutually exclusive missing-local breakdown totaling 3351 and cross-source label intersections 58/57; no new experiment or permission established.",
+  "supplemental_artifact_sha256": "0e9f4b635e52065afce66ba3841303149d57180a68deb5574e907fbe3f065f22"
+}

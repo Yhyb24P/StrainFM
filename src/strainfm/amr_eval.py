@@ -32,6 +32,20 @@ ANALYSIS_SETS = (
 )
 
 
+def _analysis_sets(units):
+    """Active analysis sets for this units file.
+
+    direct_refit needs a label_source column (AMR-02 units have it; the expanded
+    joint-split units do not), so it is omitted rather than fabricated when absent.
+    """
+    sets = [("primary", lambda unit: unit["label_conflict"] != "True"),
+            ("with_conflicts", lambda unit: True)]
+    if any("label_source" in unit for unit in units):
+        sets.append(("direct_refit", lambda unit: unit["label_conflict"] != "True"
+                     and unit.get("label_source") == "file_accession"))
+    return sets
+
+
 def _load_vectors(embeddings_dir, model):
     import pyarrow.parquet as pq
     name = {"bacformer": "genome_embeddings.parquet", "esm_mean": "esm_mean_embeddings.parquet"}[model]
@@ -211,15 +225,17 @@ def run_amr_eval(embeddings_dir, units_path, output, models=("bacformer", "esm_m
     if output.exists():
         raise ValueError("Use a new output directory")
     units = read_table(units_path)
+    analysis_sets = _analysis_sets(units)
+    set_descriptions = {
+        "primary": "mixed-label clone groups excluded; paired-accession labels",
+        "with_conflicts": "mixed-label clone groups included (sensitivity)",
+        "direct_refit": "evidence-restricted refit on direct file-accession labels; frozen partitions kept",
+    }
     contract = {
         "schema": 1,
         "purpose": "Frozen-backbone AMR light-head evaluation per D0-27/D0-28",
         "models": list(models),
-        "analysis_sets": {
-            "primary": "mixed-label clone groups excluded; paired-accession labels",
-            "with_conflicts": "mixed-label clone groups included (sensitivity)",
-            "direct_refit": "evidence-restricted refit on direct file-accession labels; frozen partitions kept",
-        },
+        "analysis_sets": {name: set_descriptions[name] for name, _ in analysis_sets},
         "lr_grid": list(lr_grid), "max_epochs": max_epochs, "patience": patience, "seeds": list(seeds),
         "head": "LayerNorm -> Dropout(0.1) -> Linear(960,1); BCEWithLogits; Adam",
         "optimizer_note": ("torch.optim.Adam without explicit weight_decay; the pinned BacBench AMR script uses "
@@ -240,7 +256,7 @@ def run_amr_eval(embeddings_dir, units_path, output, models=("bacformer", "esm_m
     for drug in drugs:
         drug_units = [u for u in units if u["drug"] == drug]
         summaries[drug] = {}
-        for analysis_set, keep in ANALYSIS_SETS:
+        for analysis_set, keep in analysis_sets:
             selected, missing = _select_units(drug_units, vectors[models[0]], keep)
             by_split = defaultdict(list)
             for row in selected:
@@ -302,7 +318,7 @@ def run_amr_eval(embeddings_dir, units_path, output, models=("bacformer", "esm_m
               ["drug", "model", "analysis_set", "seed", "genome_id", "near_clone_group", "label", "score", "split"])
     comparison_rows = []
     for drug in drugs:
-        for analysis_set, _ in ANALYSIS_SETS:
+        for analysis_set, _ in analysis_sets:
             per_seed = []
             common = None
             labels = None
@@ -354,33 +370,36 @@ def run_amr_eval(embeddings_dir, units_path, output, models=("bacformer", "esm_m
         "drug", "analysis_set", "model_a", "model_b", "n_test_units",
         "delta_AUROC_mean", "delta_AUROC_sd", "delta_AUROC_ci95",
         "delta_AP_mean", "delta_AP_sd", "delta_AP_ci95"])
+    limits = [
+        "Frozen backbones with a paper-style light head; no backbone training.",
+        "Label evidence follows the units file; direct_refit (D0-27) runs only when label_source is present.",
+        "Group bootstrap resamples near-clone groups only; source components may cross partitions (D0-28/D0-30).",
+        "Single-class test partitions cannot yield AUROC and are reported as such.",
+        "Partition design (cross-drug consistency, source isolation) is defined and documented by the units file producer; this module does not re-verify it.",
+        "Optimizer differs from the pinned BacBench AMR script (Adam here vs AdamW there, neither with explicit weight_decay); no exact paper reproduction is claimed.",
+    ]
+    if not any(name == "direct_refit" for name, _ in analysis_sets):
+        limits.append("direct_refit omitted: the units file has no label_source column, so the AMR-02 evidence-restricted refit is not rerun on this cohort.")
     summary = {
         "status": "amr_eval_complete",
         "models": list(models), "seeds": list(seeds),
-        "analysis_sets": [name for name, _ in ANALYSIS_SETS],
+        "analysis_sets": [name for name, _ in analysis_sets],
         "drugs": summaries,
         "metrics_sha256": sha256(output / "amr_metrics.tsv"),
         "predictions_sha256": sha256(output / "amr_predictions.tsv"),
         "comparison_sha256": sha256(output / "amr_model_comparison.tsv"),
         "finished_utc": datetime.now(timezone.utc).isoformat(),
-        "limits": [
-            "Frozen backbones with a paper-style light head; no backbone training.",
-            "Label evidence is paired-accession primary; direct_refit is an evidence-restricted refit (D0-27), not a gate pass.",
-            "Source components may cross partitions (D0-28); group bootstrap respects near-clone groups only.",
-            "Single-class test partitions cannot yield AUROC and are reported as such.",
-            "Cross-drug partitions differ for shared BioSamples; a future shared trained encoder needs a unified split.",
-            "Optimizer differs from the pinned BacBench AMR script (Adam here vs AdamW there, neither with explicit weight_decay); no exact paper reproduction is claimed.",
-        ],
+        "limits": limits,
     }
     atomic_json(output / "summary.json", summary)
     atomic_json(output / "completion.json", {name: sha256(output / name) for name in (
         "summary.json", "amr_metrics.tsv", "amr_predictions.tsv", "amr_model_comparison.tsv", "contract.json")})
     (output / "README.md").write_text(
-        "# AMR-02 frozen-representation evaluation (2026-11-09 completion run)\n\n"
-        "Frozen Bacformer-L and matched ESM++ genome vectors, pre-registered near-clone-group split "
-        "(D0-27/D0-28), paper-style light head per drug. `primary` excludes mixed-label clone groups; "
-        "`with_conflicts` includes them; `direct_refit` refits on direct file-accession labels only "
-        "(evidence-restricted sensitivity). Seed-averaged statistics use the same resampled groups "
-        "across the three seeds before the percentile interval is taken.\n"
+        "# Frozen-representation AMR evaluation\n\n"
+        "Frozen Bacformer-L and matched ESM++ genome vectors, a pre-registered near-clone-group split, "
+        "and a paper-style light head per drug. `primary` excludes mixed-label clone groups; "
+        "`with_conflicts` includes them; `direct_refit` (when the units file carries label_source) "
+        "refits on direct file-accession labels only (evidence-restricted sensitivity). Seed-averaged "
+        "statistics use the same resampled groups across the seeds before the percentile interval is taken.\n"
     )
     return summary

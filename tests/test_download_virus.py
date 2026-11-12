@@ -13,12 +13,32 @@ from strainfm.__main__ import main
 
 
 class DownloadTest(unittest.TestCase):
+    def test_invalid_worker_count_fails_before_reading_or_downloading(self):
+        with patch('strainfm.download.download_fasta') as fetch:
+            for workers in (0, -1, 65):
+                with self.assertRaisesRegex(ValueError, 'workers'):
+                    run_download(Path('/missing/manifest'), Path('/missing/root'), workers=workers)
+            fetch.assert_not_called()
+
+    def test_generic_source_url_preserves_legacy_manifest_support(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / 'manifest.tsv'
+            write_tsv(manifest, [{'target_relpath': 'SAMN1.fa.gz', 'url': 'https://example.org/SAMN1.fa.gz'}], ['target_relpath', 'url'])
+            with patch('strainfm.download.download_fasta', return_value='OK') as fetch:
+                self.assertEqual(run_download(manifest, Path(tmp))['downloaded'], 1)
+                fetch.assert_called_once_with(Path(tmp), 'SAMN1.fa.gz', 'https://example.org/SAMN1.fa.gz')
+            write_tsv(manifest, [{'target_relpath': 'one.fa.gz', 'url': 'https://example.org/generic',
+                                 'ncbi_url': 'https://example.org/ncbi'}], ['target_relpath', 'url', 'ncbi_url'])
+            with patch('strainfm.download.download_fasta', return_value='OK') as fetch:
+                run_download(manifest, Path(tmp))
+                fetch.assert_called_once_with(Path(tmp), 'one.fa.gz', 'https://example.org/ncbi')
+
     def test_batch_counts_and_cli_failure_status(self):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = Path(tmp) / 'manifest.tsv'
             write_tsv(manifest, [{'target_relpath': name, 'ncbi_url': 'https://example.org/a'} for name in ['a', 'b', 'c']], ['target_relpath', 'ncbi_url'])
             with patch('strainfm.download.download_fasta', side_effect=['OK', 'skip', 'FAIL c']):
-                result = run_download(manifest, Path(tmp))
+                result = run_download(manifest, Path(tmp), workers=2)
             self.assertEqual(result, {'records': 3, 'downloaded': 1, 'skipped_valid': 1, 'failed': 1})
             with patch('sys.argv', ['strainfm', 'download', '--manifest', str(manifest), '--root', tmp]), patch('strainfm.__main__.run_download', return_value=result), patch('builtins.print'):
                 with self.assertRaises(SystemExit) as raised:

@@ -41,6 +41,8 @@
 | D0-27 | 2026-11-08 | AMR-02 任务协议的用户决定：①标签证据 = **主分析 paired-accession（gent 546=440S/106R、cipro 545=268S/277R，达 500/50）+ 敏感性 direct-only（各 496，不声称达门槛）**；②采用**预注册任务专用划分**（BioSample+近克隆整组隔离、来源约束显式、在查看模型结果前冻结、不改动全局检索 split）；③**授权冻结主干 + 论文式轻量头**（LayerNorm+Dropout+单层线性；两模型同架构/同样本/同调参预算）；④每分区**≥20 个近克隆/来源组**，不足则报告无法稳定估计、不强凑 | 用户 2026-11-08 四项选择（AskUserQuestion）；gpt 通信草案（RESULT-gpt-20261108-amr02-discussion-024）为输入；D0-17 的“闭环 A 后允许轻量头”已满足 | 用户 | active |
 | D0-28 | 2026-11-08 | AMR-02 划分的两项补充决定（可行性分析后）：①隔离 = **近克隆组整组隔离，来源组件允许跨分区**（数据事实：gent 546 例中 530 例同属来源组件 PRJDA32509，严格来源隔离会使 val/test <20 组）；来源共享写入 limitation，结论限定；②**近克隆组内 S/R 冲突组主分析排除并报告**（gent 6 组、cipro 3 组，最大冲突组 43/10 例），敏感性分析可含入并单列 | 用户 2026-11-08 两项选择（AskUserQuestion）；可行性统计：gent 408 组/8 来源组件、cipro 405 组/7 组件，组级 70/10/20 可满足 ≥20 组/分区 | 用户 | active |
 | D0-29 | 2026-11-09 | AMR-02 统计补全（用户附件指示，不改写历史结果）：①新增 `direct_refit` = 仅 direct file_accession 标签、沿用冻结组分区、**重新拟合**轻头（证据受限敏感性，不声称达 500 门槛）；②配对模型差异改为同一近克隆组重采样索引下 3 seeds 配对差先平均再取百分位区间；③单类别重采样时 AUROC 与 AP 同时跳过并报告有效重复次数（gent/direct_refit 999/1000）；④优化器差异如实记录（本实现 Adam、pinned BacBench AdamW，均无显式 weight_decay，不声称精确复现）。首轮点估计保留，差异仅在 CI 统计量与新增分析集；与 gpt 独立复算逐项一致 | 用户本会话附件；gpt CHALLENGE-032（配对 bootstrap 排序 bug）与 UPDATE-031（优化器差异）、UPDATE-034（单类别重复）；新结果 `data/results/escherichia_coli_amr_frozen_eval_20261109/`，旧目录保留 | 用户；ds 执行 | active |
+| D0-30 | 2026-11-12 | 扩大队列（BV-BRC 标签 + ATB 补序列）的联合划分：**近克隆组整组隔离 + 两药共用同一分区**（同一 BioSample 跨药分区一致）；来源组件（source_projects/ENA study/BioProject 合并）**不隔离、按分区报告最大来源占比**。依据：申报来源图合并后仅 43 个组件、最大占 43%，严格来源隔离的 70/10/20 退化为 val 24 例/1 组件——该退化结果保留在 `..._joint_split_source_isolated_20261112` 作为不可行证据。新 split：cipro train/val/test = 1,931/286/620 主分析例（1,376/200/394 组），gent = 1,912/272/609（1,439/198/417）；两类齐备、各分区 ≥20 组。已知限制：新 test 与旧 AMR-02 已见 test 重叠 3 个 BioSample（22 个共同样本中），确认性主张须据此限定 | 用户对话中“扩大后的共同评测”指示；可行性统计与重叠检查由 ds 执行；模块 `src/strainfm/amr_task_split.py`（seed 20261110，units SHA 387f9a4e…） | 用户；ds 执行 | active |
+| D0-31 | 2026-11-12 | 扩大队列三模型比较的第三方对照协议（看模型结果前预注册）：StrainAMR 官方发布清单 24 个物种-药物模型中**无庆大霉素模型**（E. coli 仅 amoxicillin/ampicillin/ciprofloxacin/levofloxacin），故三模型比较仅限**环丙沙星**，庆大霉素仍为 ESM++ vs Bacformer 两模型。使用官方 Ecoli_ciprofloxacin_3fold Fold1 包（SHA-256 `6f240090…`，下载器校验；含 2.7GB 训练数据库与检查点），按官方 `build-test` → `predict --mode model-only` 运行（不启用 known-mechanism 规则层，保证与无规则先验的表示模型可比），CPU 推理（cu102 不支持 sm_120 的 RTX 5090）。**训练重叠控制**：发布模型训练集 1,012 个 BV-BRC 基因组与 cipro test 643 例有 **194 例（30.2%）** BV-BRC ID 重叠；公平主比较集 = 无标签冲突且与 StrainAMR 训练集不相交 = **433 例**（228S/205R），全测试集结果须附带重叠混杂一并报告。限制：训练数据与预算不可比（非受控重训比较）；StrainAMR 许可未定，仅内部研究用途、不再分发 | 发布清单 `models/manifest.tsv` 与训练库 `train_label.txt`；重叠统计由 ds 执行（`/mnt/e/StrainFM/tools/planA/strainamr_cipro_test_primary_disjoint.json`）；特征构建任务运行中 | 用户（三模型比较要求）；ds 执行 | active |
 
 ## 待决事项
 
@@ -60,6 +62,7 @@
 - 2026-11-05：登记 D0-13；D0-07 废止；初始化公开仓库并更新版本管理规范。
 - 2026-11-05：登记 D0-14；按用户要求收敛为三个连续阶段，明确先划分后模型预处理，复用有效证据，限制审计范围。三阶段方向已由用户决定，目标物种与训练预算未据此推定。
 - 2026-11-05：登记 D0-15、D0-16；完成 E. coli 候选数据计算交付。只读实现复核发现并修复代表选择导致来源关系丢失的问题，划分改为读取全成员来源集合；回归与全量输出核验通过。目标物种选择仍待用户确认。
+- 2026-11-12：登记 D0-30、D0-31；冻结扩大队列联合划分（近克隆组隔离 + 来源分层报告）；预注册 StrainAMR 第三模型对照协议（仅环丙沙星；训练重叠 194/643，公平子集 433）。
 
 ### D0-14 执行口径复核
 

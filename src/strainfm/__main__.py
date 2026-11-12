@@ -13,8 +13,11 @@ from .split import run_split
 from .download import run_download
 from .virus import split_virus
 from .amr_intersection import run_amr_intersection
+from .amr_sources import run_amr_sources
 from .amr_split import run_amr_split
+from .amr_task_split import run_amr_task_split
 from .amr_eval import run_amr_eval
+from .amr_external_eval import run_amr_external_eval
 from .operon_local_eval import run_operon_local_eval
 from .bacformer_annotate import run_bacformer_annotate
 from .bacformer_embed import run_bacformer_embed
@@ -61,6 +64,7 @@ def main():
     download = sub.add_parser("download", help="Download/retry manifest FASTA files, validating existing and new files")
     download.add_argument("--manifest", type=Path, required=True)
     download.add_argument("--root", type=Path, required=True)
+    download.add_argument("--workers", type=int, default=8)
     virus = sub.add_parser("split-virus", help="Split UHGV into a new output directory after successful decompression")
     virus.add_argument("--manifest", type=Path, required=True)
     virus.add_argument("--input", type=Path, required=True)
@@ -72,6 +76,19 @@ def main():
     amr.add_argument("--output", type=Path, required=True)
     amr.add_argument("--groups", type=Path, required=True)
     amr.add_argument("--genome-root", type=Path, required=True)
+    sources = sub.add_parser("amr-sources", help="Link a fixed measured-AST snapshot to sample/genome candidates")
+    sources.add_argument("--source-dir", type=Path, required=True)
+    sources.add_argument("--cohort-manifest", type=Path, required=True)
+    sources.add_argument("--local-genome-root", type=Path, required=True)
+    sources.add_argument("--atb-assemblies", type=Path, default=None)
+    sources.add_argument("--ena-runs", type=Path, default=None)
+    sources.add_argument("--output", type=Path, required=True)
+    cohort_amr = sub.add_parser("amr-cohort", help="Inspect downloaded AST cohorts with fixed QC and sequence grouping")
+    cohort_amr.add_argument("--samples", type=Path, required=True)
+    cohort_amr.add_argument("--local-cohort", type=Path, required=True)
+    cohort_amr.add_argument("--config", type=Path, required=True)
+    cohort_amr.add_argument("--output", type=Path, required=True)
+    cohort_amr.add_argument("--workers", type=int, default=8)
     amr_split = sub.add_parser("amr-split", help="Freeze a near-clone-group-isolated AMR task split before any model result")
     amr_split.add_argument("--labels", type=Path, required=True)
     amr_split.add_argument("--cohort-manifest", type=Path, required=True)
@@ -81,6 +98,14 @@ def main():
     amr_split.add_argument("--drugs", default="gentamicin,ciprofloxacin")
     amr_split.add_argument("--seed", type=int, default=20261108)
     amr_split.add_argument("--min-groups", type=int, default=20)
+    task_split = sub.add_parser("amr-task-split", help="Freeze a source- and near-clone-isolated split for the expanded AMR cohort")
+    task_split.add_argument("--representatives", type=Path, required=True)
+    task_split.add_argument("--groups", type=Path, required=True)
+    task_split.add_argument("--output", type=Path, required=True)
+    task_split.add_argument("--drugs", default="ciprofloxacin,gentamicin")
+    task_split.add_argument("--seed", type=int, default=20261110)
+    task_split.add_argument("--min-groups", type=int, default=20)
+    task_split.add_argument("--fractions", default="0.7,0.1,0.2")
     amr_eval = sub.add_parser("amr-eval", help="Train paper-style light heads on frozen AMR vectors and score the frozen test split")
     amr_eval.add_argument("--embeddings-dir", type=Path, required=True)
     amr_eval.add_argument("--units", type=Path, required=True)
@@ -91,6 +116,15 @@ def main():
     amr_eval.add_argument("--patience", type=int, default=10)
     amr_eval.add_argument("--seeds", default="20261108,20261109,20261110")
     amr_eval.add_argument("--bootstrap-repeats", type=int, default=1000)
+    external = sub.add_parser("amr-external-eval", help="Score a pretrained external AMR model against frozen heads on the same test units")
+    external.add_argument("--eval-dir", type=Path, required=True)
+    external.add_argument("--units", type=Path, required=True)
+    external.add_argument("--external-scores", type=Path, required=True)
+    external.add_argument("--external-name", required=True)
+    external.add_argument("--overlap-ids", type=Path, default=None)
+    external.add_argument("--bootstrap-repeats", type=int, default=1000)
+    external.add_argument("--seed", type=int, default=20261110)
+    external.add_argument("--output", type=Path, required=True)
     local = sub.add_parser("operon-local-eval", help="Score operon boundaries on a local annotation via explicit author-list mapping")
     local.add_argument("--embeddings", type=Path, required=True)
     local.add_argument("--mapping", type=Path, required=True)
@@ -180,14 +214,25 @@ def main():
     elif args.command == "split":
         result = run_split(args.representatives, args.groups, args.cohort_manifest, args.output, args.seed)
     elif args.command == "download":
-        result = run_download(args.manifest, args.root)
+        result = run_download(args.manifest, args.root, workers=args.workers)
     elif args.command == "amr-intersection":
         result = run_amr_intersection(args.labels, args.cohort_manifest, args.split_manifest, args.output,
                                       groups_path=args.groups, genome_root=args.genome_root)
+    elif args.command == "amr-sources":
+        result = run_amr_sources(args.source_dir, args.cohort_manifest, args.local_genome_root, args.output,
+                                 atb_assemblies=args.atb_assemblies, ena_runs=args.ena_runs)
+    elif args.command == "amr-cohort":
+        from .amr_cohort import run_amr_cohort
+        result = run_amr_cohort(args.samples, args.local_cohort, args.config, args.output, workers=args.workers)
     elif args.command == "amr-split":
         result = run_amr_split(args.labels, args.cohort_manifest, args.split_manifest, args.nonrepresentatives,
                                args.output, drugs=tuple(args.drugs.split(",")), seed=args.seed,
                                min_groups=args.min_groups)
+    elif args.command == "amr-task-split":
+        result = run_amr_task_split(args.representatives, args.groups, args.output,
+                                    drugs=tuple(args.drugs.split(",")), seed=args.seed,
+                                    min_groups=args.min_groups,
+                                    fractions=tuple(float(x) for x in args.fractions.split(",")))
     elif args.command == "amr-eval":
         result = run_amr_eval(args.embeddings_dir, args.units, args.output,
                               models=tuple(args.models.split(",")),
@@ -195,6 +240,10 @@ def main():
                               max_epochs=args.max_epochs, patience=args.patience,
                               seeds=tuple(int(x) for x in args.seeds.split(",")),
                               bootstrap_repeats=args.bootstrap_repeats)
+    elif args.command == "amr-external-eval":
+        result = run_amr_external_eval(args.eval_dir, args.units, args.external_scores, args.output,
+                                       args.external_name, overlap_ids_path=args.overlap_ids,
+                                       bootstrap_repeats=args.bootstrap_repeats, seed=args.seed)
     elif args.command == "operon-local-eval":
         result = run_operon_local_eval(args.embeddings, args.mapping, args.reference, args.output, args.method_name, args.model_revision, args.official_embeddings)
     elif args.command == "bacformer-annotate":

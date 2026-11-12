@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "purpose": "Pre-registered joint source- and near-clone-isolated split for the expanded AMR cohort",
+  "rules": {
+    "unit": "drug x identity representative with an S/R label",
+    "components": "union by near-clone group, declared source projects (source_projects), ENA study accessions and BioProject",
+    "joint": "one partition across drugs; each BioSample keeps the same partition in every task",
+    "assignment": "whole components; seeded greedy by labeled-unit deficit; per drug >= min_groups groups and both classes in every partition",
+    "conflicts": "mixed-label clone groups flagged per drug; excluded from the primary analysis downstream",
+    "source_missing": "components without any declared source are allowed in training but must not support source-independent test claims"
+  },
+  "seed": 20261110,
+  "min_groups": 20,
+  "fractions": [
+    0.7,
+    0.1,
+    0.2
+  ],
+  "drugs": [
+    "ciprofloxacin",
+    "gentamicin"
+  ],
+  "representatives_sha256": "3ed41101e6f9504ed004f9df2ac5986dd71c6a895fb7a959239cb542df52ca2b",
+  "groups_sha256": "6b0ad1024bd11c7b3d3904b392923d693f1779717073bf8dcce054c7369f70bc",
+  "code_sha256": "629bf5e487795abe1e107c24e19ae140ec4c28a5d34ae4028b1e914b5cad0a4f",
+  "started_utc": "2026-11-12T01:09:16.957335+00:00"
+}

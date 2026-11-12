@@ -1,0 +1,11 @@
+{
+  "scope": "BV-BRC nonconflicting canonical BioSample binary labels vs published BacBench labels linked through local exact versioned file/current/paired accession; before new QC/clone filtering; disagreement not adjudicated",
+  "counts": {
+    "ciprofloxacin": {
+      "agree": 58
+    },
+    "gentamicin": {
+      "agree": 57
+    }
+  }
+}

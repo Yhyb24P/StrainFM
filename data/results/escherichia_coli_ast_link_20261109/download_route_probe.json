@@ -1,0 +1,27 @@
+{
+  "url": "https://allthebacteria-assemblies.s3.eu-west-2.amazonaws.com/SAMEA103923477.fa.gz",
+  "results": [
+    {
+      "mode": "proxy",
+      "exit": 28,
+      "http_code": 200,
+      "size_download": 956970,
+      "speed_download": 38259,
+      "time_connect": 0.000337,
+      "time_starttransfer": 2.926756,
+      "time_total": 25.01242,
+      "error": "curl: (28) Operation timed out after 25012 milliseconds with 956970 out of 1557222 bytes received\n"
+    },
+    {
+      "mode": "direct",
+      "exit": 28,
+      "http_code": 200,
+      "size_download": 434730,
+      "speed_download": 17380,
+      "time_connect": 0.377276,
+      "time_starttransfer": 1.069263,
+      "time_total": 25.013032,
+      "error": "curl: (28) Operation timed out after 25013 milliseconds with 434730 out of 1557222 bytes received\n"
+    }
+  ]
+}

@@ -35,14 +35,16 @@ def download_fasta(root, relative, url):
         temporary.unlink(missing_ok=True)
 
 
-def run_download(manifest, root):
+def run_download(manifest, root, *, workers=8):
+    if not 1 <= workers <= 64:
+        raise ValueError("workers must be between 1 and 64")
     records = list(rows(manifest, ("target_relpath",)))
     for row in records:
         safe_path(Path(root), row["target_relpath"])
-        row["url"] = row.get("gwh_url") or row.get("ncbi_url")
+        row["url"] = row.get("gwh_url") or row.get("ncbi_url") or row.get("url")
         if not row["url"]:
             raise ValueError(f"Missing download URL: {row['target_relpath']}")
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    with ThreadPoolExecutor(max_workers=workers) as pool:
         counts = Counter()
         for result in pool.map(lambda row: download_fasta(root, row["target_relpath"], row["url"]), records):
             counts["failed" if result.startswith("FAIL") else result] += 1

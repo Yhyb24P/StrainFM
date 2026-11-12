@@ -1,0 +1,9 @@
+{
+  "scope": "3945 binary BioSample union; 3351 without eligible local mapping; priority conflict > BioSample > exact accession > accession base > absent accession > no reported accession. Local refers to frozen cohort, not a fresh disk search.",
+  "counts": {
+    "no_assembly_accession_in_bvbrc": 3329,
+    "identity_conflict": 2,
+    "assembly_accession_absent_from_local_cohort": 19,
+    "biosample_present_no_eligible_match": 1
+  }
+}

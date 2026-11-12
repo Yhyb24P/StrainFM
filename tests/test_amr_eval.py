@@ -7,7 +7,17 @@ try:
 except ImportError:
     HAVE = False
 
-from strainfm.amr_eval import _group_bootstrap, _metrics, _paired_group_bootstrap_multi
+from strainfm.amr_eval import _analysis_sets, _group_bootstrap, _metrics, _paired_group_bootstrap_multi
+
+
+class AnalysisSetSelectionTest(unittest.TestCase):
+    def test_direct_refit_requires_label_source(self):
+        amr02 = [{"label_conflict": "False", "label_source": "file_accession"}]
+        joint = [{"label_conflict": "False"}]
+        self.assertEqual([name for name, _ in _analysis_sets(amr02)],
+                         ["primary", "with_conflicts", "direct_refit"])
+        self.assertEqual([name for name, _ in _analysis_sets(joint)],
+                         ["primary", "with_conflicts"])
 
 
 @unittest.skipUnless(HAVE, "requires numpy/scikit-learn")

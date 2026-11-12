@@ -1,0 +1,17 @@
+{
+  "records": 2950,
+  "available_after_retry": 2950,
+  "initial_run": {
+    "downloaded": 2548,
+    "skipped_valid": 398,
+    "failed": 4
+  },
+  "retry": {
+    "records": 4,
+    "downloaded": 4,
+    "skipped_valid": 0,
+    "failed": 0
+  },
+  "manifest_sha256": "2795abbde9cb9010910e758cdac6a4404aef56323c05e57e8c3e8082437c6aa5",
+  "note": "Download validation passed; amr-cohort will recompute file hashes and quality."
+}

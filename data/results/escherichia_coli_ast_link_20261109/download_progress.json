@@ -1,0 +1,11 @@
+{
+  "status": "running",
+  "observed_utc": "2026-11-09T13:04:50.271724+00:00",
+  "manifest_samples": 2950,
+  "published_fasta_files": 125,
+  "published_bytes": 202078491,
+  "raw_root": "/mnt/e/StrainFM/data/raw/allthebacteria_ecoli_ast_20261109",
+  "log_path": "/tmp/strainfm-atb-fasta-download-20261109.log",
+  "manifest_sha256": "2795abbde9cb9010910e758cdac6a4404aef56323c05e57e8c3e8082437c6aa5",
+  "limits": "Counts are an in-progress observation, not a completed snapshot or final quality cohort."
+}

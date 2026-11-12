@@ -1,0 +1,102 @@
+{
+  "status": "expanded_amr_joint_split_frozen",
+  "seed": 20261110,
+  "min_groups": 20,
+  "fractions": [
+    0.7,
+    0.1,
+    0.2
+  ],
+  "drugs": {
+    "ciprofloxacin": {
+      "n_units": 3218,
+      "n_S": 1884,
+      "n_R": 1334,
+      "n_groups": 1970,
+      "n_conflict_groups": 24,
+      "n_conflict_units": 381,
+      "n_components": 22,
+      "primary": {
+        "n_units": 2837,
+        "n_S": 1781,
+        "n_R": 1056
+      },
+      "partitions": {
+        "train": {
+          "n_units": 3134,
+          "n_primary_units": 2753,
+          "n_groups": 1907,
+          "n_components": 17,
+          "S": 1873,
+          "R": 1261
+        },
+        "validation": {
+          "n_units": 24,
+          "n_primary_units": 24,
+          "n_groups": 23,
+          "n_components": 1,
+          "S": 5,
+          "R": 19
+        },
+        "test": {
+          "n_units": 60,
+          "n_primary_units": 60,
+          "n_groups": 40,
+          "n_components": 4,
+          "S": 6,
+          "R": 54
+        }
+      }
+    },
+    "gentamicin": {
+      "n_units": 3272,
+      "n_S": 2464,
+      "n_R": 808,
+      "n_groups": 2054,
+      "n_conflict_groups": 51,
+      "n_conflict_units": 479,
+      "n_components": 19,
+      "primary": {
+        "n_units": 2793,
+        "n_S": 2150,
+        "n_R": 643
+      },
+      "partitions": {
+        "train": {
+          "n_units": 3188,
+          "n_primary_units": 2720,
+          "n_groups": 1991,
+          "n_components": 14,
+          "S": 2419,
+          "R": 769
+        },
+        "validation": {
+          "n_units": 24,
+          "n_primary_units": 24,
+          "n_groups": 23,
+          "n_components": 1,
+          "S": 12,
+          "R": 12
+        },
+        "test": {
+          "n_units": 60,
+          "n_primary_units": 49,
+          "n_groups": 40,
+          "n_components": 4,
+          "S": 33,
+          "R": 27
+        }
+      }
+    }
+  },
+  "n_components_total": 23,
+  "units_sha256": "387f9a4e0abc251b5aa76fa2c8125346879e2b5c057f5ad1b5c3c99f8c5e41df",
+  "finished_utc": "2026-11-12T01:09:16.968814+00:00",
+  "limits": [
+    "Labels are published BV-BRC AST evidence linked at BioSample level; I is excluded, missing stays missing.",
+    "Whole declared-source components are isolated; project/study links are database metadata, not proven lineage independence.",
+    "179 labeled samples lack ENA study links but carry source_projects; they are merged by declaration and do not support source-independent test claims on their own.",
+    "Mixed-label clone groups are flagged per drug; the primary analysis excludes them.",
+    "The old AMR-02 split and the earlier single-drug partitions remain unchanged; overlap with the seen AMR-02 test must be reported."
+  ]
+}

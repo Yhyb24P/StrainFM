@@ -1,0 +1,70 @@
+{
+  "bvbrc_genomes": 12217,
+  "nonempty_raw_biosample_fields": 7816,
+  "ena_aliases_resolved": 1905,
+  "unique_canonical_biosamples": 7814,
+  "identity_conflicts": 2,
+  "matching_local_genomes": 784,
+  "matching_local_eligible_genomes": 781,
+  "drugs": {
+    "ciprofloxacin": {
+      "records": 16741,
+      "record_phenotypes": {
+        "unknown": 7308,
+        "Resistant": 2631,
+        "Susceptible": 6654,
+        "Intermediate": 148
+      },
+      "bvbrc_genomes": 11780,
+      "canonical_biosamples": 7378,
+      "biosample_states": {
+        "unknown": 3611,
+        "S": 2084,
+        "conflicting_nonmissing": 28,
+        "R": 1596,
+        "I": 59
+      },
+      "local_eligible_known_biosample_states": {
+        "unknown": 158,
+        "S": 261,
+        "R": 318,
+        "I": 21
+      },
+      "known_binary_biosamples_without_local_eligible": 3101,
+      "unresolved_identity_units": 4400,
+      "method_missing": 62,
+      "standard_missing": 7548,
+      "standard_year_missing": 11641
+    },
+    "gentamicin": {
+      "records": 14220,
+      "record_phenotypes": {
+        "unknown": 5865,
+        "Resistant": 1230,
+        "Susceptible": 6924,
+        "Intermediate": 201
+      },
+      "bvbrc_genomes": 11990,
+      "canonical_biosamples": 7622,
+      "biosample_states": {
+        "unknown": 3811,
+        "S": 2787,
+        "R": 922,
+        "conflicting_nonmissing": 3,
+        "I": 99
+      },
+      "local_eligible_known_biosample_states": {
+        "unknown": 143,
+        "S": 375,
+        "R": 103,
+        "I": 45
+      },
+      "known_binary_biosamples_without_local_eligible": 3231,
+      "unresolved_identity_units": 4366,
+      "method_missing": 47,
+      "standard_missing": 4767,
+      "standard_year_missing": 8761
+    }
+  },
+  "state_rule": "Missing phenotypes do not vote; no nonmissing=unknown; >1 distinct nonmissing=conflicting_nonmissing; I separate; MIC-only not reinterpreted. ENA aliases merged before counting. No new sequence QC or near-clone grouping."
+}

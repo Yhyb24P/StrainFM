@@ -1,0 +1,24 @@
+{
+  "utc": "2026-11-09T13:13:32.397907+00:00",
+  "old_pid": 3937966,
+  "old_process_group": 3937965,
+  "reason": "User requested fastest download; proxy measured faster than direct; increasing workers 8 to 32",
+  "completed_files_before_restart": 398,
+  "incomplete_files_retained": [
+    "SAMEA10468764.fa.gz.part-x0mosaim.gz",
+    "SAMEA10468769.fa.gz.part-p8jw1hqw.gz",
+    "SAMEA10468770.fa.gz.part-wus2z3cw.gz",
+    "SAMEA10468771.fa.gz.part-qw7llxmc.gz",
+    "SAMEA10468774.fa.gz.part-llxoxw61.gz",
+    "SAMEA10468775.fa.gz.part-r6aahho7.gz",
+    "SAMEA10468776.fa.gz.part-4ti2ob2h.gz",
+    "SAMEA10468778.fa.gz.part-uuk72hil.gz"
+  ],
+  "old_exit_code": 143,
+  "workers": 32,
+  "log_path": "/tmp/strainfm-atb-fasta-download-32-20261109.log",
+  "code_sha256": {
+    "src/strainfm/download.py": "b5b928ef6fba006781d925f4ace2db3afb11c37d991cbfdb30ee73c4ee5c9004",
+    "src/strainfm/__main__.py": "b08c29d29198ee5a9935b07fd375d5d01d5a85cdaf8fdab0aab7d326dcb11bc9"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "data/processed/escherichia_coli_ast_source_checked_20261109/summary.json": "2a398ec379b55b31fd0897e10f99f7f53019bfe38df5b0dfe5396fdfcb85dd17",
+  "data/processed/escherichia_coli_ast_source_checked_20261109/sample_genomes.tsv": "4f89efe171beabb263b71e167ffe1762626a41696a251f9bb168b70bf23a51fc",
+  "data/processed/escherichia_coli_ast_source_checked_20261109/sample_drug_evidence.tsv": "e44d6e187882341ea959ecc17108e49f6fef8cd1138e76b66637a2eb21b049cb",
+  "data/processed/escherichia_coli_ast_source_checked_20261109/download_manifest.tsv": "2795abbde9cb9010910e758cdac6a4404aef56323c05e57e8c3e8082437c6aa5",
+  "src/strainfm/amr_sources.py": "739ac0c47dc91d7856e4e4800d01ff7d8dcf1161b091e0f81f58aa32450f3a9f",
+  "src/strainfm/__main__.py": "09b0a4f5da8acdd5ee25fb8abfe64920708c3da8e20a1f1d402c5a787a188d5c",
+  "src/strainfm/download.py": "454fe3ce082b43f5afecb0af78bc6122e5a0481b3cc8fc39dc465c0a2c877d1f",
+  "tests/test_amr_sources.py": "a596e59b55aa577f2af8b197a8839febbcea56b9bed0b873be357994d2e0a2a7",
+  "tests/test_download_virus.py": "9be0fa3daac69842f19a43c9b6235353f6628df2d637da7d96d8ca7518b917dd"
+}

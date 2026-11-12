@@ -1,0 +1,46 @@
+{
+  "status": "failed",
+  "download_pid": 3963008,
+  "created_utc": "2026-11-09T13:20:23.669943+00:00",
+  "commands": [
+    [
+      "python3",
+      "-m",
+      "strainfm",
+      "amr-cohort",
+      "--samples",
+      "data/processed/escherichia_coli_ast_source_checked_20261109/sample_genomes.tsv",
+      "--local-cohort",
+      "data/processed/escherichia_coli_identity_cohort_20261105/cohort_manifest.tsv",
+      "--config",
+      "config/escherichia_coli_ast_cohort.json",
+      "--output",
+      "data/processed/escherichia_coli_ast_quality_20261109",
+      "--workers",
+      "8"
+    ],
+    [
+      "python3",
+      "-m",
+      "strainfm",
+      "diversity",
+      "--representatives",
+      "data/processed/escherichia_coli_ast_quality_20261109/identity_representatives.tsv",
+      "--config",
+      "config/escherichia_coli_ast_mash.json",
+      "--output",
+      "data/processed/escherichia_coli_ast_mash_groups_20261109",
+      "--threads",
+      "8"
+    ]
+  ],
+  "code_and_config_sha256": {
+    "src/strainfm/amr_cohort.py": "1043a5c564240418fc17b6d4ab9d7913ae9d1aed7e7e42972a5ffb7a5c06bc17",
+    "src/strainfm/audit.py": "28ce6c6e4a063d3a670c3d7c91d307e53b68a81de805ff2f2b90c6fb3cf6f637",
+    "src/strainfm/snapshot.py": "5ff5bd22cd15e5ed393fc596639164f3f765cfd3ee27c935beac49bfb40220be",
+    "src/strainfm/diversity.py": "874cdf8c417fa59a743a8f717a7aea44fbec747d25f97720a3494bdfe899effe",
+    "config/escherichia_coli_ast_cohort.json": "139003f06248f3e410a5efe2907dcb2a404841bb27dfabe18537b25f7f3648a0",
+    "config/escherichia_coli_ast_mash.json": "3eec693b931c9782f7e65cf721f33f08eefdf5a1d230083dccd74a1b46666ac4"
+  },
+  "error": "Expecting value: line 1 column 1 (char 0)"
+}
