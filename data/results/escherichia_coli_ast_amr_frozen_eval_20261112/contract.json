@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "purpose": "Frozen-backbone AMR light-head evaluation per D0-27/D0-28",
+  "models": [
+    "bacformer",
+    "esm_mean"
+  ],
+  "analysis_sets": {
+    "primary": "mixed-label clone groups excluded; paired-accession labels",
+    "with_conflicts": "mixed-label clone groups included (sensitivity)"
+  },
+  "lr_grid": [
+    0.0001,
+    0.001,
+    0.01
+  ],
+  "max_epochs": 100,
+  "patience": 10,
+  "seeds": [
+    20261108,
+    20261109,
+    20261110
+  ],
+  "head": "LayerNorm -> Dropout(0.1) -> Linear(960,1); BCEWithLogits; Adam",
+  "optimizer_note": "torch.optim.Adam without explicit weight_decay; the pinned BacBench AMR script uses AdamW without explicit weight_decay, so this is a documented deviation, not an exact paper reproduction claim",
+  "selection": "learning rate and epoch selected on validation AUROC; test scored once per seed",
+  "bootstrap": "group-level resampling of near-clone groups, 1000 repeats; seed-averaged statistics use the same resampled groups across the three seeds",
+  "units_sha256": "47b342d707087c0d5a7f4d0a453b12a961f1b95ba8f7e9a504cca5cee7f84cc7",
+  "code_sha256": "fdc65b870732fe592cacd940ae8c0455e6f61b98f2cbfe92bb69239fad5866ad",
+  "started_utc": "2026-11-12T14:50:51.676328+00:00"
+}

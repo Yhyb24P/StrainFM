@@ -65,7 +65,7 @@ def _read_external_scores(path):
 
 
 def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, external_name,
-                          overlap_ids_path=None, bootstrap_repeats=1000, seed=20261110):
+                          overlap_ids_path=None, drugs=None, bootstrap_repeats=1000, seed=20261110):
     eval_dir, units_path, external_scores_path, output = map(
         Path, (eval_dir, units_path, external_scores_path, output))
     if "raw" in output.resolve().parts:
@@ -88,6 +88,7 @@ def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, ex
         "schema": 1,
         "purpose": "External pretrained comparator on the frozen split (D0-31)",
         "external_name": external_name,
+        "drugs": drugs,
         "eval_dir": str(eval_dir), "units": str(units_path),
         "external_scores_sha256": sha256(external_scores_path),
         "units_sha256": sha256(units_path),
@@ -101,9 +102,11 @@ def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, ex
         "started_utc": datetime.now(timezone.utc).isoformat(),
     }
     prepare_output(output, contract)
-    drugs = sorted({unit["drug"] for unit in units if unit["genome_id"] in external})
-    if not drugs:
-        raise ValueError("No units carry an external score")
+    available = sorted({unit["drug"] for unit in units})
+    drugs = sorted(drugs) if drugs else available
+    unknown = [drug for drug in drugs if drug not in available]
+    if unknown:
+        raise ValueError(f"Requested drugs not in units: {unknown}")
     metric_rows, pair_rows, prediction_rows, summaries = [], [], [], {}
     for drug in drugs:
         drug_units = [u for u in units if u["drug"] == drug]

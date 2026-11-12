@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "purpose": "External pretrained comparator on the frozen split (D0-31)",
+  "external_name": "strainamr-cipro-frozen",
+  "drugs": [
+    "ciprofloxacin"
+  ],
+  "eval_dir": "data/results/escherichia_coli_ast_amr_frozen_eval_20261112",
+  "units": "data/results/escherichia_coli_ast_joint_split_20261112/amr_task_units.tsv",
+  "external_scores_sha256": "c80a681eaa8b87068170bb2c266678d8af5947868c394e08c4446d5da364b575",
+  "units_sha256": "47b342d707087c0d5a7f4d0a453b12a961f1b95ba8f7e9a504cca5cee7f84cc7",
+  "eval_predictions_sha256": "147bd7c80cb2d31285acb9d92fa17b00f4003c6f385250670d6f3d0079207628",
+  "overlap_ids": "/mnt/e/StrainFM/tools/planA/strainamr_cipro_test_train_overlap_ids.txt",
+  "overlap_ids_sha256": "a32ab1fd800d11cc7f8e34553e4d96b51d9b5334507e127060d8e74cf6d94132",
+  "frozen_analysis_set": "primary",
+  "frozen_seeds": [
+    20261108,
+    20261109,
+    20261110
+  ],
+  "bootstrap": "near-clone-group resampling, 1000 repeats; external scores are constant across seeds",
+  "code_sha256": "45d5dc2903ee585251ff360dd8cdfb15ecd68dde2984e8b03c86d11c234309f9",
+  "started_utc": "2026-11-12T14:56:08.359324+00:00"
+}

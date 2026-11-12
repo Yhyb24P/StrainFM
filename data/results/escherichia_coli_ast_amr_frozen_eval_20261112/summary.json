@@ -1,0 +1,647 @@
+{
+  "status": "amr_eval_complete",
+  "models": [
+    "bacformer",
+    "esm_mean"
+  ],
+  "seeds": [
+    20261108,
+    20261109,
+    20261110
+  ],
+  "analysis_sets": [
+    "primary",
+    "with_conflicts"
+  ],
+  "drugs": {
+    "ciprofloxacin": {
+      "primary": {
+        "n_units": 2837,
+        "n_missing_embeddings": 0,
+        "partitions": {
+          "test": 620,
+          "train": 1931,
+          "validation": 286
+        },
+        "models": {
+          "bacformer": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 391,
+              "AUROC_ci95": [
+                0.8558605328093718,
+                0.9363433774529502
+              ],
+              "AP_ci95": [
+                0.7463370813203971,
+                0.8765928029995903
+              ]
+            },
+            "runs": [
+              {
+                "drug": "ciprofloxacin",
+                "model": "bacformer",
+                "analysis_set": "primary",
+                "seed": 20261108,
+                "n_train": 1931,
+                "n_validation": 286,
+                "n_test": 620,
+                "test_S": 392,
+                "test_R": 228,
+                "test_prevalence": 0.3677419424057007,
+                "AUROC": 0.887296365914787,
+                "average_precision": 0.7903758445918388,
+                "val_AUROC": 0.9136824234707411,
+                "selected_lr": 0.01,
+                "selected_epoch": 32,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "bacformer",
+                "analysis_set": "primary",
+                "seed": 20261109,
+                "n_train": 1931,
+                "n_validation": 286,
+                "n_test": 620,
+                "test_S": 392,
+                "test_R": 228,
+                "test_prevalence": 0.3677419424057007,
+                "AUROC": 0.9307867883995703,
+                "average_precision": 0.8523946106491851,
+                "val_AUROC": 0.935964772666985,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "bacformer",
+                "analysis_set": "primary",
+                "seed": 20261110,
+                "n_train": 1931,
+                "n_validation": 286,
+                "n_test": 620,
+                "test_S": 392,
+                "test_R": 228,
+                "test_prevalence": 0.3677419424057007,
+                "AUROC": 0.8872180451127819,
+                "average_precision": 0.7873457049912156,
+                "val_AUROC": 0.912568306010929,
+                "selected_lr": 0.01,
+                "selected_epoch": 32,
+                "selected_threshold": ""
+              }
+            ]
+          },
+          "esm_mean": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 391,
+              "AUROC_ci95": [
+                0.5799522000549392,
+                0.7043720520129825
+              ],
+              "AP_ci95": [
+                0.4295066107068272,
+                0.6239143687959969
+              ]
+            },
+            "runs": [
+              {
+                "drug": "ciprofloxacin",
+                "model": "esm_mean",
+                "analysis_set": "primary",
+                "seed": 20261108,
+                "n_train": 1931,
+                "n_validation": 286,
+                "n_test": 620,
+                "test_S": 392,
+                "test_R": 228,
+                "test_prevalence": 0.3677419424057007,
+                "AUROC": 0.664876476906552,
+                "average_precision": 0.5317177788179193,
+                "val_AUROC": 0.7247599342140166,
+                "selected_lr": 0.01,
+                "selected_epoch": 6,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "esm_mean",
+                "analysis_set": "primary",
+                "seed": 20261109,
+                "n_train": 1931,
+                "n_validation": 286,
+                "n_test": 620,
+                "test_S": 392,
+                "test_R": 228,
+                "test_prevalence": 0.3677419424057007,
+                "AUROC": 0.6032491944146079,
+                "average_precision": 0.5124251486845995,
+                "val_AUROC": 0.6296355244310042,
+                "selected_lr": 0.01,
+                "selected_epoch": 13,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "esm_mean",
+                "analysis_set": "primary",
+                "seed": 20261110,
+                "n_train": 1931,
+                "n_validation": 286,
+                "n_test": 620,
+                "test_S": 392,
+                "test_R": 228,
+                "test_prevalence": 0.3677419424057007,
+                "AUROC": 0.6406417830290011,
+                "average_precision": 0.5131446410602967,
+                "val_AUROC": 0.6422091357631704,
+                "selected_lr": 0.01,
+                "selected_epoch": 5,
+                "selected_threshold": ""
+              }
+            ]
+          }
+        }
+      },
+      "with_conflicts": {
+        "n_units": 3218,
+        "n_missing_embeddings": 0,
+        "partitions": {
+          "test": 643,
+          "train": 2247,
+          "validation": 328
+        },
+        "models": {
+          "bacformer": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 394,
+              "AUROC_ci95": [
+                0.8156539631939824,
+                0.9149079973047243
+              ],
+              "AP_ci95": [
+                0.6959660190752528,
+                0.8342468771930212
+              ]
+            },
+            "runs": [
+              {
+                "drug": "ciprofloxacin",
+                "model": "bacformer",
+                "analysis_set": "with_conflicts",
+                "seed": 20261108,
+                "n_train": 2247,
+                "n_validation": 328,
+                "n_test": 643,
+                "test_S": 405,
+                "test_R": 238,
+                "test_prevalence": 0.3701399564743042,
+                "AUROC": 0.8670608984334474,
+                "average_precision": 0.7609147835490419,
+                "val_AUROC": 0.8496960486322188,
+                "selected_lr": 0.001,
+                "selected_epoch": 43,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "bacformer",
+                "analysis_set": "with_conflicts",
+                "seed": 20261109,
+                "n_train": 2247,
+                "n_validation": 328,
+                "n_test": 643,
+                "test_S": 405,
+                "test_R": 238,
+                "test_prevalence": 0.3701399564743042,
+                "AUROC": 0.8684614586575371,
+                "average_precision": 0.7596380587838555,
+                "val_AUROC": 0.8378799392097265,
+                "selected_lr": 0.01,
+                "selected_epoch": 18,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "bacformer",
+                "analysis_set": "with_conflicts",
+                "seed": 20261110,
+                "n_train": 2247,
+                "n_validation": 328,
+                "n_test": 643,
+                "test_S": 405,
+                "test_R": 238,
+                "test_prevalence": 0.3701399564743042,
+                "AUROC": 0.8718643012760661,
+                "average_precision": 0.7562959951340111,
+                "val_AUROC": 0.8429711246200607,
+                "selected_lr": 0.001,
+                "selected_epoch": 48,
+                "selected_threshold": ""
+              }
+            ]
+          },
+          "esm_mean": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 394,
+              "AUROC_ci95": [
+                0.6318606545637504,
+                0.7298552845109517
+              ],
+              "AP_ci95": [
+                0.48108865352018576,
+                0.6453866859318661
+              ]
+            },
+            "runs": [
+              {
+                "drug": "ciprofloxacin",
+                "model": "esm_mean",
+                "analysis_set": "with_conflicts",
+                "seed": 20261108,
+                "n_train": 2247,
+                "n_validation": 328,
+                "n_test": 643,
+                "test_S": 405,
+                "test_R": 238,
+                "test_prevalence": 0.3701399564743042,
+                "AUROC": 0.6748832866479926,
+                "average_precision": 0.5372209887837898,
+                "val_AUROC": 0.6408814589665653,
+                "selected_lr": 0.01,
+                "selected_epoch": 13,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "esm_mean",
+                "analysis_set": "with_conflicts",
+                "seed": 20261109,
+                "n_train": 2247,
+                "n_validation": 328,
+                "n_test": 643,
+                "test_S": 405,
+                "test_R": 238,
+                "test_prevalence": 0.3701399564743042,
+                "AUROC": 0.652557319223986,
+                "average_precision": 0.561672972774826,
+                "val_AUROC": 0.6235182370820669,
+                "selected_lr": 0.01,
+                "selected_epoch": 13,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "ciprofloxacin",
+                "model": "esm_mean",
+                "analysis_set": "with_conflicts",
+                "seed": 20261110,
+                "n_train": 2247,
+                "n_validation": 328,
+                "n_test": 643,
+                "test_S": 405,
+                "test_R": 238,
+                "test_prevalence": 0.3701399564743042,
+                "AUROC": 0.7127917833800187,
+                "average_precision": 0.5872218505490995,
+                "val_AUROC": 0.652241641337386,
+                "selected_lr": 0.01,
+                "selected_epoch": 4,
+                "selected_threshold": ""
+              }
+            ]
+          }
+        }
+      }
+    },
+    "gentamicin": {
+      "primary": {
+        "n_units": 2793,
+        "n_missing_embeddings": 0,
+        "partitions": {
+          "test": 609,
+          "train": 1912,
+          "validation": 272
+        },
+        "models": {
+          "bacformer": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 407,
+              "AUROC_ci95": [
+                0.8527913085673225,
+                0.9248735163235084
+              ],
+              "AP_ci95": [
+                0.476129005134509,
+                0.6817345661362899
+              ]
+            },
+            "runs": [
+              {
+                "drug": "gentamicin",
+                "model": "bacformer",
+                "analysis_set": "primary",
+                "seed": 20261108,
+                "n_train": 1912,
+                "n_validation": 272,
+                "n_test": 609,
+                "test_S": 505,
+                "test_R": 104,
+                "test_prevalence": 0.1707717627286911,
+                "AUROC": 0.8908796648895659,
+                "average_precision": 0.5695332813673976,
+                "val_AUROC": 0.8989800081599347,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "bacformer",
+                "analysis_set": "primary",
+                "seed": 20261109,
+                "n_train": 1912,
+                "n_validation": 272,
+                "n_test": 609,
+                "test_S": 505,
+                "test_R": 104,
+                "test_prevalence": 0.1707717627286911,
+                "AUROC": 0.894021325209444,
+                "average_precision": 0.5714521067472,
+                "val_AUROC": 0.9015095879232966,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "bacformer",
+                "analysis_set": "primary",
+                "seed": 20261110,
+                "n_train": 1912,
+                "n_validation": 272,
+                "n_test": 609,
+                "test_S": 505,
+                "test_R": 104,
+                "test_prevalence": 0.1707717627286911,
+                "AUROC": 0.893012185833968,
+                "average_precision": 0.5668865841587498,
+                "val_AUROC": 0.9024071807425541,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              }
+            ]
+          },
+          "esm_mean": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 407,
+              "AUROC_ci95": [
+                0.6648445237126426,
+                0.7765092436650978
+              ],
+              "AP_ci95": [
+                0.30059032543223196,
+                0.4921205444532773
+              ]
+            },
+            "runs": [
+              {
+                "drug": "gentamicin",
+                "model": "esm_mean",
+                "analysis_set": "primary",
+                "seed": 20261108,
+                "n_train": 1912,
+                "n_validation": 272,
+                "n_test": 609,
+                "test_S": 505,
+                "test_R": 104,
+                "test_prevalence": 0.1707717627286911,
+                "AUROC": 0.7190974866717441,
+                "average_precision": 0.35112263270216315,
+                "val_AUROC": 0.7463892288861688,
+                "selected_lr": 0.01,
+                "selected_epoch": 7,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "esm_mean",
+                "analysis_set": "primary",
+                "seed": 20261109,
+                "n_train": 1912,
+                "n_validation": 272,
+                "n_test": 609,
+                "test_S": 505,
+                "test_R": 104,
+                "test_prevalence": 0.1707717627286911,
+                "AUROC": 0.7043031226199543,
+                "average_precision": 0.36371504611267136,
+                "val_AUROC": 0.6911464708282334,
+                "selected_lr": 0.01,
+                "selected_epoch": 6,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "esm_mean",
+                "analysis_set": "primary",
+                "seed": 20261110,
+                "n_train": 1912,
+                "n_validation": 272,
+                "n_test": 609,
+                "test_S": 505,
+                "test_R": 104,
+                "test_prevalence": 0.1707717627286911,
+                "AUROC": 0.7411271896420412,
+                "average_precision": 0.43056281787753203,
+                "val_AUROC": 0.7169318645450836,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              }
+            ]
+          }
+        }
+      },
+      "with_conflicts": {
+        "n_units": 3272,
+        "n_missing_embeddings": 0,
+        "partitions": {
+          "test": 655,
+          "train": 2296,
+          "validation": 321
+        },
+        "models": {
+          "bacformer": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 417,
+              "AUROC_ci95": [
+                0.8412572996231735,
+                0.9146106922481415
+              ],
+              "AP_ci95": [
+                0.4935680093835052,
+                0.6848167274897938
+              ]
+            },
+            "runs": [
+              {
+                "drug": "gentamicin",
+                "model": "bacformer",
+                "analysis_set": "with_conflicts",
+                "seed": 20261108,
+                "n_train": 2296,
+                "n_validation": 321,
+                "n_test": 655,
+                "test_S": 522,
+                "test_R": 133,
+                "test_prevalence": 0.20305342972278595,
+                "AUROC": 0.8802898049722007,
+                "average_precision": 0.5849760515281862,
+                "val_AUROC": 0.89671006742618,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "bacformer",
+                "analysis_set": "with_conflicts",
+                "seed": 20261109,
+                "n_train": 2296,
+                "n_validation": 321,
+                "n_test": 655,
+                "test_S": 522,
+                "test_R": 133,
+                "test_prevalence": 0.20305342972278595,
+                "AUROC": 0.8834586466165414,
+                "average_precision": 0.588355889733927,
+                "val_AUROC": 0.8990932341315974,
+                "selected_lr": 0.01,
+                "selected_epoch": 98,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "bacformer",
+                "analysis_set": "with_conflicts",
+                "seed": 20261110,
+                "n_train": 2296,
+                "n_validation": 321,
+                "n_test": 655,
+                "test_S": 522,
+                "test_R": 133,
+                "test_prevalence": 0.20305342972278595,
+                "AUROC": 0.8823207443897099,
+                "average_precision": 0.5885510320490607,
+                "val_AUROC": 0.8980469658219019,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              }
+            ]
+          },
+          "esm_mean": {
+            "bootstrap": {
+              "n_repeats": 1000,
+              "n_valid_repeats": 1000,
+              "n_groups": 417,
+              "AUROC_ci95": [
+                0.5937406761514962,
+                0.7476721959587749
+              ],
+              "AP_ci95": [
+                0.2990634426917261,
+                0.48288727972183376
+              ]
+            },
+            "runs": [
+              {
+                "drug": "gentamicin",
+                "model": "esm_mean",
+                "analysis_set": "with_conflicts",
+                "seed": 20261108,
+                "n_train": 2296,
+                "n_validation": 321,
+                "n_test": 655,
+                "test_S": 522,
+                "test_R": 133,
+                "test_prevalence": 0.20305342972278595,
+                "AUROC": 0.6501454786391265,
+                "average_precision": 0.32718097657869816,
+                "val_AUROC": 0.7326784468728202,
+                "selected_lr": 0.01,
+                "selected_epoch": 7,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "esm_mean",
+                "analysis_set": "with_conflicts",
+                "seed": 20261109,
+                "n_train": 2296,
+                "n_validation": 321,
+                "n_test": 655,
+                "test_S": 522,
+                "test_R": 133,
+                "test_prevalence": 0.20305342972278595,
+                "AUROC": 0.6664073978048569,
+                "average_precision": 0.38615937552755686,
+                "val_AUROC": 0.6854219948849105,
+                "selected_lr": 0.01,
+                "selected_epoch": 15,
+                "selected_threshold": ""
+              },
+              {
+                "drug": "gentamicin",
+                "model": "esm_mean",
+                "analysis_set": "with_conflicts",
+                "seed": 20261110,
+                "n_train": 2296,
+                "n_validation": 321,
+                "n_test": 655,
+                "test_S": 522,
+                "test_R": 133,
+                "test_prevalence": 0.20305342972278595,
+                "AUROC": 0.7044479013626017,
+                "average_precision": 0.4292152162098206,
+                "val_AUROC": 0.7182050685887004,
+                "selected_lr": 0.01,
+                "selected_epoch": 100,
+                "selected_threshold": ""
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "metrics_sha256": "4600c547dea94f20a4e688c0fa60aba7aa3f4de99de4f738345d0e91af2c0902",
+  "predictions_sha256": "147bd7c80cb2d31285acb9d92fa17b00f4003c6f385250670d6f3d0079207628",
+  "comparison_sha256": "3a02403c32b06314f168e511c6b58de791057473acb87b0a1b39f5a519b77e79",
+  "finished_utc": "2026-11-12T14:54:47.354335+00:00",
+  "limits": [
+    "Frozen backbones with a paper-style light head; no backbone training.",
+    "Label evidence follows the units file; direct_refit (D0-27) runs only when label_source is present.",
+    "Group bootstrap resamples near-clone groups only; source components may cross partitions (D0-28/D0-30).",
+    "Single-class test partitions cannot yield AUROC and are reported as such.",
+    "Partition design (cross-drug consistency, source isolation) is defined and documented by the units file producer; this module does not re-verify it.",
+    "Optimizer differs from the pinned BacBench AMR script (Adam here vs AdamW there, neither with explicit weight_decay); no exact paper reproduction is claimed.",
+    "direct_refit omitted: the units file has no label_source column, so the AMR-02 evidence-restricted refit is not rerun on this cohort."
+  ]
+}

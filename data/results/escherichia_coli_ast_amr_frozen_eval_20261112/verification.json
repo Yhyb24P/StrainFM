@@ -1,0 +1,45 @@
+{
+  "artifacts_verified_against_completion": {
+    "summary.json": true,
+    "amr_metrics.tsv": true,
+    "amr_predictions.tsv": true,
+    "amr_model_comparison.tsv": true,
+    "contract.json": true
+  },
+  "recomputed_from_predictions": {
+    "ciprofloxacin|bacformer|seed20261108": {
+      "n": 620,
+      "AUROC": 0.887296365914787,
+      "AP": 0.7903758445918388
+    },
+    "ciprofloxacin|esm_mean|seed20261108": {
+      "n": 620,
+      "AUROC": 0.664876476906552,
+      "AP": 0.5317177788179193
+    },
+    "gentamicin|bacformer|seed20261108": {
+      "n": 609,
+      "AUROC": 0.8908796648895659,
+      "AP": 0.5695332813673976
+    },
+    "gentamicin|esm_mean|seed20261108": {
+      "n": 609,
+      "AUROC": 0.7190974866717441,
+      "AP": 0.35112263270216315
+    }
+  },
+  "n_missing_embeddings": {
+    "ciprofloxacin": {
+      "primary": 0,
+      "with_conflicts": 0
+    },
+    "gentamicin": {
+      "primary": 0,
+      "with_conflicts": 0
+    }
+  },
+  "units_sha256": "47b342d707087c0d5a7f4d0a453b12a961f1b95ba8f7e9a504cca5cee7f84cc7",
+  "genome_embeddings_sha256": "7b496a6fb5ddf7083bc97e01b60840bceb7929315b3287a2d9cf22708034b002",
+  "esm_mean_embeddings_sha256": "d92cecf21c96ea7f6138a1b204a5b7e06b9f398d5f76c272edccc78b7baf7293",
+  "note": "AUROC/AP recomputed directly from amr_predictions.tsv rows with analysis_set=primary, split=test; seed 20261108 shown, all seeds participate in the seed-averaged metrics."
+}

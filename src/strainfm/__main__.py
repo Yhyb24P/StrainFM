@@ -121,6 +121,7 @@ def main():
     external.add_argument("--units", type=Path, required=True)
     external.add_argument("--external-scores", type=Path, required=True)
     external.add_argument("--external-name", required=True)
+    external.add_argument("--drugs", default="")
     external.add_argument("--overlap-ids", type=Path, default=None)
     external.add_argument("--bootstrap-repeats", type=int, default=1000)
     external.add_argument("--seed", type=int, default=20261110)
@@ -243,6 +244,7 @@ def main():
     elif args.command == "amr-external-eval":
         result = run_amr_external_eval(args.eval_dir, args.units, args.external_scores, args.output,
                                        args.external_name, overlap_ids_path=args.overlap_ids,
+                                       drugs=tuple(args.drugs.split(",")) if args.drugs else None,
                                        bootstrap_repeats=args.bootstrap_repeats, seed=args.seed)
     elif args.command == "operon-local-eval":
         result = run_operon_local_eval(args.embeddings, args.mapping, args.reference, args.output, args.method_name, args.model_revision, args.official_embeddings)
