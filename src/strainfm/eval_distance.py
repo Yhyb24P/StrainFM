@@ -25,6 +25,7 @@ Distance sources, in order:
 
 import gzip
 import random
+import subprocess
 import tempfile
 from collections import defaultdict
 from pathlib import Path
@@ -67,8 +68,9 @@ def mash_cli_batch(mash_binary, sketch, candidate_paths, workers=8):
         handle.write("\n".join(candidate_paths) + "\n")
         list_file = handle.name
     try:
-        result = subprocess_run(
-            [str(mash_binary), "dist", str(sketch), list_file, "-l", "-t", "-p", str(workers)])
+        result = subprocess.run(
+            [str(mash_binary), "dist", str(sketch), list_file, "-l", "-t", "-p", str(workers)],
+            capture_output=True, text=True, check=False)
         if result.returncode != 0:
             return {}
         # List-mode rows are "<query path>\t<distance>" (the reference column
@@ -87,11 +89,6 @@ def mash_cli_batch(mash_binary, sketch, candidate_paths, workers=8):
         return resolved
     finally:
         Path(list_file).unlink(missing_ok=True)
-
-
-def subprocess_run(cmd):
-    import subprocess
-    return subprocess.run(cmd, capture_output=True, text=True, check=False)
 
 
 def _ranks(values):

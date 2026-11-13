@@ -4,9 +4,8 @@ from pathlib import Path
 
 from .audit import run_audit
 from .labels import run_label_audit
-from .metadata import run_metadata_audit
+from .metadata import run_metadata_audit, run_bulk_metadata
 from .snapshot import run_snapshot
-from .metadata_bulk import run_bulk_metadata
 from .cohort import run_cohort
 from .diversity import run_diversity
 from .split import run_split

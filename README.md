@@ -36,4 +36,6 @@ PYTHONPATH=src python3 -m unittest discover -s tests -v
 
 `split-virus` 替代 `split_uhgv.py`，需要 `zstd`；使用含 `genome_id`、`species_id` 的清单，目标目录必须尚不存在。仅当整个解压进程成功时发布目录，失败保留原始数据。
 
+`metadata` 与 `metadata-bulk` 统一由 `src/strainfm/metadata.py` 实现，共享 NCBI 字段解析。抽样清单和批量 inventory 在读取时检查必需字段与版本化 accession；批量入口仍校验缓存哈希和续跑契约。模块合并会改变代码哈希，已有批量输出应按原版本续跑，新代码使用新输出目录。
+
 `snapshot`、`metadata-bulk`、`diversity` 拒绝占用没有匹配契约的非空输出目录。恢复必须使用原始输入、配置和匹配代码；修复前的契约不自动迁移，请为新代码选择新输出目录。`diversity` 校验输入 SHA-256，完成后重复调用只核验并读取结果；中断后的距离阶段会重新计算。历史 E. coli 结果仍对应生成时的代码，以上回归测试不构成全量数据重验证。
