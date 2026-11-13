@@ -1,0 +1,18 @@
+[
+  {
+    "id": "mash",
+    "path": "ref/papers/mash.pdf",
+    "url": "https://link.springer.com/content/pdf/10.1186/s13059-016-0997-x.pdf",
+    "bytes": 2226056,
+    "sha256": "aea78203cb5b520c251fc8fe10d278b9f20bcb532a880b300e917823ef36c395",
+    "status": "downloaded"
+  },
+  {
+    "id": "prodigal",
+    "path": "ref/papers/prodigal.pdf",
+    "url": "https://link.springer.com/content/pdf/10.1186/1471-2105-11-119.pdf",
+    "bytes": 1316712,
+    "sha256": "7d97bbf06bf9c0518acf27e140f80dc20deec2bc3c0443e319975415c09a7868",
+    "status": "downloaded"
+  }
+]

@@ -27,6 +27,8 @@ from .eval_distance import run_eval_distance
 def main():
     parser = argparse.ArgumentParser(description="StrainFM research CLI")
     sub = parser.add_subparsers(dest="command", required=True)
+    report = sub.add_parser("report", help="Build offline result and reference HTML from saved artifacts")
+    report.add_argument("--root", type=Path, default=Path.cwd())
     audit = sub.add_parser("audit", help="Read-only manifest and sampled FASTA audit")
     audit.add_argument("--config", type=Path, required=True)
     audit.add_argument("--output", type=Path, required=True)
@@ -197,7 +199,10 @@ def main():
     distance.add_argument("--max-far-candidates-per-query", type=int, default=400)
     distance.add_argument("--cli-workers", type=int, default=8)
     args = parser.parse_args()
-    if args.command == "audit":
+    if args.command == "report":
+        from .report import run_report
+        result = run_report(args.root)
+    elif args.command == "audit":
         result = run_audit(args.config, args.output)
     elif args.command == "labels":
         result = run_label_audit(args.labels, args.download_manifest, args.output)
