@@ -27,13 +27,19 @@ PREDICTION_COLUMNS = ["drug", "analysis_set", "genome_id", "near_clone_group", "
 
 
 def _frozen_scores(eval_dir):
-    """Per-model, per-seed test scores from the amr-eval primary analysis."""
+    """Per-drug, per-model, per-seed test scores from the amr-eval primary analysis.
+
+    The units file may hold the same genome under several drugs with different
+    labels and scores, so drug must stay in the key (regression: cross-drug
+    overwrite produced mixed-up external comparisons).
+    """
     rows = [r for r in read_table(Path(eval_dir) / "amr_predictions.tsv")
             if r["analysis_set"] == "primary" and r["split"] == "test"]
-    by_model = {}
+    by_drug = {}
     for row in rows:
-        by_model.setdefault(row["model"], {}).setdefault(int(row["seed"]), {})[row["genome_id"]] = float(row["score"])
-    return by_model
+        by_drug.setdefault(row["drug"], {}).setdefault(row["model"], {}).setdefault(
+            int(row["seed"]), {})[row["genome_id"]] = float(row["score"])
+    return by_drug
 
 
 def _score_sets(units, overlap_ids):
@@ -78,12 +84,20 @@ def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, ex
     if overlap_ids_path is not None:
         overlap_ids_path = Path(overlap_ids_path)
         overlap_ids = {line.strip() for line in overlap_ids_path.read_text().splitlines() if line.strip()}
-    frozen = _frozen_scores(eval_dir)
-    model_names = sorted(frozen) + [external_name]
-    seeds = sorted(next(iter(frozen.values())))
-    for model, by_seed in frozen.items():
-        if sorted(by_seed) != seeds:
-            raise ValueError(f"{model} seed sets differ: {sorted(by_seed)} vs {seeds}")
+    frozen_by_drug = _frozen_scores(eval_dir)
+    available = sorted({unit["drug"] for unit in units})
+    drugs = sorted(drugs) if drugs else available
+    unknown = [drug for drug in drugs if drug not in available]
+    if unknown:
+        raise ValueError(f"Requested drugs not in units: {unknown}")
+    missing_frozen = [drug for drug in drugs if drug not in frozen_by_drug]
+    if missing_frozen:
+        raise ValueError(f"Requested drugs have no frozen predictions: {missing_frozen}")
+    seeds_by_drug = {drug: sorted(next(iter(frozen_by_drug[drug].values()))) for drug in drugs}
+    for drug in drugs:
+        for model, by_seed in frozen_by_drug[drug].items():
+            if sorted(by_seed) != seeds_by_drug[drug]:
+                raise ValueError(f"{drug}/{model} seed sets differ: {sorted(by_seed)} vs {seeds_by_drug[drug]}")
     contract = {
         "schema": 1,
         "purpose": "External pretrained comparator on the frozen split (D0-31)",
@@ -96,19 +110,17 @@ def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, ex
         "overlap_ids": str(overlap_ids_path) if overlap_ids_path else None,
         "overlap_ids_sha256": sha256(overlap_ids_path) if overlap_ids_path else None,
         "frozen_analysis_set": "primary",
-        "frozen_seeds": seeds,
+        "frozen_seeds": seeds_by_drug,
         "bootstrap": f"near-clone-group resampling, {bootstrap_repeats} repeats; external scores are constant across seeds",
         "code_sha256": sha256(__file__),
         "started_utc": datetime.now(timezone.utc).isoformat(),
     }
     prepare_output(output, contract)
-    available = sorted({unit["drug"] for unit in units})
-    drugs = sorted(drugs) if drugs else available
-    unknown = [drug for drug in drugs if drug not in available]
-    if unknown:
-        raise ValueError(f"Requested drugs not in units: {unknown}")
     metric_rows, pair_rows, prediction_rows, summaries = [], [], [], {}
     for drug in drugs:
+        frozen = frozen_by_drug[drug]
+        seeds = seeds_by_drug[drug]
+        model_names = sorted(frozen) + [external_name]
         drug_units = [u for u in units if u["drug"] == drug]
         summaries[drug] = {}
         for set_name, keep in _score_sets(drug_units, overlap_ids).items():
@@ -126,7 +138,7 @@ def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, ex
             per_seed_scores = {}
             for model in sorted(frozen):
                 per_seed_scores[model] = [[frozen[model][s][g] for g in ids] for s in seeds]
-                point_auroc, point_ap = _metrics(labels, _mean_over_seeds(per_seed_scores[model]))
+                point_auroc, point_ap = _seed_mean_metrics(labels, per_seed_scores[model])
                 bootstrap = _group_bootstrap_multi(groups, labels, per_seed_scores[model],
                                                    bootstrap_repeats, seed)
                 metric_rows.append({
@@ -222,8 +234,13 @@ def run_amr_external_eval(eval_dir, units_path, external_scores_path, output, ex
     return summary
 
 
-def _mean_over_seeds(scores_by_seed):
-    return [sum(values) / len(values) for values in zip(*scores_by_seed)]
+def _seed_mean_metrics(labels, scores_by_seed):
+    """Mean of per-seed metrics, matching amr-eval's seed-averaged convention."""
+    pairs = [_metrics(labels, scores) for scores in scores_by_seed]
+    aurocs = [a for a, _ in pairs if a is not None]
+    aps = [p for _, p in pairs if p is not None]
+    return (sum(aurocs) / len(aurocs) if aurocs else None,
+            sum(aps) / len(aps) if aps else None)
 
 
 def _sd(values):

@@ -1,6 +1,6 @@
 # 扩大队列联合评测（2026-11-12）：Bacformer vs ESM++ 均值
 
-本目录是在**冻结联合划分**（D0-30，`../escherichia_coli_ast_joint_split_20261112/`，units SHA-256 `387f9a4e…`）上，对扩大后的 E. coli AMR 队列做两药冻结主干 + 轻头的评测。StrainAMR 第三方对照见 `../escherichia_coli_ast_amr_external_eval_20261112/`（D0-31）；本目录只包含 ESM++ 均值与 Bacformer-L 两个表示模型。
+本目录是在**冻结联合划分**（D0-30，`../escherichia_coli_ast_joint_split_20261112/`，units SHA-256 `387f9a4e…`）上，对扩大后的 E. coli AMR 队列做两药冻结主干 + 轻头的评测。StrainAMR 第三方对照见 `../escherichia_coli_ast_amr_external_eval_20261113/`（D0-31；2026-11-12 旧外部目录因跨药索引 bug 作废，保留为证据）；本目录只包含 ESM++ 均值与 Bacformer-L 两个表示模型。
 
 ## 数据与冻结条件
 

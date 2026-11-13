@@ -1,0 +1,62 @@
+{
+  "artifacts_verified_against_completion": {
+    "summary.json": true,
+    "external_metrics.tsv": true,
+    "external_paired.tsv": true,
+    "external_predictions.tsv": true,
+    "contract.json": true
+  },
+  "recomputed_strainamr_from_external_predictions": {
+    "primary_all": {
+      "n": 620,
+      "AUROC": 0.9362244897959183,
+      "AP": 0.9433269956546264
+    },
+    "primary_disjoint": {
+      "n": 433,
+      "AUROC": 0.9303166452717159,
+      "AP": 0.9484781342542374
+    }
+  },
+  "frozen_model_aggregation": {
+    "note": "per_seed_mean is the reported convention (matches amr-eval); score_average reproduces the independent cross-check value 0.9164 (Bacformer)",
+    "models": {
+      "bacformer": {
+        "per_seed_mean": {
+          "AUROC": 0.901767066475713,
+          "AP": 0.8100387200774133
+        },
+        "score_average": {
+          "AUROC": 0.916420515574651,
+          "AP": 0.8257621812680037
+        }
+      },
+      "esm_mean": {
+        "per_seed_mean": {
+          "AUROC": 0.6362558181167204,
+          "AP": 0.5190958561876051
+        },
+        "score_average": {
+          "AUROC": 0.6265887934121017,
+          "AP": 0.520028771733032
+        }
+      }
+    }
+  },
+  "overlap_diagnostic": {
+    "n_primary_overlap_units": 187,
+    "AUROC": 1.0,
+    "AP": 1.0
+  },
+  "score_ties": {
+    "n_scores": 643,
+    "n_unique_at_1e-6": 599
+  },
+  "cross_drug_bug": {
+    "old_dir": "data/results/escherichia_coli_ast_amr_external_eval_20261112",
+    "description": "_frozen_scores indexed without drug; gentamicin rows overwrote ciprofloxacin for shared genomes; fixed and regression-tested in this rerun"
+  },
+  "overlap_ids_sha256": "a32ab1fd800d11cc7f8e34553e4d96b51d9b5334507e127060d8e74cf6d94132",
+  "strainamr_native_scores_sha256": "c80a681eaa8b87068170bb2c266678d8af5947868c394e08c4446d5da364b575",
+  "strainamr_bundle_sha256": "6f240090453432bbeda7ed1352308c3393bcb9b848d80be1022c60df68608169"
+}

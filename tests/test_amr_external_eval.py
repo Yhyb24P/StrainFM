@@ -67,6 +67,28 @@ class ExternalEvalTest(unittest.TestCase):
             self.assertEqual(read_table(root / "out1" / "external_metrics.tsv"),
                              read_table(root / "out2" / "external_metrics.tsv"))
 
+    def test_same_genome_in_two_drugs_does_not_mix_scores(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            units_path, external_path, overlap_path = self._fixture(root)
+            pred_path = root / "amr_predictions.tsv"
+            lines = pred_path.read_text().rstrip("\n").split("\n")
+            for i in range(8):
+                label = i % 2
+                for model, base in (("esm_mean", 0.1), ("bacformer", 0.2)):
+                    for seed in (1, 2):
+                        lines.append("\t".join(map(str, [
+                            "gentamicin", model, "primary", seed, f"g{i}", f"c{i // 2}", label,
+                            base + 0.7 * (1 - label) + 0.01 * seed, "test"])))
+            pred_path.write_text("\n".join(lines) + "\n")
+            run_amr_external_eval(root, units_path, external_path, root / "out", "strainamr",
+                                  overlap_ids_path=overlap_path, drugs=("ciprofloxacin",),
+                                  bootstrap_repeats=10)
+            metrics = read_table(root / "out" / "external_metrics.tsv")
+            bac = [r for r in metrics if r["model"] == "bacformer" and r["analysis_set"] == "primary_all"][0]
+            # A drug-blind index would take the later, inverted gentamicin rows and score near 0.
+            self.assertGreater(float(bac["AUROC"]), 0.9)
+
     def test_missing_external_score_is_fatal(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

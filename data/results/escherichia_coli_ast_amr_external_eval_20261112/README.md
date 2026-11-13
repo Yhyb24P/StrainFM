@@ -1,5 +1,7 @@
 # 扩大队列三模型对照（2026-11-12，环丙沙星）：Bacformer / ESM++ / StrainAMR
 
+> **⚠ 本目录结果无效（跨药索引 bug）**：`_frozen_scores` 未按药物索引，两药共享基因组时 gentamicin 预测覆盖 ciprofloxacin，导致本目录的 `external_metrics.tsv` 与 `external_paired.tsv` 使用了错误的冻结分数（跨药同键冲突 3,306 条）。本目录按“保留旧证据”原则原样保留；有效结果见 `../escherichia_coli_ast_amr_external_eval_20261113/`（按 drug/model/seed/genome_id 索引，并有同基因组两药回归测试）。`external_predictions.tsv`（StrainAMR 分数）与 `summary.json` 的分药规模未受影响。该发现由 gpt 在 HTML 归整时报告，修复与更正由 ds 执行。
+
 本目录是 D0-31 预注册的第三方对照评测。冻结分数来自 `../escherichia_coli_ast_amr_frozen_eval_20261112/` 的 `primary` 分析（测试行筛选不重训任何头）；外部分数来自 StrainAMR 官方发布模型 `Ecoli_ciprofloxacin_3fold` Fold1 的 `predict --mode model-only` 输出。**仅环丙沙星**：StrainAMR 官方清单的 24 个物种-药物模型中没有庆大霉素模型（E. coli 仅 amoxicillin/ampicillin/ciprofloxacin/levofloxacin），庆大霉素保持两模型比较。
 
 ## 协议（看结果前写入 D0-31）
